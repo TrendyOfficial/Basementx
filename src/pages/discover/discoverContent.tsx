@@ -25,7 +25,6 @@ export function DiscoverContent() {
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const progressItems = useProgressStore((state) => state.items);
 
-  // Only load data for the active tab
   const isMoviesTab = selectedCategory === "movies";
   const isTVShowsTab = selectedCategory === "tvshows";
   const isEditorPicksTab = selectedCategory === "editorpicks";
@@ -49,11 +48,9 @@ export function DiscoverContent() {
     ([_, item]) => item.type === "show",
   );
 
-  // Render Movies content with lazy loading
   const renderMoviesContent = () => {
     return (
       <>
-        {/* Movie Recommendations - only show if there are movie progress items */}
         {movieProgressItems.length > 0 && (
           <MediaCarousel
             content={{ type: "recommendations" }}
@@ -65,7 +62,6 @@ export function DiscoverContent() {
           />
         )}
 
-        {/* Latest Releases */}
         <MediaCarousel
           content={{ type: "latest", fallback: "nowPlaying" }}
           isTVShow={false}
@@ -74,7 +70,6 @@ export function DiscoverContent() {
           moreContent
         />
 
-        {/* 4K Releases */}
         <MediaCarousel
           content={{ type: "latest4k", fallback: "popular" }}
           isTVShow={false}
@@ -83,7 +78,6 @@ export function DiscoverContent() {
           moreContent
         />
 
-        {/* Top Rated */}
         <MediaCarousel
           content={{ type: "topRated" }}
           isTVShow={false}
@@ -92,7 +86,6 @@ export function DiscoverContent() {
           moreContent
         />
 
-        {/* Provider Movies */}
         <MediaCarousel
           content={{ type: "provider" }}
           isTVShow={false}
@@ -102,7 +95,6 @@ export function DiscoverContent() {
           moreContent
         />
 
-        {/* Genre Movies */}
         <MediaCarousel
           content={{ type: "genre" }}
           isTVShow={false}
@@ -115,11 +107,9 @@ export function DiscoverContent() {
     );
   };
 
-  // Render TV Shows content with lazy loading
   const renderTVShowsContent = () => {
     return (
       <>
-        {/* TV Show Recommendations - only show if there are TV show progress items */}
         {tvProgressItems.length > 0 && (
           <MediaCarousel
             content={{ type: "recommendations" }}
@@ -131,7 +121,6 @@ export function DiscoverContent() {
           />
         )}
 
-        {/* On Air */}
         <MediaCarousel
           content={{ type: "latesttv", fallback: "onTheAir" }}
           isTVShow
@@ -140,7 +129,6 @@ export function DiscoverContent() {
           moreContent
         />
 
-        {/* Top Rated */}
         <MediaCarousel
           content={{ type: "topRated" }}
           isTVShow
@@ -149,7 +137,6 @@ export function DiscoverContent() {
           moreContent
         />
 
-        {/* Popular */}
         <MediaCarousel
           content={{ type: "popular" }}
           isTVShow
@@ -158,7 +145,6 @@ export function DiscoverContent() {
           moreContent
         />
 
-        {/* Provider TV Shows */}
         <MediaCarousel
           content={{ type: "provider" }}
           isTVShow
@@ -168,7 +154,6 @@ export function DiscoverContent() {
           moreContent
         />
 
-        {/* Genre TV Shows */}
         <MediaCarousel
           content={{ type: "genre" }}
           isTVShow
@@ -181,7 +166,6 @@ export function DiscoverContent() {
     );
   };
 
-  // Render Editor Picks content
   const renderEditorPicksContent = () => {
     return (
       <>
@@ -205,29 +189,70 @@ export function DiscoverContent() {
 
   return (
     <div className="relative min-h-screen">
+      {/* Navigation Tabs */}
       <DiscoverNavigation
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
       />
 
+      {/* Streaming Platforms Row */}
+      <div className="flex justify-center items-center gap-8 mt-8 mb-6 flex-wrap">
+        <img
+          src="/platforms/netflix.png"
+          alt="Netflix"
+          className="h-10 transition-transform hover:scale-110 cursor-pointer"
+        />
+        <img
+          src="/platforms/disney.png"
+          alt="Disney+"
+          className="h-10 transition-transform hover:scale-110 cursor-pointer"
+        />
+        <img
+          src="/platforms/prime.png"
+          alt="Prime Video"
+          className="h-10 transition-transform hover:scale-110 cursor-pointer"
+        />
+        <img
+          src="/platforms/appletv.png"
+          alt="Apple TV"
+          className="h-10 transition-transform hover:scale-110 cursor-pointer"
+        />
+        <img
+          src="/platforms/hulu.png"
+          alt="Hulu"
+          className="h-10 transition-transform hover:scale-110 cursor-pointer"
+        />
+        <img
+          src="/platforms/crunchyroll.png"
+          alt="Crunchyroll"
+          className="h-10 transition-transform hover:scale-110 cursor-pointer"
+        />
+        <img
+          src="/platforms/max.png"
+          alt="HBO Max"
+          className="h-10 transition-transform hover:scale-110 cursor-pointer"
+        />
+        <img
+          src="/platforms/paramount.png"
+          alt="Paramount"
+          className="h-10 transition-transform hover:scale-110 cursor-pointer"
+        />
+      </div>
+
       <WideContainer ultraWide classNames="!px-0">
-        {/* Movies Tab */}
         <LazyTabContent isActive={isMoviesTab}>
           {renderMoviesContent()}
         </LazyTabContent>
 
-        {/* TV Shows Tab */}
         <LazyTabContent isActive={isTVShowsTab}>
           {renderTVShowsContent()}
         </LazyTabContent>
 
-        {/* Editor Picks Tab */}
         <LazyTabContent isActive={isEditorPicksTab}>
           {renderEditorPicksContent()}
         </LazyTabContent>
       </WideContainer>
 
-      {/* View All Button */}
       <div
         className={classNames(
           "flex justify-center mt-8 mb-12",
