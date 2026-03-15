@@ -40,6 +40,8 @@ export interface PreferencesStore {
   enableAutoResumeOnPlaybackError: boolean;
   enableNumberKeySeeking: boolean;
   enablePauseOverlay: boolean;
+  enableGamepadControls: boolean;
+  gamepadMapping: Record<string, string>;
   keyboardShortcuts: KeyboardShortcuts;
 
   setEnableThumbnails(v: boolean): void;
@@ -74,6 +76,8 @@ export interface PreferencesStore {
   setEnableAutoResumeOnPlaybackError(v: boolean): void;
   setEnableNumberKeySeeking(v: boolean): void;
   setEnablePauseOverlay(v: boolean): void;
+  setEnableGamepadControls(v: boolean): void;
+  setGamepadMapping(v: Record<string, string>): void;
   setKeyboardShortcuts(v: KeyboardShortcuts): void;
 }
 
@@ -112,6 +116,8 @@ export const usePreferencesStore = create(
       enableAutoResumeOnPlaybackError: true,
       enableNumberKeySeeking: true,
       enablePauseOverlay: false,
+      enableGamepadControls: false,
+      gamepadMapping: {},
       keyboardShortcuts: DEFAULT_KEYBOARD_SHORTCUTS,
       setEnableThumbnails(v) {
         set((s) => {
@@ -276,6 +282,16 @@ export const usePreferencesStore = create(
       setEnablePauseOverlay(v) {
         set((s) => {
           s.enablePauseOverlay = v;
+        });
+      },
+      setEnableGamepadControls(v) {
+        set((s) => {
+          s.enableGamepadControls = v;
+        });
+      },
+      setGamepadMapping(v) {
+        set((s) => {
+          s.gamepadMapping = v;
         });
       },
       setKeyboardShortcuts(v) {
