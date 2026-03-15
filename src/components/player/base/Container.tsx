@@ -4,8 +4,8 @@ import { OverlayDisplay } from "@/components/overlays/OverlayDisplay";
 import { AutoSkipSegments } from "@/components/player/internals/AutoSkipSegments";
 import { SkipTracker } from "@/components/player/internals/Backend/SkipTracker";
 import { CastingInternal } from "@/components/player/internals/CastingInternal";
-import { HeadUpdater } from "@/components/player/internals/HeadUpdater";
 import { GamepadEvents } from "@/components/player/internals/GamepadEvents";
+import { HeadUpdater } from "@/components/player/internals/HeadUpdater";
 import { KeyboardEvents } from "@/components/player/internals/KeyboardEvents";
 import { MediaSession } from "@/components/player/internals/MediaSession";
 import { MetaReporter } from "@/components/player/internals/MetaReporter";
@@ -98,6 +98,7 @@ export function Container(props: PlayerProps) {
         <VideoContainer />
         <ProgressSaver />
         <KeyboardEvents />
+        <GamepadEvents />
         <MediaSession />
         <WatchPartyReporter />
         <SkipTracker />
