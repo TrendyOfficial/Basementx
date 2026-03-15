@@ -12,6 +12,7 @@ import {
 import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
 import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
 import { DetailsModal } from "@/components/overlays/detailsModal";
+import { GamepadControlsModal } from "@/components/overlays/GamepadControlsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
@@ -133,6 +134,7 @@ function App() {
       <NotificationModal id="notifications" />
       <KeyboardCommandsModal id="keyboard-commands" />
       <KeyboardCommandsEditModal id="keyboard-commands-edit" />
+      <GamepadControlsModal id="gamepad-controls-edit" />
       <SupportInfoModal id="support-info" />
       <DetailsModal id="details" />
       <DetailsModal id="discover-details" />
