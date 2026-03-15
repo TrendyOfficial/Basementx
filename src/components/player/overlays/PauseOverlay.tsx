@@ -108,14 +108,14 @@ export function PauseOverlay() {
           // Get runtime
           let runtime: number | null = null;
           if (isShowWithEpisode) {
-            const episodeData = await getEpisodeDetails(
+             const epData = await getEpisodeDetails(
               meta.tmdbId,
               meta.season?.number ?? 0,
               meta.episode?.number ?? 0,
             );
-            runtime = episodeData?.runtime ?? null;
+             runtime = (epData as any)?.runtime ?? null;
           } else {
-            runtime = (data as any).runtime ?? null;
+            runtime = (data as any)?.runtime ?? null;
           }
 
           setDetails({ voteAverage: finalVoteAverage, genres, runtime });
