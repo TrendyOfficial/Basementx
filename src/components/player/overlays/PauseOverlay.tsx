@@ -13,7 +13,6 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
-import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 
 interface PauseDetails {
   voteAverage: number | null;
@@ -26,8 +25,7 @@ export function PauseOverlay() {
   const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
   const status = usePlayerStore((s) => s.status);
   const meta = usePlayerStore((s) => s.meta);
-  const { time, duration, draggingTime } = usePlayerStore((s) => s.progress);
-  const { isSeeking } = usePlayerStore((s) => s.interface);
+  const { duration } = usePlayerStore((s) => s.progress);
   const enablePauseOverlay = usePreferencesStore((s) => s.enablePauseOverlay);
   const enableImageLogos = usePreferencesStore((s) => s.enableImageLogos);
   const { isMobile } = useIsMobile();
@@ -105,7 +103,6 @@ export function PauseOverlay() {
               ? data.vote_average
               : null;
 
-          // Get runtime
           let runtime: number | null = null;
           if (isShowWithEpisode) {
             const epData = await getEpisodeDetails(
@@ -121,7 +118,8 @@ export function PauseOverlay() {
           setDetails({ voteAverage: finalVoteAverage, genres, runtime });
         }
       } catch {
-        if (mounted) setDetails({ voteAverage: null, genres: [], runtime: null });
+        if (mounted)
+          setDetails({ voteAverage: null, genres: [], runtime: null });
       }
     };
 
