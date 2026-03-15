@@ -13,6 +13,7 @@ import { Icon, Icons } from "@/components/Icon";
 import { Heading1 } from "@/components/utils/Text";
 import { appLanguageOptions } from "@/setup/i18n";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
+import { usePreferencesStore } from "@/stores/preferences";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 import { getLocaleInfo, sortLangCodes } from "@/utils/language";
 
@@ -47,6 +48,8 @@ export function PreferencesPart(props: {
   const { t } = useTranslation();
   const { showModal } = useOverlayStack();
   const [isSourceListExpanded, setIsSourceListExpanded] = useState(false);
+  const enableGamepadControls = usePreferencesStore((s) => s.enableGamepadControls);
+  const setEnableGamepadControls = usePreferencesStore((s) => s.setEnableGamepadControls);
   const sorted = sortLangCodes(
     appLanguageOptions.map((item) => item.code),
     props.language,
@@ -278,12 +281,33 @@ export function PreferencesPart(props: {
               {t("settings.preferences.keyboardShortcutsDescription")}
             </p>
           </div>
-          <Button
-            theme="secondary"
-            onClick={() => showModal("keyboard-commands-edit")}
+          <div className="flex gap-3 max-w-[25rem]">
+            <Button
+              theme="secondary"
+              onClick={() => showModal("keyboard-commands-edit")}
+              className="flex-1"
+            >
+              {t("settings.preferences.keyboardShortcutsLabel")}
+            </Button>
+            <Button
+              theme="secondary"
+              onClick={() => showModal("gamepad-controls-edit")}
+              className="flex-1"
+            >
+              🎮 {t("settings.preferences.gamepadControlsLabel", "Controller")}
+            </Button>
+          </div>
+
+          {/* Gamepad Enable Toggle */}
+          <div
+            onClick={() => setEnableGamepadControls(!enableGamepadControls)}
+            className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
           >
-            {t("settings.preferences.keyboardShortcutsLabel")}
-          </Button>
+            <Toggle enabled={enableGamepadControls} />
+            <p className="flex-1 text-white font-bold">
+              {t("settings.preferences.enableGamepadControls", "Enable controller support")}
+            </p>
+          </div>
         </div>
 
         {/* Column */}
