@@ -48,8 +48,12 @@ export function PreferencesPart(props: {
   const { t } = useTranslation();
   const { showModal } = useOverlayStack();
   const [isSourceListExpanded, setIsSourceListExpanded] = useState(false);
-  const enableGamepadControls = usePreferencesStore((s) => s.enableGamepadControls);
-  const setEnableGamepadControls = usePreferencesStore((s) => s.setEnableGamepadControls);
+  const enableGamepadControls = usePreferencesStore(
+    (s) => s.enableGamepadControls,
+  );
+  const setEnableGamepadControls = usePreferencesStore(
+    (s) => s.setEnableGamepadControls,
+  );
   const sorted = sortLangCodes(
     appLanguageOptions.map((item) => item.code),
     props.language,
@@ -305,7 +309,10 @@ export function PreferencesPart(props: {
           >
             <Toggle enabled={enableGamepadControls} />
             <p className="flex-1 text-white font-bold">
-              {t("settings.preferences.enableGamepadControls", "Enable controller support")}
+              {t(
+                "settings.preferences.enableGamepadControls",
+                "Enable controller support",
+              )}
             </p>
           </div>
         </div>
