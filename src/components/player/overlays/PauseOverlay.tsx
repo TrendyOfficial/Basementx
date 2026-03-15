@@ -42,25 +42,15 @@ export function PauseOverlay() {
   const [overlayVisible, setOverlayVisible] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Mark that real playback has started the moment isPaused flips to false
-  // while the player is in a playing state (not scraping/loading)
+  // Mark that real playback has started only when the player is actively playing
   useEffect(() => {
-    if (
-      !isPaused &&
-      status !== playerStatus.SCRAPING &&
-      status !== playerStatus.LOADING
-    ) {
+    if (!isPaused && status === playerStatus.PLAYING) {
       hasPlayedRef.current = true;
     }
   }, [isPaused, status]);
 
   useEffect(() => {
-    if (
-      isPaused &&
-      hasPlayedRef.current &&
-      status !== playerStatus.SCRAPING &&
-      status !== playerStatus.LOADING
-    ) {
+    if (isPaused && hasPlayedRef.current && status === playerStatus.PLAYING) {
       // Show after 2 seconds of being paused
       timerRef.current = setTimeout(() => {
         setOverlayVisible(true);
