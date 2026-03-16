@@ -7,11 +7,15 @@ import {
   getMediaLogo,
 } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
+import { Icon, Icons } from "@/components/Icon";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
+import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
+import { uses12HourClock } from "@/utils/uses12HourClock";
 
 interface PauseDetails {
   voteAverage: number | null;
@@ -21,14 +25,19 @@ interface PauseDetails {
 
 export function PauseOverlay() {
   const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
+  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const status = usePlayerStore((s) => s.status);
   const meta = usePlayerStore((s) => s.meta);
-  const { duration } = usePlayerStore((s) => s.progress);
+  const { time, duration, draggingTime } = usePlayerStore((s) => s.progress);
+  const { isSeeking } = usePlayerStore((s) => s.interface);
+  const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
   const enablePauseOverlay = usePreferencesStore((s) => s.enablePauseOverlay);
   const enableImageLogos = usePreferencesStore((s) => s.enableImageLogos);
   const { isMobile } = useIsMobile();
   const { showTargets } = useShouldShowControls();
   const { t } = useTranslation();
+  const { showModal } = useOverlayStack();
+
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [details, setDetails] = useState<PauseDetails>({
     voteAverage: null,
@@ -36,13 +45,10 @@ export function PauseOverlay() {
     runtime: null,
   });
 
-  // Track whether playback has actually started at least once
-  // so the overlay never appears during source scraping / initial load
   const hasPlayedRef = useRef(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Mark that real playback has started only when the player is actively playing
   useEffect(() => {
     if (!isPaused && status === playerStatus.PLAYING) {
       hasPlayedRef.current = true;
@@ -50,13 +56,23 @@ export function PauseOverlay() {
   }, [isPaused, status]);
 
   useEffect(() => {
+    if (status === playerStatus.SCRAPING) {
+      setOverlayVisible(false);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      return;
+    }
+
+    if (isLoading && hasPlayedRef.current) {
+      setOverlayVisible(true);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      return;
+    }
+
     if (isPaused && hasPlayedRef.current && status === playerStatus.PLAYING) {
-      // Show after 2 seconds of being paused
       timerRef.current = setTimeout(() => {
         setOverlayVisible(true);
       }, 2000);
     } else {
-      // Hide immediately when unpaused or not yet played
       if (timerRef.current) {
         clearTimeout(timerRef.current);
         timerRef.current = null;
@@ -65,15 +81,12 @@ export function PauseOverlay() {
     }
 
     return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [isPaused, status]);
+  }, [isPaused, status, isLoading]);
 
   let shouldShow = overlayVisible && enablePauseOverlay;
-  if (isMobile && status === playerStatus.SCRAPING) shouldShow = false;
+  if (status === playerStatus.SCRAPING) shouldShow = false;
   if (isMobile && showTargets) shouldShow = false;
 
   useEffect(() => {
@@ -110,10 +123,10 @@ export function PauseOverlay() {
       try {
         const type =
           meta.type === "movie" ? TMDBContentTypes.MOVIE : TMDBContentTypes.TV;
-
         const isShowWithEpisode =
           meta.type === "show" && meta.season && meta.episode;
         let voteAverage: number | null = null;
+        let runtime: number | null = null;
 
         if (isShowWithEpisode) {
           const episodeData = await getEpisodeDetails(
@@ -121,8 +134,9 @@ export function PauseOverlay() {
             meta.season?.number ?? 0,
             meta.episode?.number ?? 0,
           );
-          if (mounted && episodeData?.vote_average != null) {
-            voteAverage = episodeData.vote_average;
+          if (mounted && episodeData) {
+            voteAverage = episodeData.vote_average ?? null;
+            runtime = (episodeData as any).runtime ?? null;
           }
         }
 
@@ -137,16 +151,8 @@ export function PauseOverlay() {
               ? data.vote_average
               : null;
 
-          let runtime: number | null = null;
-          if (isShowWithEpisode) {
-            const epData = await getEpisodeDetails(
-              meta.tmdbId,
-              meta.season?.number ?? 0,
-              meta.episode?.number ?? 0,
-            );
-            runtime = (epData as any)?.runtime ?? null;
-          } else {
-            runtime = (data as any)?.runtime ?? null;
+          if (!isShowWithEpisode) {
+            runtime = (data as any).runtime ?? null;
           }
 
           setDetails({ voteAverage: finalVoteAverage, genres, runtime });
@@ -168,27 +174,60 @@ export function PauseOverlay() {
   const overview =
     meta.type === "show" ? meta.episode?.overview : meta.overview;
 
-  const formatRuntime = (minutes: number) => {
-    const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
-    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+  const currentTime = Math.min(
+    Math.max(isSeeking ? draggingTime : time, 0),
+    duration,
+  );
+  const secondsRemaining = Math.abs(currentTime - duration);
+  const secondsRemainingAdjusted =
+    playbackRate > 0 ? secondsRemaining / playbackRate : secondsRemaining;
+
+  const hasHours = durationExceedsHour(duration);
+  const timeLeft = formatSeconds(
+    secondsRemaining,
+    durationExceedsHour(secondsRemaining),
+  );
+  const timeWatched = formatSeconds(currentTime, hasHours);
+  const timeFinished = new Date(Date.now() + secondsRemainingAdjusted * 1e3);
+  const durationFormatted = formatSeconds(duration, hasHours);
+
+  const handleOpenDetails = () => {
+    showModal("details", {
+      id: Number(meta.tmdbId),
+      type: meta.type === "movie" ? "movie" : "show",
+    });
   };
+
+  const timeRemainingText = t("player.time.remaining", {
+    timeFinished,
+    timeWatched,
+    timeLeft,
+    duration: durationFormatted,
+    formatParams: {
+      timeFinished: {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: uses12HourClock(),
+      },
+    },
+  })
+    .replace(/ • /g, " | ")
+    .replace(/ · /g, " | ");
 
   return (
     <div
-      className={`absolute inset-0 z-[60] flex flex-col justify-between bg-black/50 transition-opacity duration-700 pointer-events-none ${
-        shouldShow ? "opacity-100" : "opacity-0"
+      className={`absolute inset-0 z-[60] flex flex-col justify-between bg-black/80 transition-opacity duration-700 ${
+        shouldShow
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
       }`}
     >
-      {/* Main content - left-center aligned, vertically anchored near bottom */}
       <div className="flex-1 flex items-end pb-36 md:pb-44">
         <div className="ml-24 md:ml-48 lg:ml-64 max-w-lg lg:max-w-2xl">
-          {/* "You are watching" label */}
           <p className="text-sm text-white/70 mb-3 tracking-wide uppercase">
             {t("player.pauseOverlay.youAreWatching", "You are watching")}
           </p>
 
-          {/* Title / Logo */}
           {logoUrl ? (
             <img
               src={logoUrl}
@@ -201,61 +240,68 @@ export function PauseOverlay() {
             </h1>
           )}
 
-          {/* Season / Episode info */}
           {meta.type === "show" && meta.season && meta.episode && (
             <p className="text-lg text-white/70 mb-1">
-              Season {meta.season.number} · Episode {meta.episode.number}
+              Season {meta.season.number} | Episode {meta.episode.number}
             </p>
           )}
 
-          {/* Episode title */}
           {meta.type === "show" && meta.episode?.title && (
             <h2 className="mb-3 text-2xl font-semibold text-white drop-shadow-md">
               {meta.episode.title}
             </h2>
           )}
 
-          {/* Description */}
-          {overview && (
-            <p className="text-base lg:text-lg text-white/70 drop-shadow-md line-clamp-3 mb-4 max-w-xl">
-              {overview}
-            </p>
-          )}
+          <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-base text-white/80 drop-shadow-md font-medium">
+            {details.voteAverage !== null && (
+              <span className="flex items-center gap-1">
+                Rating ⭐: {details.voteAverage.toFixed(1)}
+                <span className="text-white/60">/10</span>
+              </span>
+            )}
 
-          {/* Rating + Runtime */}
-          <div className="flex items-center gap-2 text-base text-white/80">
-            {details.voteAverage !== null && details.voteAverage > 0 && (
+            {details.genres.length > 0 && (
               <>
-                <span className="text-yellow-400">⭐</span>
-                <span>{details.voteAverage.toFixed(0)}</span>
+                <span className="text-white/40">|</span>
+                <span>{details.genres.slice(0, 3).join(", ")}</span>
               </>
             )}
-            {details.runtime && details.runtime > 0 && (
+
+            {duration > 0 && (
               <>
-                {details.voteAverage !== null && details.voteAverage > 0 && (
-                  <span className="text-white/40">·</span>
-                )}
-                <span>{formatRuntime(details.runtime)}</span>
-              </>
-            )}
-            {duration > 0 && !details.runtime && (
-              <>
-                {details.voteAverage !== null && details.voteAverage > 0 && (
-                  <span className="text-white/40">·</span>
-                )}
-                <span>{formatRuntime(Math.round(duration / 60))}</span>
+                <span className="text-white/40">|</span>
+                <span>{timeRemainingText}</span>
               </>
             )}
           </div>
+
+          {overview && (
+            <div
+              className="group/desc cursor-pointer flex items-start gap-2"
+              onClick={handleOpenDetails}
+            >
+              <p className="text-base lg:text-lg text-white/70 drop-shadow-md line-clamp-3 max-w-xl transition-colors group-hover/desc:text-white">
+                {overview}
+              </p>
+              <span className="mt-1 text-white/40 group-hover/desc:text-white transition-colors">
+                <Icon icon={Icons.CHEVRON_RIGHT} className="text-xl" />
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* "Paused" indicator - bottom right, raised up to avoid controls overlap */}
-      <div className="absolute bottom-20 right-8 md:right-12">
-        <span className="text-base text-white/60 tracking-wider">
+      <div className="absolute bottom-20 right-8 md:right-12 flex items-center gap-3">
+        <Icon
+          icon={Icons.PAUSE}
+          className="text-2xl text-white/60 drop-shadow-md"
+        />
+        <span className="text-xl text-white/60 tracking-widest uppercase font-light">
           {t("player.pauseOverlay.paused", "Paused")}
         </span>
       </div>
     </div>
   );
 }
+
+
