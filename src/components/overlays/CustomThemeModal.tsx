@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -14,8 +14,153 @@ import {
   secondaryOptions,
   tertiaryOptions,
 } from "@themes/custom";
+import { colorToRgbString } from "@/utils/color";
 
 import { OverlayPortal } from "./OverlayDisplay";
+
+/**
+ * High-fidelity Detailed Preview Component
+ */
+function DetailedPreview({
+  vars,
+  scale = 1,
+}: {
+  vars: Record<string, string>;
+  scale?: number;
+}) {
+  return (
+    <div
+      className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/5 bg-background-main shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] transition-all duration-500 group"
+      style={
+        {
+          ...vars,
+          transform: `scale(${scale})`,
+          transformOrigin: "center center",
+        } as any
+      }
+    >
+      {/* Background Atmosphere */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Top Glow */}
+        <div className="absolute -top-1/4 left-1/2 -translate-x-1/2 w-[150%] h-1/2 bg-themePreview-primary/20 blur-[120px] rounded-[100%] opacity-60" />
+        {/* Particles / Stars Mock */}
+        <div className="absolute inset-0 opacity-20">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute bg-white rounded-full"
+              style={{
+                width: Math.random() * 2 + 1 + "px",
+                height: Math.random() * 2 + 1 + "px",
+                top: Math.random() * 100 + "%",
+                left: Math.random() * 100 + "%",
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Navbar Mock */}
+      <div className="relative z-10 p-4 flex justify-between items-center bg-gradient-to-b from-black/40 to-transparent">
+        <div className="flex items-center gap-4">
+          {/* Logo Symbol */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/5">
+            <div className="w-5 h-5 flex items-center justify-center text-themePreview-primary">
+              <Icon icon={Icons.LOGO} className="text-lg" />
+            </div>
+            <span className="font-black tracking-tighter text-sm text-type-text hidden sm:block">
+              P-Stream
+            </span>
+          </div>
+          {/* Nav Icons */}
+          <div className="flex gap-3 text-type-text/60">
+            <Icon icon={Icons.RISING_STAR} className="text-sm" />
+            <Icon icon={Icons.BELL} className="text-sm" />
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-type-text/10" />
+          <Icon icon={Icons.MENU} className="text-type-text/60" />
+        </div>
+      </div>
+
+      {/* Hero Section */}
+      <div className="relative z-10 mt-6 flex flex-col items-center px-12 text-center">
+        <div className="p-3 mb-6 relative">
+          {/* Top floating icons mock (Discord etc) */}
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex gap-4 opacity-50">
+            <Icon
+              icon={Icons.RISING_STAR}
+              className="text-themePreview-primary animate-pulse"
+            />
+            <div className="w-1.5 h-1.5 rounded-full bg-white/40 mt-3" />
+            <div className="w-2 h-2 rounded-full bg-white/20 mt-1" />
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-black text-type-text tracking-tight mb-2">
+            What would you like to
+            <br />
+            watch tonight?
+          </h2>
+        </div>
+
+        {/* Search Bar Mock */}
+        <div className="w-full max-w-lg relative group/search">
+          <div className="absolute inset-y-0 left-4 flex items-center text-type-text/30">
+            <Icon icon={Icons.SEARCH} />
+          </div>
+          <div className="w-full h-11 bg-type-text/5 border border-white/5 rounded-full backdrop-blur-md flex items-center px-12 text-type-text/40 text-sm">
+            What do you want to watch?
+          </div>
+        </div>
+
+        {/* Category Tabs */}
+        <div className="flex gap-4 mt-10 border-b border-white/5 pb-2">
+          {["Movies", "TV Shows", "Editor Picks"].map((tab, i) => (
+            <div
+              key={tab}
+              className={classNames(
+                "text-xs font-bold transition-colors relative pb-2",
+                i === 0 ? "text-themePreview-primary" : "text-type-text/40",
+              )}
+            >
+              {tab}
+              {i === 0 && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-themePreview-primary rounded-full" />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Content Grid Mock */}
+      <div className="relative z-10 mt-8 px-6 pb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-sm font-bold text-type-text tracking-tight flex items-center gap-2">
+            Most Popular
+            <Icon icon={Icons.ARROW_RIGHT} className="text-[10px] opacity-40" />
+          </h3>
+        </div>
+
+        <div className="grid grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="space-y-2 group/card">
+              <div className="aspect-[2/3] rounded-xl bg-type-text/5 border border-white/5 relative overflow-hidden transition-transform duration-300 group-hover/card:scale-[1.02] shadow-lg">
+                <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent" />
+                {/* Micro menu icon mock */}
+                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-black/40 backdrop-blur-md opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center">
+                  <Icon icon={Icons.MENU} className="text-[8px] text-white" />
+                </div>
+              </div>
+              <div className="h-2 w-[80%] bg-type-text/20 rounded-full" />
+              <div className="h-1.5 w-[50%] bg-type-text/10 rounded-full" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function ColorOption({
   opt,
@@ -89,59 +234,10 @@ function CustomColorPicker({
         />
       </div>
       <div>
-        <p className="text-white/60 text-xs">{label}</p>
-        <p className="text-white font-mono text-sm">{value.toUpperCase()}</p>
-      </div>
-    </div>
-  );
-}
-
-function LivePreview() {
-  return (
-    <div className="w-full max-w-md mx-auto rounded-xl overflow-hidden border border-white/10 bg-background-main shadow-2xl">
-      <div className="relative w-full h-full">
-        {/* Background glow */}
-        <div className="bg-themePreview-primary/50 w-[130%] h-16 absolute left-1/2 -top-8 blur-2xl transform -translate-x-1/2 rounded-[100%]" />
-        {/* Navbar */}
-        <div className="relative p-3 flex justify-between items-center">
-          <div className="flex space-x-2 items-center">
-            <div className="bg-themePreview-primary w-6 h-3 rounded-full" />
-            <div className="bg-themePreview-ghost/20 w-10 h-2 rounded-full" />
-            <div className="bg-themePreview-ghost/20 w-6 h-2 rounded-full" />
-            <div className="bg-themePreview-ghost/20 w-6 h-2 rounded-full" />
-          </div>
-          <div className="bg-themePreview-ghost/20 w-4 h-4 rounded-full" />
-        </div>
-        {/* Hero */}
-        <div className="relative mt-4 flex items-center flex-col gap-2 px-6">
-          <div className="bg-themePreview-ghost/30 w-32 h-2 rounded-full" />
-          <div className="bg-themePreview-ghost/20 w-24 h-1.5 rounded-full" />
-          {/* Search bar */}
-          <div className="bg-themePreview-ghost/10 w-full max-w-xs h-6 mt-2 rounded-full" />
-        </div>
-        {/* Media grid */}
-        <div className="mt-8 px-4 pb-4">
-          <div className="flex gap-2 items-center mb-2">
-            <div className="bg-themePreview-primary w-3 h-3 rounded-full" />
-            <div className="bg-themePreview-ghost/30 w-16 h-1.5 rounded-full" />
-          </div>
-          <div className="grid grid-cols-4 gap-2">
-            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
-            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
-            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
-            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
-          </div>
-          <div className="flex gap-2 items-center mb-2 mt-4">
-            <div className="bg-themePreview-secondary w-3 h-3 rounded-full" />
-            <div className="bg-themePreview-ghost/30 w-20 h-1.5 rounded-full" />
-          </div>
-          <div className="grid grid-cols-4 gap-2">
-            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
-            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
-            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
-            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
-          </div>
-        </div>
+        <p className="text-white/60 text-[10px] uppercase tracking-wider font-bold">
+          {label}
+        </p>
+        <p className="text-white font-mono text-xs">{value.toUpperCase()}</p>
       </div>
     </div>
   );
@@ -158,59 +254,103 @@ export function CustomThemeModal(props: {
 
   const saveCustomTheme = useThemeStore((s) => s.saveCustomTheme);
   const setTheme = useThemeStore((s) => s.setTheme);
-  const setCustomTheme = useThemeStore((s) => s.setCustomTheme);
-  const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
 
   const [name, setName] = useState("");
   const [primary, setPrimary] = useState(primaryOptions[0].id);
   const [secondary, setSecondary] = useState(secondaryOptions[0].id);
   const [tertiary, setTertiary] = useState(tertiaryOptions[0].id);
 
-  // Custom color picker state (hex values)
+  // Scaling and Modes
+  const [scale, setScale] = useState(0.8);
+  const [isFullPreview, setIsFullPreview] = useState(false);
+
+  // Custom color picker state
   const [useCustomPrimary, setUseCustomPrimary] = useState(false);
   const [useCustomSecondary, setUseCustomSecondary] = useState(false);
   const [useCustomTertiary, setUseCustomTertiary] = useState(false);
-  const [customPrimaryColor, setCustomPrimaryColor] = useState("#7B61FF");
-  const [customSecondaryColor, setCustomSecondaryColor] = useState("#FFFFFF");
-  const [customTertiaryColor, setCustomTertiaryColor] = useState("#0F0F12");
+
+  const [customPrimary, setCustomPrimary] = useState("#BE95FF");
+  const [customSecondaryText, setCustomSecondaryText] = useState("#FFFFFF");
+  const [customSecondaryButton, setCustomSecondaryButton] = useState("#1A1A1E");
+  const [customTertiaryBg, setCustomTertiaryBg] = useState("#0C0C0F");
+  const [customTertiaryAccent, setCustomTertiaryAccent] = useState("#1A1A1E");
 
   const [wasShown, setWasShown] = useState(false);
 
-  if (props.isShown && !wasShown) {
-    setWasShown(true);
-    if (props.themeToEdit) {
-      setName(props.themeToEdit.name);
-      setPrimary(props.themeToEdit.primary);
-      setSecondary(props.themeToEdit.secondary);
-      setTertiary(props.themeToEdit.tertiary);
-    } else {
-      setName("");
-      setPrimary(primaryOptions[0].id);
-      setSecondary(secondaryOptions[0].id);
-      setTertiary(tertiaryOptions[0].id);
-    }
-    setUseCustomPrimary(false);
-    setUseCustomSecondary(false);
-    setUseCustomTertiary(false);
-  } else if (!props.isShown && wasShown) {
-    setWasShown(false);
-  }
-
-  // Sync state to the preview theme in real-time
   useEffect(() => {
-    if (props.isShown) {
-      setPreviewTheme("custom");
-      setCustomTheme({ primary, secondary, tertiary });
-    } else {
-      setPreviewTheme(null);
+    if (props.isShown && !wasShown) {
+      setWasShown(true);
+      if (props.themeToEdit) {
+        setName(props.themeToEdit.name);
+        setPrimary(props.themeToEdit.primary);
+        setSecondary(props.themeToEdit.secondary);
+        setTertiary(props.themeToEdit.tertiary);
+      } else {
+        setName("");
+        setPrimary(primaryOptions[0].id);
+        setSecondary(secondaryOptions[0].id);
+        setTertiary(tertiaryOptions[0].id);
+      }
+      setUseCustomPrimary(false);
+      setUseCustomSecondary(false);
+      setUseCustomTertiary(false);
+      setIsFullPreview(false);
+      setScale(0.8);
+    } else if (!props.isShown && wasShown) {
+      setWasShown(false);
     }
+  }, [props.isShown, wasShown, props.themeToEdit]);
+
+  // Calculate local CSS variables for scoped injection
+  const previewVars = useMemo(() => {
+    const vars: Record<string, string> = {};
+
+    // 1. Primary
+    if (useCustomPrimary) {
+      const rgb = colorToRgbString(customPrimary);
+      vars["--colors-themePreview-primary"] = rgb;
+      vars["--colors-type-logo"] = rgb;
+      vars["--colors-buttons-primary"] = rgb;
+    } else {
+      const opt = primaryOptions.find((o) => o.id === primary);
+      if (opt) Object.assign(vars, opt.colors);
+    }
+
+    // 2. Secondary
+    if (useCustomSecondary) {
+      vars["--colors-type-text"] = colorToRgbString(customSecondaryText);
+      vars["--colors-buttons-secondary"] = colorToRgbString(
+        customSecondaryButton,
+      );
+    } else {
+      const opt = secondaryOptions.find((o) => o.id === secondary);
+      if (opt) Object.assign(vars, opt.colors);
+    }
+
+    // 3. Tertiary
+    if (useCustomTertiary) {
+      vars["--colors-background-main"] = colorToRgbString(customTertiaryBg);
+      vars["--colors-themePreview-secondary"] = colorToRgbString(
+        customTertiaryAccent,
+      );
+    } else {
+      const opt = tertiaryOptions.find((o) => o.id === tertiary);
+      if (opt) Object.assign(vars, opt.colors);
+    }
+
+    return vars;
   }, [
-    props.isShown,
     primary,
     secondary,
     tertiary,
-    setPreviewTheme,
-    setCustomTheme,
+    useCustomPrimary,
+    useCustomSecondary,
+    useCustomTertiary,
+    customPrimary,
+    customSecondaryText,
+    customSecondaryButton,
+    customTertiaryBg,
+    customTertiaryAccent,
   ]);
 
   const handleClose = () => {
@@ -219,15 +359,17 @@ export function CustomThemeModal(props: {
 
   const handleSave = () => {
     const themeName = name.trim() || "Untitled Theme";
-    const id = props.themeToEdit
-      ? props.themeToEdit.id
-      : `custom-${Date.now()}`;
+    const id = props.themeToEdit ? props.themeToEdit.id : `custom-${Date.now()}`;
     const newTheme: SavedCustomTheme = {
       id,
       name: themeName,
-      primary,
-      secondary,
-      tertiary,
+      primary: useCustomPrimary ? `custom:${customPrimary}` : primary,
+      secondary: useCustomSecondary
+        ? `custom:${customSecondaryText},${customSecondaryButton}`
+        : secondary,
+      tertiary: useCustomTertiary
+        ? `custom:${customTertiaryBg},${customTertiaryAccent}`
+        : tertiary,
     };
 
     if (props.onSave) {
@@ -242,32 +384,52 @@ export function CustomThemeModal(props: {
 
   return (
     <OverlayPortal show={props.isShown}>
-      <div className="absolute inset-0 z-[1000] flex flex-col lg:flex-row bg-background-main/95 backdrop-blur-3xl text-white pointer-events-auto overflow-hidden">
-        {/* Left Section - Name, Preview & Actions */}
-        <div className="flex-1 flex flex-col p-6 md:p-12 border-b lg:border-b-0 lg:border-r border-white/5 relative overflow-y-auto">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-black tracking-tighter mb-4 text-white uppercase flex flex-wrap gap-x-3 md:block">
-              <span>
-                {props.themeToEdit
-                  ? t("settings.appearance.customTheme.editBtn", "Edit")
-                  : t("settings.appearance.customTheme.createBtn", "Create")}
-              </span>
-              <br className="hidden md:block" />
-              <span>
-                {t(
-                  "settings.appearance.customTheme.createBtn2",
-                  "Your Own Theme",
-                )}
-              </span>
+      <div className="absolute inset-0 z-[1000] flex flex-col lg:flex-row bg-background-main/98 backdrop-blur-3xl text-white pointer-events-auto overflow-hidden animate-in fade-in duration-500">
+        {/* Full Modal Live Preview Overlay */}
+        {isFullPreview && (
+          <div className="absolute inset-0 z-[1100] bg-black/40 backdrop-blur-md flex items-center justify-center p-8 animate-in zoom-in-95 duration-300">
+            <div className="relative w-full h-full max-w-6xl max-h-[80vh]">
+              <DetailedPreview vars={previewVars} scale={1} />
+              <button
+                type="button"
+                onClick={() => setIsFullPreview(false)}
+                className="absolute -top-12 right-0 flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black font-bold hover:bg-gray-200 transition-colors shadow-2xl"
+              >
+                <Icon icon={Icons.X} />
+                Exit Preview
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Left Section - Identity & Detailed Preview */}
+        <div className="flex-1 flex flex-col p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-white/5 overflow-y-auto">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-4xl font-black tracking-tighter text-white uppercase leading-none">
+              Create
+              <br />
+              <span className="text-white/40">Your Own</span>
+              <br />
+              Theme
             </h1>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setIsFullPreview(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition-all border border-white/5"
+              >
+                <Icon icon={Icons.EYE} />
+                Full Preview
+              </button>
+            </div>
           </div>
 
-          <div className="my-4">
+          <div className="mb-10">
             <input
               type="text"
               id="theme-name-input"
               name="theme-name"
-              className="w-full text-2xl md:text-3xl font-black bg-transparent border-none outline-none text-white placeholder-white/20 transition-colors min-w-0"
+              className="w-full text-3xl font-black bg-transparent border-none outline-none text-white placeholder-white/10 transition-colors"
               placeholder="Name your theme..."
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -275,23 +437,46 @@ export function CustomThemeModal(props: {
             />
           </div>
 
-          {/* Live Preview */}
-          <div className="flex-1 flex flex-col justify-center py-4">
-            <p className="text-white/40 text-xs uppercase tracking-widest mb-3 font-semibold">
-              Live Preview
-            </p>
-            <LivePreview />
+          {/* Scale Control & High-Fidelity Preview Container */}
+          <div className="flex-1 flex flex-col justify-center items-center min-h-[400px]">
+            <div className="w-full max-w-2xl">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-[10px] uppercase tracking-[0.2em] font-black text-white/30">
+                  Live Concept Preview
+                </p>
+                <div className="flex items-center gap-4">
+                  <Icon icon={Icons.SEARCH} className="text-xs opacity-20" />
+                  <input
+                    type="range"
+                    min="0.3"
+                    max="1"
+                    step="0.01"
+                    value={scale}
+                    onChange={(e) => setScale(parseFloat(e.target.value))}
+                    className="w-24 h-1 bg-white/10 rounded-full appearance-none cursor-pointer hover:bg-white/20 transition-all [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full"
+                  />
+                  <span className="text-[10px] font-mono text-white/40 w-8">
+                    {Math.round(scale * 100)}%
+                  </span>
+                </div>
+              </div>
+
+              <div className="relative rounded-2xl p-4 bg-black/20 border border-white/5 overflow-hidden">
+                <DetailedPreview vars={previewVars} scale={scale} />
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-3 mt-auto w-full pt-4">
+          {/* Footer Actions */}
+          <div className="flex flex-col md:flex-row items-center gap-4 mt-12 w-full">
             <Button
-              className="w-full md:w-auto md:flex-1 !bg-white/5 hover:!bg-white/10 !text-white !font-bold !px-6 !py-4 !rounded-xl transition-all"
+              className="w-full md:w-auto md:flex-1 !bg-white/5 hover:!bg-white/10 !text-white !font-bold !px-6 !py-5 !rounded-2xl border border-white/5 transition-all"
               onClick={handleClose}
             >
               {t("global.cancel", "Cancel")}
             </Button>
             <Button
-              className="w-full md:w-auto md:flex-[2] !bg-white hover:!bg-gray-200 !text-black !font-black !px-10 !py-4 !rounded-xl transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-2xl shadow-white/10"
+              className="w-full md:w-auto md:flex-[2] !bg-white hover:!bg-gray-200 !text-black !font-black !px-12 !py-5 !rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.1)]"
               onClick={handleSave}
               disabled={name.trim().length === 0}
             >
@@ -300,34 +485,41 @@ export function CustomThemeModal(props: {
           </div>
         </div>
 
-        {/* Right Section - Color Pickers */}
-        <div className="w-full lg:w-[50%] xl:w-[45%] flex flex-col gap-8 p-6 md:p-12 overflow-y-auto overflow-x-hidden custom-scrollbar">
-          {/* Primary */}
-          <div className="space-y-4">
+        {/* Right Section - Advanced Color Configuration */}
+        <div className="w-full lg:w-[420px] xl:w-[480px] flex flex-col gap-10 p-8 md:p-12 overflow-y-auto overflow-x-hidden custom-scrollbar bg-black/10">
+          {/* Section: Primary */}
+          <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold tracking-tight">
-                Primary Color
-              </h2>
+              <div>
+                <h2 className="text-sm font-black text-white/40 uppercase tracking-widest">
+                  Primary Theme
+                </h2>
+                <p className="text-[10px] text-white/20 mt-1 uppercase tracking-wider">
+                  Branding & Interaction
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setUseCustomPrimary(!useCustomPrimary)}
                 className={classNames(
-                  "text-xs px-3 py-1.5 rounded-lg transition-colors font-medium",
+                  "flex items-center gap-2 text-[10px] px-3 py-2 rounded-xl transition-all font-black uppercase tracking-tighter border",
                   useCustomPrimary
-                    ? "bg-white/20 text-white"
-                    : "bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10",
+                    ? "bg-white text-black border-white"
+                    : "bg-white/5 text-white/40 border-white/5 hover:border-white/20 hover:text-white/80",
                 )}
               >
-                <Icon icon={Icons.BRUSH} className="mr-1" />
+                <Icon icon={Icons.BRUSH} />
                 Custom
               </button>
             </div>
             {useCustomPrimary ? (
-              <CustomColorPicker
-                label="Primary accent color"
-                value={customPrimaryColor}
-                onChange={setCustomPrimaryColor}
-              />
+              <div className="p-5 rounded-2xl bg-white/5 border border-white/5 animate-in slide-in-from-top-2">
+                <CustomColorPicker
+                  label="Accent highlight"
+                  value={customPrimary}
+                  onChange={setCustomPrimary}
+                />
+              </div>
             ) : (
               <div className="flex flex-wrap gap-3">
                 {primaryOptions.map((opt) => (
@@ -343,32 +535,47 @@ export function CustomThemeModal(props: {
             )}
           </div>
 
-          {/* Secondary */}
-          <div className="space-y-4">
+          <div className="h-px bg-white/5" />
+
+          {/* Section: Secondary */}
+          <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold tracking-tight">
-                Secondary Color
-              </h2>
+              <div>
+                <h2 className="text-sm font-black text-white/40 uppercase tracking-widest">
+                  Secondary Details
+                </h2>
+                <p className="text-[10px] text-white/20 mt-1 uppercase tracking-wider">
+                  Typography & Elements
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setUseCustomSecondary(!useCustomSecondary)}
                 className={classNames(
-                  "text-xs px-3 py-1.5 rounded-lg transition-colors font-medium",
+                  "flex items-center gap-2 text-[10px] px-3 py-2 rounded-xl transition-all font-black uppercase tracking-tighter border",
                   useCustomSecondary
-                    ? "bg-white/20 text-white"
-                    : "bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10",
+                    ? "bg-white text-black border-white"
+                    : "bg-white/5 text-white/40 border-white/5 hover:border-white/20 hover:text-white/80",
                 )}
               >
-                <Icon icon={Icons.BRUSH} className="mr-1" />
+                <Icon icon={Icons.BRUSH} />
                 Custom
               </button>
             </div>
             {useCustomSecondary ? (
-              <CustomColorPicker
-                label="Secondary text color"
-                value={customSecondaryColor}
-                onChange={setCustomSecondaryColor}
-              />
+              <div className="p-5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-6 animate-in slide-in-from-top-2">
+                <CustomColorPicker
+                  label="Primary text color"
+                  value={customSecondaryText}
+                  onChange={setCustomSecondaryText}
+                />
+                <div className="h-px bg-white/5" />
+                <CustomColorPicker
+                  label="Secondary buttons"
+                  value={customSecondaryButton}
+                  onChange={setCustomSecondaryButton}
+                />
+              </div>
             ) : (
               <div className="flex flex-wrap gap-3">
                 {secondaryOptions.map((opt) => (
@@ -385,32 +592,47 @@ export function CustomThemeModal(props: {
             )}
           </div>
 
-          {/* Tertiary */}
-          <div className="space-y-4">
+          <div className="h-px bg-white/5" />
+
+          {/* Section: Tertiary */}
+          <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold tracking-tight">
-                Tertiary Color
-              </h2>
+              <div>
+                <h2 className="text-sm font-black text-white/40 uppercase tracking-widest">
+                  Tertiary Base
+                </h2>
+                <p className="text-[10px] text-white/20 mt-1 uppercase tracking-wider">
+                  Surfaces & Accents
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setUseCustomTertiary(!useCustomTertiary)}
                 className={classNames(
-                  "text-xs px-3 py-1.5 rounded-lg transition-colors font-medium",
+                  "flex items-center gap-2 text-[10px] px-3 py-2 rounded-xl transition-all font-black uppercase tracking-tighter border",
                   useCustomTertiary
-                    ? "bg-white/20 text-white"
-                    : "bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10",
+                    ? "bg-white text-black border-white"
+                    : "bg-white/5 text-white/40 border-white/5 hover:border-white/20 hover:text-white/80",
                 )}
               >
-                <Icon icon={Icons.BRUSH} className="mr-1" />
+                <Icon icon={Icons.BRUSH} />
                 Custom
               </button>
             </div>
             {useCustomTertiary ? (
-              <CustomColorPicker
-                label="Background color"
-                value={customTertiaryColor}
-                onChange={setCustomTertiaryColor}
-              />
+              <div className="p-5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-6 animate-in slide-in-from-top-2">
+                <CustomColorPicker
+                  label="Main background"
+                  value={customTertiaryBg}
+                  onChange={setCustomTertiaryBg}
+                />
+                <div className="h-px bg-white/5" />
+                <CustomColorPicker
+                  label="Accent surfaces"
+                  value={customTertiaryAccent}
+                  onChange={setCustomTertiaryAccent}
+                />
+              </div>
             ) : (
               <div className="flex flex-wrap gap-3">
                 {tertiaryOptions.map((opt) => (
