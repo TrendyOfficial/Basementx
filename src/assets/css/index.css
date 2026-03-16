@@ -272,6 +272,27 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
   box-shadow: 0 0 10px theme("colors.themePreview.secondary");
 }
 
+/* Gamepad specific focus - Premium TV Experience */
+.gamepad-active *:focus-visible {
+  outline: 4px solid #ffffff !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
+  border-radius: 4px;
+  z-index: 50;
+  transition:
+    outline 0.2s ease,
+    outline-offset 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Ensure cards and buttons look good when focused */
+.gamepad-active .group:focus-visible,
+.gamepad-active button:focus-visible,
+.gamepad-active a:focus-visible {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
 [dir="rtl"] .transform {
   /* Invert horizontal X offset on transform (Tailwind RTL plugin does the rest) */
   transform: translate(calc(var(--tw-translate-x) * -1), var(--tw-translate-y))

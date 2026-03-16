@@ -27,15 +27,15 @@ export const createPlayingSlice: MakeSlice<PlayingSlice> = (set) => ({
     playbackRate: 1,
   },
   play() {
-    set((state) => {
+    set((state: any) => {
       state.mediaPlaying.isPlaying = true;
       state.mediaPlaying.isPaused = false;
     });
   },
   pause() {
-    set((state) => {
+    set((state: any) => {
       state.mediaPlaying.isPlaying = false;
-      state.mediaPlaying.isPaused = false;
+      state.mediaPlaying.isPaused = true;
     });
   },
 });

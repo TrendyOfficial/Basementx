@@ -41,6 +41,8 @@ export interface PreferencesStore {
   enableNumberKeySeeking: boolean;
   enablePauseOverlay: boolean;
   enableGamepadControls: boolean;
+  gamepadSetupComplete: boolean;
+  gamepadInputMode: "controller" | "kbm" | "both";
   gamepadMapping: Record<string, string>;
   keyboardShortcuts: KeyboardShortcuts;
 
@@ -77,6 +79,8 @@ export interface PreferencesStore {
   setEnableNumberKeySeeking(v: boolean): void;
   setEnablePauseOverlay(v: boolean): void;
   setEnableGamepadControls(v: boolean): void;
+  setGamepadSetupComplete(v: boolean): void;
+  setGamepadInputMode(v: "controller" | "kbm" | "both"): void;
   setGamepadMapping(v: Record<string, string>): void;
   setKeyboardShortcuts(v: KeyboardShortcuts): void;
 }
@@ -117,6 +121,8 @@ export const usePreferencesStore = create(
       enableNumberKeySeeking: true,
       enablePauseOverlay: false,
       enableGamepadControls: false,
+      gamepadSetupComplete: false,
+      gamepadInputMode: "both",
       gamepadMapping: {},
       keyboardShortcuts: DEFAULT_KEYBOARD_SHORTCUTS,
       setEnableThumbnails(v) {
@@ -287,6 +293,16 @@ export const usePreferencesStore = create(
       setEnableGamepadControls(v) {
         set((s) => {
           s.enableGamepadControls = v;
+        });
+      },
+      setGamepadSetupComplete(v) {
+        set((s) => {
+          s.gamepadSetupComplete = v;
+        });
+      },
+      setGamepadInputMode(v) {
+        set((s) => {
+          s.gamepadInputMode = v;
         });
       },
       setGamepadMapping(v) {

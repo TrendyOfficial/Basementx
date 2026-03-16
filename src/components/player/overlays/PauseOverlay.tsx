@@ -221,7 +221,7 @@ export function PauseOverlay() {
     <div
       className={`absolute inset-0 z-[60] flex flex-col justify-between bg-black/80 transition-opacity duration-700 ${
         shouldShow
-          ? "opacity-100 pointer-events-auto cursor-pointer"
+          ? "opacity-100 pointer-events-auto cursor-default"
           : "opacity-0 pointer-events-none"
       }`}
       onClick={() => play()}

@@ -276,48 +276,98 @@ export function PreferencesPart(props: {
             </div>
           </div>
 
-          {/* Keyboard Shortcuts Preference */}
+          {/* Gamepad Setup & Controls */}
           <div>
             <p className="text-white font-bold mb-3">
-              {t("settings.preferences.keyboardShortcuts")}
+              {t("settings.preferences.gamepadTitle", "Controller Support")}
             </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.preferences.keyboardShortcutsDescription")}
-            </p>
-          </div>
-          <div className="flex gap-3 max-w-[25rem]">
-            <Button
-              theme="secondary"
-              onClick={() => showModal("keyboard-commands-edit")}
-              className="flex-1"
-            >
-              {t("settings.preferences.keyboardShortcutsLabel")}
-            </Button>
-            <Button
-              theme="secondary"
-              onClick={() => showModal("gamepad-controls-edit")}
-              className="flex-1"
-            >
-              {" "}
+            <p className="max-w-[25rem] font-medium mb-4">
               {t(
-                "settings.preferences.gamepadControlsLabel",
-                "Customizze Controller Keybinds",
+                "settings.preferences.gamepadDescription",
+                "Navigate P-Stream using your Xbox or PlayStation controller.",
               )}
-            </Button>
-          </div>
+            </p>
 
-          {/* Gamepad Enable Toggle */}
-          <div
-            onClick={() => setEnableGamepadControls(!enableGamepadControls)}
-            className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-          >
-            <Toggle enabled={enableGamepadControls} />
-            <p className="flex-1 text-white font-bold">
-              {t(
-                "settings.preferences.enableGamepadControls",
-                "Enable controller support",
+            <div className="flex flex-col gap-4 max-w-[25rem]">
+              {!enableGamepadControls || !usePreferencesStore.getState().gamepadSetupComplete ? (
+                <Button
+                  theme="primary"
+                  onClick={() => navigate("/gamepad-setup")}
+                  className="w-full py-4 text-lg"
+                >
+                  {t(
+                    "settings.preferences.setupGamepad",
+                    "Setup Controller Support",
+                  )}
+                </Button>
+              ) : (
+                <>
+                  <div
+                    onClick={() =>
+                      setEnableGamepadControls(!enableGamepadControls)
+                    }
+                    className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none cursor-pointer space-x-3 flex items-center py-3 px-4 rounded-lg border border-white/5"
+                  >
+                    <Toggle enabled={enableGamepadControls} />
+                    <p className="flex-1 text-white font-bold">
+                      {t(
+                        "settings.preferences.enableGamepadControls",
+                        "Enabled",
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <Button
+                      theme="secondary"
+                      onClick={() => navigate("/gamepad-setup")}
+                      className="flex-1"
+                    >
+                      {t("settings.preferences.redoSetup", "Redo Setup")}
+                    </Button>
+                    <Button
+                      theme="secondary"
+                      onClick={() => showModal("gamepad-controls-edit")}
+                      className="flex-1"
+                    >
+                      {t("settings.preferences.keybinds", "Keybinds")}
+                    </Button>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-type-dimmed mb-2 uppercase font-bold tracking-wider">
+                      Input Mode
+                    </p>
+                    <Dropdown
+                      className="w-full"
+                      options={[
+                        { id: "both", name: "Both (Recommended)" },
+                        { id: "controller", name: "Controller Only" },
+                        { id: "kbm", name: "Keyboard & Mouse Only" },
+                      ]}
+                      selectedItem={
+                        [
+                          { id: "both", name: "Both (Recommended)" },
+                          { id: "controller", name: "Controller Only" },
+                          { id: "kbm", name: "Keyboard & Mouse Only" },
+                        ].find(
+                          (i) =>
+                            i.id ===
+                            usePreferencesStore.getState().gamepadInputMode,
+                        ) || { id: "both", name: "Both (Recommended)" }
+                      }
+                      setSelectedItem={(opt) =>
+                        usePreferencesStore
+                          .getState()
+                          .setGamepadInputMode(
+                            opt.id as "controller" | "kbm" | "both",
+                          )
+                      }
+                    />
+                  </div>
+                </>
               )}
-            </p>
+            </div>
           </div>
         </div>
 

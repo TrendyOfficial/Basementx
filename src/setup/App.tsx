@@ -15,6 +15,7 @@ import { DetailsModal } from "@/components/overlays/detailsModal";
 import { GamepadControlsModal } from "@/components/overlays/GamepadControlsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
+import { GamepadGlobalListener } from "@/components/gamepad/GamepadGlobalListener";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
 import { SupportInfoModal } from "@/components/overlays/SupportInfoModal";
 import { TraktAuthHandler } from "@/components/TraktAuthHandler";
@@ -51,11 +52,18 @@ import { LanguageProvider } from "@/stores/language";
 
 const DeveloperPage = lazy(() => import("@/pages/DeveloperPage"));
 const TestView = lazy(() => import("@/pages/developer/TestView"));
+const GamepadSetupPage = lazyWithPreload(
+  () => import("@/pages/GamepadSetup"),
+  {
+    factory: (m) => m.GamepadSetupPage,
+  },
+);
 const PlayerView = lazyWithPreload(() => import("@/pages/PlayerView"));
 const SettingsPage = lazyWithPreload(() => import("@/pages/Settings"));
 
 PlayerView.preload();
 SettingsPage.preload();
+GamepadSetupPage.preload();
 
 function LegacyUrlView({ children }: { children: ReactElement }) {
   const location = useLocation();
@@ -129,6 +137,7 @@ function App() {
 
   return (
     <Layout>
+      <GamepadGlobalListener />
       <TraktAuthHandler />
       <LanguageProvider />
       <NotificationModal id="notifications" />
@@ -168,6 +177,7 @@ function App() {
           />
           <Route path="/browse/:query?" element={<HomePage />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/gamepad-setup" element={<GamepadSetupPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/about" element={<AboutPage />} />
