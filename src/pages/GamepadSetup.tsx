@@ -22,7 +22,6 @@ const MANUAL_BUTTONS = [
 
 export function GamepadSetupPage() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const [step, setStep] = useState<SetupStep>("start");
   const [currentManualButton, setCurrentManualButton] = useState(0);
   const [detectedGamepad, setDetectedGamepad] = useState<string | null>(null);

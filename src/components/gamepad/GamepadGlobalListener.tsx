@@ -49,7 +49,7 @@ export function GamepadGlobalListener() {
           break;
       }
     },
-    [navigateSpatial, navigate, location.pathname, gamepadInputMode],
+    [navigateSpatial, location.pathname, gamepadInputMode],
   );
 
   useGamepadPolling({
