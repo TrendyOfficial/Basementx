@@ -277,7 +277,9 @@ export function CustomThemeModal(props: {
 
           {/* Live Preview */}
           <div className="flex-1 flex flex-col justify-center py-4">
-            <p className="text-white/40 text-xs uppercase tracking-widest mb-3 font-semibold">Live Preview</p>
+            <p className="text-white/40 text-xs uppercase tracking-widest mb-3 font-semibold">
+              Live Preview
+            </p>
             <LivePreview />
           </div>
 
@@ -303,7 +305,9 @@ export function CustomThemeModal(props: {
           {/* Primary */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold tracking-tight">Primary Color</h2>
+              <h2 className="text-xl font-bold tracking-tight">
+                Primary Color
+              </h2>
               <button
                 type="button"
                 onClick={() => setUseCustomPrimary(!useCustomPrimary)}
@@ -342,7 +346,9 @@ export function CustomThemeModal(props: {
           {/* Secondary */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold tracking-tight">Secondary Color</h2>
+              <h2 className="text-xl font-bold tracking-tight">
+                Secondary Color
+              </h2>
               <button
                 type="button"
                 onClick={() => setUseCustomSecondary(!useCustomSecondary)}
@@ -382,7 +388,9 @@ export function CustomThemeModal(props: {
           {/* Tertiary */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold tracking-tight">Tertiary Color</h2>
+              <h2 className="text-xl font-bold tracking-tight">
+                Tertiary Color
+              </h2>
               <button
                 type="button"
                 onClick={() => setUseCustomTertiary(!useCustomTertiary)}
