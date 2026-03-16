@@ -4,7 +4,7 @@ import loadVersion from "vite-plugin-package-version";
 import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
 import path from "path";
-import million from "million/compiler";
+
 import { handlebars } from "./plugins/handlebars";
 import { PluginOption, loadEnv, splitVendorChunkPlugin } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.VITE_BASE_URL || "/",
     plugins: [
-      million.vite({ auto: true, mute: true }),
+      
       handlebars({
         vars: {
           opensearchEnabled: env.VITE_OPENSEARCH_ENABLED === "true",
@@ -177,5 +177,9 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: "jsdom",
     },
+ preview: {
+  host: true,
+  port: 80,
+  allowedHosts: ["pstream.net, pstream-test.vercel.app"]
   };
 });
