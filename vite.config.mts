@@ -177,9 +177,10 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: "jsdom",
     },
- preview: {
-  host: true,
-  port: 80,
-  allowedHosts: ["pstream.net, pstream-test.vercel.app"]
+    preview: {
+      host: true,
+      port: 80,
+      allowedHosts: ["pstream.net", "pstream-test.vercel.app"],
+    },
   };
 });
