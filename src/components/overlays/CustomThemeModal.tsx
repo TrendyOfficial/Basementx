@@ -4,17 +4,13 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
-import {
-  SavedCustomTheme,
-  usePreviewThemeStore,
-  useThemeStore,
-} from "@/stores/theme";
+import { SavedCustomTheme, useThemeStore } from "@/stores/theme";
+import { colorToRgbString } from "@/utils/color";
 import {
   primaryOptions,
   secondaryOptions,
   tertiaryOptions,
 } from "@themes/custom";
-import { colorToRgbString } from "@/utils/color";
 
 import { OverlayPortal } from "./OverlayDisplay";
 
@@ -47,13 +43,13 @@ function DetailedPreview({
         <div className="absolute inset-0 opacity-20">
           {[...Array(20)].map((_, i) => (
             <div
-              key={i}
+              key={`star-id-${i}`}
               className="absolute bg-white rounded-full"
               style={{
-                width: Math.random() * 2 + 1 + "px",
-                height: Math.random() * 2 + 1 + "px",
-                top: Math.random() * 100 + "%",
-                left: Math.random() * 100 + "%",
+                width: `${(Math.random() * 2 + 1).toFixed(2)}px`,
+                height: `${(Math.random() * 2 + 1).toFixed(2)}px`,
+                top: `${(Math.random() * 100).toFixed(2)}%`,
+                left: `${(Math.random() * 100).toFixed(2)}%`,
               }}
             />
           ))}
@@ -144,7 +140,7 @@ function DetailedPreview({
 
         <div className="grid grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="space-y-2 group/card">
+            <div key={`card-id-${i}`} className="space-y-2 group/card">
               <div className="aspect-[2/3] rounded-xl bg-type-text/5 border border-white/5 relative overflow-hidden transition-transform duration-300 group-hover/card:scale-[1.02] shadow-lg">
                 <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent" />
                 {/* Micro menu icon mock */}
@@ -330,9 +326,8 @@ export function CustomThemeModal(props: {
     // 3. Tertiary
     if (useCustomTertiary) {
       vars["--colors-background-main"] = colorToRgbString(customTertiaryBg);
-      vars["--colors-themePreview-secondary"] = colorToRgbString(
-        customTertiaryAccent,
-      );
+      vars["--colors-themePreview-secondary"] =
+        colorToRgbString(customTertiaryAccent);
     } else {
       const opt = tertiaryOptions.find((o) => o.id === tertiary);
       if (opt) Object.assign(vars, opt.colors);
@@ -359,7 +354,9 @@ export function CustomThemeModal(props: {
 
   const handleSave = () => {
     const themeName = name.trim() || "Untitled Theme";
-    const id = props.themeToEdit ? props.themeToEdit.id : `custom-${Date.now()}`;
+    const id = props.themeToEdit
+      ? props.themeToEdit.id
+      : `custom-${Date.now()}`;
     const newTheme: SavedCustomTheme = {
       id,
       name: themeName,

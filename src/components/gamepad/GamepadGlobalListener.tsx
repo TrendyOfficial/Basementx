@@ -44,7 +44,6 @@ export function GamepadGlobalListener() {
           window.history.back();
           break;
         default:
-          // Do nothing for unknown actions
           break;
       }
     },
