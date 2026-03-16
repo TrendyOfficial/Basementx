@@ -35,9 +35,9 @@ function ColorOption({
       type="button"
       onClick={onClick}
       className={classNames(
-        "relative w-14 h-14 md:w-16 md:h-16 rounded-2xl flex-shrink-0 cursor-pointer overflow-hidden transition-all duration-300 ease-out outline-none",
+        "relative w-12 h-12 md:w-14 md:h-14 rounded-xl flex-shrink-0 cursor-pointer overflow-hidden transition-all duration-300 ease-out outline-none",
         selected
-          ? "ring-2 ring-white ring-offset-4 ring-offset-background-main scale-100 shadow-xl shadow-white/10"
+          ? "ring-2 ring-white ring-offset-2 ring-offset-background-main scale-100 shadow-xl shadow-white/10"
           : "hover:scale-110 opacity-60 hover:opacity-100 shadow-lg",
       )}
     >
@@ -61,11 +61,89 @@ function ColorOption({
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <Icon
             icon={Icons.CHECKMARK}
-            className="text-white text-2xl drop-shadow-md"
+            className="text-white text-xl drop-shadow-md"
           />
         </div>
       )}
     </button>
+  );
+}
+
+function CustomColorPicker({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (hex: string) => void;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="relative">
+        <input
+          type="color"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-12 h-12 md:w-14 md:h-14 rounded-xl cursor-pointer border-2 border-white/20 hover:border-white/50 transition-colors bg-transparent"
+        />
+      </div>
+      <div>
+        <p className="text-white/60 text-xs">{label}</p>
+        <p className="text-white font-mono text-sm">{value.toUpperCase()}</p>
+      </div>
+    </div>
+  );
+}
+
+function LivePreview() {
+  return (
+    <div className="w-full max-w-md mx-auto rounded-xl overflow-hidden border border-white/10 bg-background-main shadow-2xl">
+      <div className="relative w-full h-full">
+        {/* Background glow */}
+        <div className="bg-themePreview-primary/50 w-[130%] h-16 absolute left-1/2 -top-8 blur-2xl transform -translate-x-1/2 rounded-[100%]" />
+        {/* Navbar */}
+        <div className="relative p-3 flex justify-between items-center">
+          <div className="flex space-x-2 items-center">
+            <div className="bg-themePreview-primary w-6 h-3 rounded-full" />
+            <div className="bg-themePreview-ghost/20 w-10 h-2 rounded-full" />
+            <div className="bg-themePreview-ghost/20 w-6 h-2 rounded-full" />
+            <div className="bg-themePreview-ghost/20 w-6 h-2 rounded-full" />
+          </div>
+          <div className="bg-themePreview-ghost/20 w-4 h-4 rounded-full" />
+        </div>
+        {/* Hero */}
+        <div className="relative mt-4 flex items-center flex-col gap-2 px-6">
+          <div className="bg-themePreview-ghost/30 w-32 h-2 rounded-full" />
+          <div className="bg-themePreview-ghost/20 w-24 h-1.5 rounded-full" />
+          {/* Search bar */}
+          <div className="bg-themePreview-ghost/10 w-full max-w-xs h-6 mt-2 rounded-full" />
+        </div>
+        {/* Media grid */}
+        <div className="mt-8 px-4 pb-4">
+          <div className="flex gap-2 items-center mb-2">
+            <div className="bg-themePreview-primary w-3 h-3 rounded-full" />
+            <div className="bg-themePreview-ghost/30 w-16 h-1.5 rounded-full" />
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+          </div>
+          <div className="flex gap-2 items-center mb-2 mt-4">
+            <div className="bg-themePreview-secondary w-3 h-3 rounded-full" />
+            <div className="bg-themePreview-ghost/30 w-20 h-1.5 rounded-full" />
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -88,6 +166,14 @@ export function CustomThemeModal(props: {
   const [secondary, setSecondary] = useState(secondaryOptions[0].id);
   const [tertiary, setTertiary] = useState(tertiaryOptions[0].id);
 
+  // Custom color picker state (hex values)
+  const [useCustomPrimary, setUseCustomPrimary] = useState(false);
+  const [useCustomSecondary, setUseCustomSecondary] = useState(false);
+  const [useCustomTertiary, setUseCustomTertiary] = useState(false);
+  const [customPrimaryColor, setCustomPrimaryColor] = useState("#7B61FF");
+  const [customSecondaryColor, setCustomSecondaryColor] = useState("#FFFFFF");
+  const [customTertiaryColor, setCustomTertiaryColor] = useState("#0F0F12");
+
   const [wasShown, setWasShown] = useState(false);
 
   if (props.isShown && !wasShown) {
@@ -103,6 +189,9 @@ export function CustomThemeModal(props: {
       setSecondary(secondaryOptions[0].id);
       setTertiary(tertiaryOptions[0].id);
     }
+    setUseCustomPrimary(false);
+    setUseCustomSecondary(false);
+    setUseCustomTertiary(false);
   } else if (!props.isShown && wasShown) {
     setWasShown(false);
   }
@@ -153,11 +242,11 @@ export function CustomThemeModal(props: {
 
   return (
     <OverlayPortal show={props.isShown}>
-      <div className="absolute inset-0 z-[1000] flex flex-col md:flex-row bg-background-main/95 backdrop-blur-3xl text-white pointer-events-auto overflow-hidden">
-        {/* Left/Top Section - Typography & Actions */}
-        <div className="flex-1 flex flex-col p-8 md:p-16 border-b md:border-b-0 md:border-r border-white/5 relative">
+      <div className="absolute inset-0 z-[1000] flex flex-col lg:flex-row bg-background-main/95 backdrop-blur-3xl text-white pointer-events-auto overflow-hidden">
+        {/* Left Section - Name, Preview & Actions */}
+        <div className="flex-1 flex flex-col p-6 md:p-12 border-b lg:border-b-0 lg:border-r border-white/5 relative overflow-y-auto">
           <div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 text-white uppercase flex flex-wrap gap-x-3 md:block">
+            <h1 className="text-3xl md:text-4xl font-black tracking-tighter mb-4 text-white uppercase flex flex-wrap gap-x-3 md:block">
               <span>
                 {props.themeToEdit
                   ? t("settings.appearance.customTheme.editBtn", "Edit")
@@ -173,31 +262,34 @@ export function CustomThemeModal(props: {
             </h1>
           </div>
 
-          <div className="flex-1 flex flex-col justify-center my-6 md:my-0 h-full">
+          <div className="my-4">
             <input
               type="text"
               id="theme-name-input"
               name="theme-name"
-              className="w-full text-3xl md:text-4xl lg:text-5xl font-black bg-transparent border-none outline-none text-white placeholder-white/20 transition-colors min-w-0"
-              placeholder={t(
-                "settings.appearance.customTheme.namePlaceholder",
-                "Name your theme...",
-              )}
+              className="w-full text-2xl md:text-3xl font-black bg-transparent border-none outline-none text-white placeholder-white/20 transition-colors min-w-0"
+              placeholder="Name your theme..."
               value={name}
               onChange={(e) => setName(e.target.value)}
               autoFocus
             />
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-4 mt-auto w-full">
+          {/* Live Preview */}
+          <div className="flex-1 flex flex-col justify-center py-4">
+            <p className="text-white/40 text-xs uppercase tracking-widest mb-3 font-semibold">Live Preview</p>
+            <LivePreview />
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-3 mt-auto w-full pt-4">
             <Button
-              className="w-full md:w-auto md:flex-1 !bg-white/5 hover:!bg-white/10 !text-white !font-bold !px-8 !py-5 !rounded-2xl transition-all text-lg"
+              className="w-full md:w-auto md:flex-1 !bg-white/5 hover:!bg-white/10 !text-white !font-bold !px-6 !py-4 !rounded-xl transition-all"
               onClick={handleClose}
             >
               {t("global.cancel", "Cancel")}
             </Button>
             <Button
-              className="w-full md:w-auto md:flex-[2] !bg-white hover:!bg-gray-200 !text-black !font-black !px-12 !py-5 !rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 text-lg shadow-2xl shadow-white/10"
+              className="w-full md:w-auto md:flex-[2] !bg-white hover:!bg-gray-200 !text-black !font-black !px-10 !py-4 !rounded-xl transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-2xl shadow-white/10"
               onClick={handleSave}
               disabled={name.trim().length === 0}
             >
@@ -206,67 +298,125 @@ export function CustomThemeModal(props: {
           </div>
         </div>
 
-        {/* Right/Bottom Section - Colors */}
-        <div className="w-full md:w-[50%] lg:w-[45%] flex flex-col gap-12 p-8 md:p-16 overflow-y-auto overflow-x-hidden custom-scrollbar">
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight">
-                {t("settings.appearance.customParts.primary", "Primary")} Color
-              </h2>
+        {/* Right Section - Color Pickers */}
+        <div className="w-full lg:w-[50%] xl:w-[45%] flex flex-col gap-8 p-6 md:p-12 overflow-y-auto overflow-x-hidden custom-scrollbar">
+          {/* Primary */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold tracking-tight">Primary Color</h2>
+              <button
+                type="button"
+                onClick={() => setUseCustomPrimary(!useCustomPrimary)}
+                className={classNames(
+                  "text-xs px-3 py-1.5 rounded-lg transition-colors font-medium",
+                  useCustomPrimary
+                    ? "bg-white/20 text-white"
+                    : "bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10",
+                )}
+              >
+                <Icon icon={Icons.BRUSH} className="mr-1" />
+                Custom
+              </button>
             </div>
-            <div className="flex flex-wrap gap-4">
-              {primaryOptions.map((opt) => (
-                <ColorOption
-                  key={opt.id}
-                  opt={opt}
-                  selected={primary === opt.id}
-                  onClick={() => setPrimary(opt.id)}
-                  colorKey1="--colors-type-logo"
-                />
-              ))}
-            </div>
+            {useCustomPrimary ? (
+              <CustomColorPicker
+                label="Primary accent color"
+                value={customPrimaryColor}
+                onChange={setCustomPrimaryColor}
+              />
+            ) : (
+              <div className="flex flex-wrap gap-3">
+                {primaryOptions.map((opt) => (
+                  <ColorOption
+                    key={opt.id}
+                    opt={opt}
+                    selected={primary === opt.id}
+                    onClick={() => setPrimary(opt.id)}
+                    colorKey1="--colors-type-logo"
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight">
-                {t("settings.appearance.customParts.secondary", "Secondary")}{" "}
-                Color
-              </h2>
+          {/* Secondary */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold tracking-tight">Secondary Color</h2>
+              <button
+                type="button"
+                onClick={() => setUseCustomSecondary(!useCustomSecondary)}
+                className={classNames(
+                  "text-xs px-3 py-1.5 rounded-lg transition-colors font-medium",
+                  useCustomSecondary
+                    ? "bg-white/20 text-white"
+                    : "bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10",
+                )}
+              >
+                <Icon icon={Icons.BRUSH} className="mr-1" />
+                Custom
+              </button>
             </div>
-            <div className="flex flex-wrap gap-4">
-              {secondaryOptions.map((opt) => (
-                <ColorOption
-                  key={opt.id}
-                  opt={opt}
-                  selected={secondary === opt.id}
-                  onClick={() => setSecondary(opt.id)}
-                  colorKey1="--colors-type-text"
-                  colorKey2="--colors-buttons-secondary"
-                />
-              ))}
-            </div>
+            {useCustomSecondary ? (
+              <CustomColorPicker
+                label="Secondary text color"
+                value={customSecondaryColor}
+                onChange={setCustomSecondaryColor}
+              />
+            ) : (
+              <div className="flex flex-wrap gap-3">
+                {secondaryOptions.map((opt) => (
+                  <ColorOption
+                    key={opt.id}
+                    opt={opt}
+                    selected={secondary === opt.id}
+                    onClick={() => setSecondary(opt.id)}
+                    colorKey1="--colors-type-text"
+                    colorKey2="--colors-buttons-secondary"
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight">
-                {t("settings.appearance.customParts.tertiary", "Tertiary")}{" "}
-                Color
-              </h2>
+          {/* Tertiary */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold tracking-tight">Tertiary Color</h2>
+              <button
+                type="button"
+                onClick={() => setUseCustomTertiary(!useCustomTertiary)}
+                className={classNames(
+                  "text-xs px-3 py-1.5 rounded-lg transition-colors font-medium",
+                  useCustomTertiary
+                    ? "bg-white/20 text-white"
+                    : "bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10",
+                )}
+              >
+                <Icon icon={Icons.BRUSH} className="mr-1" />
+                Custom
+              </button>
             </div>
-            <div className="flex flex-wrap gap-4">
-              {tertiaryOptions.map((opt) => (
-                <ColorOption
-                  key={opt.id}
-                  opt={opt}
-                  selected={tertiary === opt.id}
-                  onClick={() => setTertiary(opt.id)}
-                  colorKey1="--colors-themePreview-primary"
-                  colorKey2="--colors-themePreview-secondary"
-                />
-              ))}
-            </div>
+            {useCustomTertiary ? (
+              <CustomColorPicker
+                label="Background color"
+                value={customTertiaryColor}
+                onChange={setCustomTertiaryColor}
+              />
+            ) : (
+              <div className="flex flex-wrap gap-3">
+                {tertiaryOptions.map((opt) => (
+                  <ColorOption
+                    key={opt.id}
+                    opt={opt}
+                    selected={tertiary === opt.id}
+                    onClick={() => setTertiary(opt.id)}
+                    colorKey1="--colors-themePreview-primary"
+                    colorKey2="--colors-themePreview-secondary"
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
