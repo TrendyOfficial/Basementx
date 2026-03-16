@@ -14,6 +14,10 @@ import {
 
 import { OverlayPortal } from "./OverlayDisplay";
 
+// Stable identifiers for mock UI elements to satisfy linter key unique requirements
+const MOCK_STARS = Array.from({ length: 20 }, (_, i) => `star-${i}`);
+const MOCK_CARDS = Array.from({ length: 4 }, (_, i) => `card-${i}`);
+
 /**
  * High-fidelity Detailed Preview Component
  */
@@ -41,9 +45,9 @@ function DetailedPreview({
         <div className="absolute -top-1/4 left-1/2 -translate-x-1/2 w-[150%] h-1/2 bg-themePreview-primary/20 blur-[120px] rounded-[100%] opacity-60" />
         {/* Particles / Stars Mock */}
         <div className="absolute inset-0 opacity-20">
-          {[...Array(20)].map((_, i) => (
+          {MOCK_STARS.map((id) => (
             <div
-              key={`star-id-${i}`}
+              key={id}
               className="absolute bg-white rounded-full"
               style={{
                 width: `${(Math.random() * 2 + 1).toFixed(2)}px`,
@@ -139,8 +143,8 @@ function DetailedPreview({
         </div>
 
         <div className="grid grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <div key={`card-id-${i}`} className="space-y-2 group/card">
+          {MOCK_CARDS.map((id) => (
+            <div key={id} className="space-y-2 group/card">
               <div className="aspect-[2/3] rounded-xl bg-type-text/5 border border-white/5 relative overflow-hidden transition-transform duration-300 group-hover/card:scale-[1.02] shadow-lg">
                 <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent" />
                 {/* Micro menu icon mock */}
