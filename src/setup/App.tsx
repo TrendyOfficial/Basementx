@@ -11,11 +11,11 @@ import {
 
 import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
 import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
+import { GamepadGlobalListener } from "@/components/gamepad/GamepadGlobalListener";
 import { DetailsModal } from "@/components/overlays/detailsModal";
 import { GamepadControlsModal } from "@/components/overlays/GamepadControlsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
-import { GamepadGlobalListener } from "@/components/gamepad/GamepadGlobalListener";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
 import { SupportInfoModal } from "@/components/overlays/SupportInfoModal";
 import { TraktAuthHandler } from "@/components/TraktAuthHandler";
@@ -52,12 +52,9 @@ import { LanguageProvider } from "@/stores/language";
 
 const DeveloperPage = lazy(() => import("@/pages/DeveloperPage"));
 const TestView = lazy(() => import("@/pages/developer/TestView"));
-const GamepadSetupPage = lazyWithPreload(
-  () => import("@/pages/GamepadSetup"),
-  {
-    factory: (m) => m.GamepadSetupPage,
-  },
-);
+const GamepadSetupPage = lazyWithPreload(() => import("@/pages/GamepadSetup"), {
+  factory: (m) => m.GamepadSetupPage,
+});
 const PlayerView = lazyWithPreload(() => import("@/pages/PlayerView"));
 const SettingsPage = lazyWithPreload(() => import("@/pages/Settings"));
 

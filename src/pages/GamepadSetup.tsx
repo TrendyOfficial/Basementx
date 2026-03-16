@@ -147,19 +147,22 @@ export function GamepadSetupPage() {
               </div>
             </div>
             <Heading2 className="!text-2xl mb-2">
-              {detectedGamepad ? "Controller Detected!" : "Waiting for Controller..."}
+              {detectedGamepad
+                ? "Controller Detected!"
+                : "Waiting for Controller..."}
             </Heading2>
             <Paragraph className="opacity-60">
-              {detectedGamepad
-                ? detectedGamepad
-                : "Please press any button on your controller to identify it."}
+              {detectedGamepad ||
+                "Please press any button on your controller to identify it."}
             </Paragraph>
           </div>
         )}
 
         {step === "manual" && (
           <div className="text-center py-12 bg-white/5 rounded-2xl border border-white/10 p-8">
-            <Heading2 className="!text-2xl mb-6">Verify Button Presses</Heading2>
+            <Heading2 className="!text-2xl mb-6">
+              Verify Button Presses
+            </Heading2>
             <div className="flex flex-col items-center gap-6">
               <div className="w-20 h-20 bg-themePreview-primary/20 rounded-full flex items-center justify-center text-3xl text-themePreview-primary animate-pulse">
                 <Icon icon={MANUAL_BUTTONS[currentManualButton].icon} />
@@ -195,6 +198,7 @@ export function GamepadSetupPage() {
               site using the D-Pad and Select button.
             </Paragraph>
             <button
+              type="button"
               onClick={finishSetup}
               className="bg-white text-black px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform"
             >

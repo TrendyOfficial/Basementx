@@ -289,9 +289,10 @@ export function PreferencesPart(props: {
             </p>
 
             <div className="flex flex-col gap-4 max-w-[25rem]">
-              {!enableGamepadControls || !usePreferencesStore.getState().gamepadSetupComplete ? (
+              {!enableGamepadControls ||
+              !usePreferencesStore.getState().gamepadSetupComplete ? (
                 <Button
-                  theme="primary"
+                  theme="purple"
                   onClick={() => navigate("/gamepad-setup")}
                   className="w-full py-4 text-lg"
                 >

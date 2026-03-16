@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useGamepadPolling } from "@/hooks/useGamepad";
@@ -42,11 +42,14 @@ export function GamepadGlobalListener() {
           (document.activeElement as HTMLElement)?.click();
           break;
         case "back":
-          navigate(-1);
+          window.history.back();
+          break;
+        default:
+          // Do nothing for unknown actions
           break;
       }
     },
-    [navigateSpatial, navigate, location.pathname],
+    [navigateSpatial, navigate, location.pathname, gamepadInputMode],
   );
 
   useGamepadPolling({

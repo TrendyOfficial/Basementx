@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
 export type NavigationDirection = "up" | "down" | "left" | "right";
 
@@ -64,6 +64,8 @@ export function useSpatialNavigation() {
             break;
           case "right":
             isCorrectDirection = dx > 0 && Math.abs(dy) < Math.abs(dx) * 1.5;
+            break;
+          default:
             break;
         }
 
