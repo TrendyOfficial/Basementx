@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -24,15 +24,15 @@ interface PauseDetails {
 }
 
 export function PauseOverlay() {
-  const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
-  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
-  const status = usePlayerStore((s) => s.status);
-  const meta = usePlayerStore((s) => s.meta);
-  const { time, duration, draggingTime } = usePlayerStore((s) => s.progress);
-  const { isSeeking } = usePlayerStore((s) => s.interface);
-  const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
-  const enablePauseOverlay = usePreferencesStore((s) => s.enablePauseOverlay);
-  const enableImageLogos = usePreferencesStore((s) => s.enableImageLogos);
+  const isPaused = usePlayerStore((s: any) => s.mediaPlaying.isPaused);
+  const isLoading = usePlayerStore((s: any) => s.mediaPlaying.isLoading);
+  const status = usePlayerStore((s: any) => s.status);
+  const meta = usePlayerStore((s: any) => s.meta);
+  const { time, duration, draggingTime } = usePlayerStore((s: any) => s.progress);
+  const { isSeeking } = usePlayerStore((s: any) => s.interface);
+  const playbackRate = usePlayerStore((s: any) => s.mediaPlaying.playbackRate);
+  const enablePauseOverlay = usePreferencesStore((s: any) => s.enablePauseOverlay);
+  const enableImageLogos = usePreferencesStore((s: any) => s.enableImageLogos);
   const { isMobile } = useIsMobile();
   const { showTargets } = useShouldShowControls();
   const { t } = useTranslation();
@@ -198,7 +198,7 @@ export function PauseOverlay() {
     });
   };
 
-  const timeRemainingText = t("player.time.remaining", {
+  const timeRemainingParts = t("player.time.remaining", {
     timeFinished,
     timeWatched,
     timeLeft,
@@ -210,17 +210,18 @@ export function PauseOverlay() {
         hour12: uses12HourClock(),
       },
     },
-  })
-    .replace(/ • /g, " | ")
-    .replace(/ · /g, " | ");
+  }).split(/[•·]| \| /);
+
+  const play = usePlayerStore((s) => s.play);
 
   return (
     <div
       className={`absolute inset-0 z-[60] flex flex-col justify-between bg-black/80 transition-opacity duration-700 ${
         shouldShow
-          ? "opacity-100 pointer-events-auto"
+          ? "opacity-100 pointer-events-auto cursor-pointer"
           : "opacity-0 pointer-events-none"
       }`}
+      onClick={() => play()}
     >
       <div className="flex-1 flex items-end pb-36 md:pb-44">
         <div className="ml-24 md:ml-48 lg:ml-64 max-w-lg lg:max-w-2xl">
@@ -267,18 +268,24 @@ export function PauseOverlay() {
               </>
             )}
 
-            {duration > 0 && (
-              <>
-                <span className="text-white/40">|</span>
-                <span>{timeRemainingText}</span>
-              </>
-            )}
+            {duration > 0 &&
+              timeRemainingParts.map((part: string, i: number) => (
+                <React.Fragment key={i}>
+                  {(i > 0 || details.genres.length > 0 || details.voteAverage !== null) && (
+                    <span className="text-white/40">|</span>
+                  )}
+                  <span>{part.trim()}</span>
+                </React.Fragment>
+              ))}
           </div>
 
           {overview && (
             <div
               className="group/desc cursor-pointer flex items-start gap-2"
-              onClick={handleOpenDetails}
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                handleOpenDetails();
+              }}
             >
               <p className="text-base lg:text-lg text-white/70 drop-shadow-md line-clamp-3 max-w-xl transition-colors group-hover/desc:text-white">
                 {overview}

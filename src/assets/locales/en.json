@@ -983,7 +983,7 @@
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
-      "remaining": "{{timeLeft}} left • Finish at {{timeFinished, datetime}}",
+      "remaining": "{{timeLeft}} left • Finishes at {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
     },
