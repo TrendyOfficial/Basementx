@@ -154,16 +154,6 @@ function DetailedPreview({
       {/* Hero Section */}
       <div className="relative z-10 mt-2 flex flex-col items-center px-12 text-center">
         <div className="p-3 mb-6 relative">
-          {/* Top floating icons mock (Discord etc) */}
-          <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex gap-4 opacity-50 scale-125">
-            <Icon
-              icon={Icons.DISCORD}
-              className="text-themePreview-primary drop-shadow-[0_0_15px_rgba(var(--colors-themePreview-primary),0.6)]"
-            />
-            <Icon icon={Icons.RISING_STAR} className="text-white/40" />
-            <Icon icon={Icons.BELL} className="text-white/20" />
-          </div>
-
           <h2 className="text-3xl sm:text-4xl font-black text-type-text tracking-tight mb-4 leading-tight">
             What would you like to
             <br />
@@ -464,7 +454,7 @@ export function CustomThemeModal(props: {
 
   return (
     <OverlayPortal show={props.isShown}>
-      <div className="absolute inset-0 z-[1000] flex flex-col lg:flex-row bg-background-main/98 backdrop-blur-3xl text-white pointer-events-auto overflow-hidden animate-in fade-in duration-500">
+      <div className="absolute inset-0 z-[1000] flex flex-col lg:flex-row bg-background-main text-white pointer-events-auto overflow-hidden animate-in fade-in duration-500">
         {/* Full Modal Live Preview Overlay */}
         {isFullPreview && (
           <div className="absolute inset-0 z-[1100] bg-black/40 backdrop-blur-md flex items-center justify-center p-8 animate-in zoom-in-95 duration-300 pointer-events-auto">

@@ -70,6 +70,7 @@ const parts = {
     "type.linkHover",
     "largeCard.icon",
     "mediaCard.barFillColor",
+    "themePreview.primary",
   ],
   secondary: [
     "type.text",
@@ -173,7 +174,6 @@ const parts = {
     "onboarding.card",
     "onboarding.cardHover",
     "errors.card",
-    "themePreview.primary",
     "themePreview.secondary",
     "themePreview.ghost",
     "video.scraping.card",

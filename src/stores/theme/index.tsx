@@ -148,8 +148,9 @@ export function ThemeProvider(props: {
     const values = colorStr.replace("custom:", "").split(",");
     const vars: Record<string, string> = {};
     keys.forEach((key, i) => {
-      if (values[i]) {
-        vars[key] = colorToRgbString(values[i]);
+      const val = values[i] || values[0];
+      if (val) {
+        vars[key] = colorToRgbString(val);
       }
     });
     return vars;
