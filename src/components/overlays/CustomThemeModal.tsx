@@ -461,7 +461,7 @@ export function CustomThemeModal(props: {
         {/* Full Modal Live Preview Overlay */}
         {isFullPreview && (
           <div className="absolute inset-0 z-[1100] bg-black/40 backdrop-blur-md flex items-center justify-center p-8 animate-in zoom-in-95 duration-300 pointer-events-auto">
-            <div className="relative w-full h-full max-w-6xl max-h-[85vh] flex items-center justify-center overflow-hidden">
+            <div className="relative w-full h-full max-w-6xl max-h-[85vh] flex items-center justify-center">
               {previewMode === "detailed" ? (
                 <DetailedPreview vars={previewVars} scale={1} />
               ) : (
@@ -470,7 +470,7 @@ export function CustomThemeModal(props: {
               <button
                 type="button"
                 onClick={() => setIsFullPreview(false)}
-                className="absolute -top-12 right-0 flex items-center gap-2 px-6 py-2.5 rounded-full bg-white text-black font-black hover:bg-gray-200 transition-all shadow-2xl active:scale-95 z-[1200]"
+                className="absolute -top-12 right-0 bg-white text-black px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform shadow-2xl z-[1200] flex items-center gap-2"
               >
                 <Icon icon={Icons.X} />
                 Exit Preview

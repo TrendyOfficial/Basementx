@@ -263,10 +263,13 @@ export function PauseOverlay() {
     <div
       className={`absolute inset-0 z-[60] flex flex-col justify-between bg-black/80 transition-opacity duration-700 ${
         shouldShow
-          ? "opacity-100 pointer-events-auto cursor-default"
+          ? "opacity-100 pointer-events-auto cursor-pointer"
           : "opacity-0 pointer-events-none"
       }`}
-      onClick={() => play()}
+      onClick={() => {
+        play();
+        setOverlayVisible(false);
+      }}
     >
       <div className="flex-1 flex items-end p-8 md:p-16 lg:p-24 pb-28 md:pb-36 lg:pb-44 w-full">
         <div className="max-w-2xl lg:max-w-4xl text-left">
