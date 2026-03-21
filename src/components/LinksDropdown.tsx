@@ -275,6 +275,8 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             <DropdownLink className="text-white" href="/settings">
               <UserAvatar />
               {(() => {
+                const parts = deviceName?.split(".");
+                if (!parts || parts.length !== 3) return deviceName;
                 try {
                   return decryptData(deviceName, bufferSeed);
                 } catch (error) {

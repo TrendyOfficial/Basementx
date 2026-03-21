@@ -144,6 +144,19 @@
     "cancel": "Cancel",
     "confirm": "Confirm"
   },
+  "bookmarks": {
+    "folders": {
+      "title": "Folders",
+      "counter": "{{count}} / {{max}}",
+      "empty": "No folders yet",
+      "moreInfo": "More Info",
+      "removeFromFolder": "Remove from folder",
+      "editDetails": "Edit Details",
+      "createFolder": "Create Folder",
+      "folderNamePlaceholder": "Folder name...",
+      "limitReached": "Folder limit reached ({{max}} max)"
+    }
+  },
   "auth": {
     "createAccount": "Don't have an account yet 😬 <0>Create an account.</0>",
     "deviceNameLabel": "Device name",
@@ -379,7 +392,8 @@
       }
     },
     "mediaList": {
-      "stopEditing": "Stop editing"
+      "stopEditing": "Stop editing",
+      "editMode": "Edit"
     },
     "watchHistory": {
       "sectionTitle": "Watch History",
@@ -1231,6 +1245,20 @@
         "primary": "Primary",
         "secondary": "Secondary",
         "tertiary": "Tertiary"
+      },
+      "customTheme": {
+        "editBtn": "Edit",
+        "createBtn": "Create",
+        "createBtn2": "Your Own Theme",
+        "namePlaceholder": "Name your theme...",
+        "livePreview": "Live Preview",
+        "customToggle": "Custom",
+        "primaryColor": "Primary Color",
+        "secondaryColor": "Secondary Color",
+        "tertiaryColor": "Tertiary Color",
+        "primaryColorLabel": "Primary accent color",
+        "secondaryColorLabel": "Secondary text color",
+        "tertiaryColorLabel": "Background color"
       },
       "title": "Appearance",
       "options": {

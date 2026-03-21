@@ -1,16 +1,27 @@
 // I'm sorry this is so confusing 😭
 
 import classNames from "classnames";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { mediaItemToId } from "@/backend/metadata/tmdb";
 import { DotList } from "@/components/text/DotList";
+import {
+  ContextMenu,
+  ContextMenuDivider,
+  ContextMenuItem,
+} from "@/components/utils/ContextMenu";
 import { Flare } from "@/components/utils/Flare";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
+import { useBookmarkStore } from "@/stores/bookmarks";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
+import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePreferencesStore } from "@/stores/preferences";
+import {
+  createGroupString,
+  parseGroupString,
+} from "@/utils/bookmarkModifications";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import { MediaBookmarkButton } from "./MediaBookmark";
@@ -108,7 +119,7 @@ export interface MediaCardProps {
   onShowDetails?: (media: MediaItem) => void;
   forceSkeleton?: boolean;
   editable?: boolean;
-  onEdit?: () => void;
+  onEdit?: (e?: React.MouseEvent) => void;
 }
 
 function checkReleased(media: MediaItem): boolean {
@@ -320,7 +331,7 @@ function MediaCardContent({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      onEdit?.();
+                      onEdit?.(e);
                     }}
                   >
                     <Icon
@@ -341,6 +352,7 @@ function MediaCardContent({
 export function MediaCard(props: MediaCardProps) {
   const { media, onShowDetails, forceSkeleton } = props;
   const { showModal } = useOverlayStack();
+  const { t } = useTranslation();
   const enableDetailsModal = usePreferencesStore(
     (state) => state.enableDetailsModal,
   );
@@ -378,6 +390,69 @@ export function MediaCard(props: MediaCardProps) {
     });
   }, [media, showModal, onShowDetails]);
 
+  const [contextMenuPos, setContextMenuPos] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const [isCreatingFolder, setIsCreatingFolder] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+
+  const bookmarks = useBookmarkStore((s) => s.bookmarks);
+  const modifyBookmarks = useBookmarkStore((s) => s.modifyBookmarks);
+  const addBookmarkWithGroups = useBookmarkStore(
+    (s) => s.addBookmarkWithGroups,
+  );
+
+  const isBookmarked = !!bookmarks[media.id];
+  const currentGroups = bookmarks[media.id]?.group || [];
+
+  const allGroups = useMemo(() => {
+    const groupSet = new Set<string>();
+    Object.values(bookmarks).forEach((bookmark) => {
+      if (bookmark.group) {
+        bookmark.group.forEach((group) => groupSet.add(group));
+      }
+    });
+    return Array.from(groupSet);
+  }, [bookmarks]);
+
+  const meta: PlayerMeta | undefined = useMemo(() => {
+    return media.year !== undefined
+      ? {
+          type: media.type,
+          title: media.title,
+          tmdbId: media.id,
+          releaseYear: media.year,
+          poster: media.poster,
+        }
+      : undefined;
+  }, [media]);
+
+  const toggleGroup = (groupName: string) => {
+    let newGroups = [...currentGroups];
+    if (newGroups.includes(groupName)) {
+      newGroups = newGroups.filter((g) => g !== groupName);
+    } else {
+      newGroups.push(groupName);
+    }
+
+    if (isBookmarked) {
+      modifyBookmarks([media.id], { groups: newGroups });
+    } else if (meta) {
+      addBookmarkWithGroups(meta, newGroups);
+    }
+  };
+
+  const handleCreateFolder = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newFolderName.trim() || allGroups.length >= 30) return;
+
+    const newGroupString = createGroupString("BOOKMARK", newFolderName.trim());
+    toggleGroup(newGroupString);
+    setIsCreatingFolder(false);
+    setNewFolderName("");
+  };
+
   const handleCardClick = (e: React.MouseEvent) => {
     if (enableDetailsModal && canLink) {
       e.preventDefault();
@@ -387,21 +462,133 @@ export function MediaCard(props: MediaCardProps) {
 
   const handleCardContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    handleShowDetails();
+    e.stopPropagation();
+    setIsCreatingFolder(false);
+    setContextMenuPos({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleEditClick = (e?: React.MouseEvent) => {
+    if (e) handleCardContextMenu(e);
   };
 
   const content = (
     <MediaCardContent
       {...props}
+      onEdit={props.onEdit ? handleEditClick : undefined}
       onShowDetails={handleShowDetails}
       forceSkeleton={forceSkeleton}
     />
   );
 
+  const contextMenuEl = contextMenuPos && (
+    <ContextMenu
+      x={contextMenuPos.x}
+      y={contextMenuPos.y}
+      onClose={() => setContextMenuPos(null)}
+    >
+      <div className="px-3 py-1 mb-1 text-xs text-white/50 font-bold uppercase tracking-wider">
+        {media.title || "Media"}
+      </div>
+      <ContextMenuDivider />
+      <ContextMenuItem onClick={handleShowDetails}>
+        <Icon icon={Icons.CIRCLE_EXCLAMATION} className="text-lg w-5" />
+        <span className="flex-1">{t("bookmarks.folders.moreInfo")}</span>
+      </ContextMenuItem>
+      {props.onEdit && (
+        <ContextMenuItem
+          onClick={() => {
+            setContextMenuPos(null);
+            props.onEdit?.();
+          }}
+        >
+          <Icon icon={Icons.EDIT} className="text-lg w-5" />
+          <span className="flex-1">{t("bookmarks.folders.editDetails")}</span>
+        </ContextMenuItem>
+      )}
+      <ContextMenuDivider />
+
+      <div className="px-3 py-2 text-xs text-white/50 font-bold uppercase tracking-wider flex justify-between items-center">
+        <span>{t("bookmarks.folders.title")}</span>
+        <span
+          className={allGroups.length >= 30 ? "text-semantic-rose-c100" : ""}
+        >
+          {allGroups.length} / 30
+        </span>
+      </div>
+
+      {allGroups.length === 0 && !isCreatingFolder && (
+        <div className="px-4 py-2 text-sm text-white/30 italic">
+          {t("bookmarks.folders.empty")}
+        </div>
+      )}
+
+      {allGroups.map((group: string) => {
+        const { name } = parseGroupString(group);
+        const isInGroup = currentGroups.includes(group);
+        return (
+          <ContextMenuItem key={group} onClick={() => toggleGroup(group)}>
+            <Icon
+              icon={isInGroup ? Icons.CHECKMARK : Icons.BOOKMARK}
+              className={classNames(
+                "text-lg w-5",
+                isInGroup ? "text-type-link" : "",
+              )}
+            />
+            <span
+              className={classNames(
+                "flex-1 truncate",
+                isInGroup ? "text-type-link font-medium" : "",
+              )}
+            >
+              {name}
+            </span>
+          </ContextMenuItem>
+        );
+      })}
+
+      {!isCreatingFolder ? (
+        <ContextMenuItem
+          onClick={() => setIsCreatingFolder(true)}
+          className="mt-1"
+          disabled={allGroups.length >= 30}
+        >
+          <Icon icon={Icons.PLUS} className="text-lg w-5" />
+          <span className="flex-1">{t("bookmarks.folders.createFolder")}</span>
+        </ContextMenuItem>
+      ) : (
+        <div className="px-3 py-2 mt-1 bg-white/5 rounded mx-1">
+          <form
+            onSubmit={handleCreateFolder}
+            className="flex gap-2 items-center"
+          >
+            <input
+              autoFocus
+              type="text"
+              placeholder={t("bookmarks.folders.folderNamePlaceholder")}
+              className="w-full bg-transparent outline-none text-sm text-white placeholder-white/30"
+              value={newFolderName}
+              onChange={(e) => setNewFolderName(e.target.value)}
+              onKeyDown={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
+              onContextMenu={(e) => e.stopPropagation()}
+            />
+            <button
+              type="submit"
+              className="text-type-link hover:text-white transition-colors"
+              disabled={!newFolderName.trim()}
+            >
+              <Icon icon={Icons.CHECKMARK} />
+            </button>
+          </form>
+        </div>
+      )}
+    </ContextMenu>
+  );
+
   if (!canLink) {
     return (
       <span
-        className="relative"
+        className="relative block"
         onClick={(e) => {
           if (e.defaultPrevented) {
             e.preventDefault();
@@ -410,6 +597,7 @@ export function MediaCard(props: MediaCardProps) {
         onContextMenu={handleCardContextMenu}
       >
         {content}
+        {contextMenuEl}
       </span>
     );
   }
@@ -419,13 +607,14 @@ export function MediaCard(props: MediaCardProps) {
       to={link}
       tabIndex={-1}
       className={classNames(
-        "tabbable",
+        "tabbable relative block",
         props.closable ? "hover:cursor-default" : "",
       )}
       onClick={handleCardClick}
       onContextMenu={handleCardContextMenu}
     >
       {content}
+      {contextMenuEl}
     </Link>
   );
 }

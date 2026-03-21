@@ -41,7 +41,7 @@ export const customTheme = createTheme({
 });
 
 // Define parts
-const parts = {
+export const parts = {
   primary: [
     "lightBar.light",
     "type.logo",

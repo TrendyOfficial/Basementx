@@ -564,11 +564,14 @@ export function SettingsPage() {
   const updateNickname = useAuthStore((s) => s.setAccountNickname);
   const decryptedName = useMemo(() => {
     if (!account) return "";
+    const parts = account.deviceName?.split(".");
+    if (!parts || parts.length !== 3) {
+      return account.deviceName || t("settings.account.devices.unknownDevice");
+    }
     try {
       return decryptData(account.deviceName, base64ToBuffer(account.seed));
     } catch (error) {
       console.warn("Failed to decrypt device name, using fallback:", error);
-      // Return a fallback device name if decryption fails
       return t("settings.account.devices.unknownDevice");
     }
   }, [account, t]);

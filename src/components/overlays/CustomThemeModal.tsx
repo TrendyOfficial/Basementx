@@ -299,10 +299,66 @@ function CustomColorPicker({
         />
       </div>
       <div>
+<<<<<<< HEAD
         <p className="text-white/60 text-[10px] uppercase tracking-wider font-bold">
           {label}
         </p>
         <p className="text-white font-mono text-xs">{value.toUpperCase()}</p>
+=======
+        <p className="text-white/60 text-xs">{label}</p>
+        <p className="text-white font-mono text-sm">{value.toUpperCase()}</p>
+      </div>
+    </div>
+  );
+}
+
+function LivePreview() {
+  return (
+    <div className="w-full max-w-md mx-auto rounded-xl overflow-hidden border border-white/10 bg-background-main shadow-2xl">
+      <div className="relative w-full h-full">
+        {/* Background glow */}
+        <div className="bg-themePreview-primary/50 w-[130%] h-16 absolute left-1/2 -top-8 blur-2xl transform -translate-x-1/2 rounded-[100%]" />
+        {/* Navbar */}
+        <div className="relative p-3 flex justify-between items-center">
+          <div className="flex space-x-2 items-center">
+            <div className="bg-themePreview-primary w-6 h-3 rounded-full" />
+            <div className="bg-themePreview-ghost/20 w-10 h-2 rounded-full" />
+            <div className="bg-themePreview-ghost/20 w-6 h-2 rounded-full" />
+            <div className="bg-themePreview-ghost/20 w-6 h-2 rounded-full" />
+          </div>
+          <div className="bg-themePreview-ghost/20 w-4 h-4 rounded-full" />
+        </div>
+        {/* Hero */}
+        <div className="relative mt-4 flex items-center flex-col gap-2 px-6">
+          <div className="bg-themePreview-ghost/30 w-32 h-2 rounded-full" />
+          <div className="bg-themePreview-ghost/20 w-24 h-1.5 rounded-full" />
+          {/* Search bar */}
+          <div className="bg-themePreview-ghost/10 w-full max-w-xs h-6 mt-2 rounded-full" />
+        </div>
+        {/* Media grid */}
+        <div className="mt-8 px-4 pb-4">
+          <div className="flex gap-2 items-center mb-2">
+            <div className="bg-themePreview-primary w-3 h-3 rounded-full" />
+            <div className="bg-themePreview-ghost/30 w-16 h-1.5 rounded-full" />
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+          </div>
+          <div className="flex gap-2 items-center mb-2 mt-4">
+            <div className="bg-themePreview-secondary w-3 h-3 rounded-full" />
+            <div className="bg-themePreview-ghost/30 w-20 h-1.5 rounded-full" />
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+            <div className="bg-themePreview-ghost/10 w-full h-16 rounded-lg" />
+          </div>
+        </div>
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
       </div>
     </div>
   );
@@ -325,6 +381,7 @@ export function CustomThemeModal(props: {
   const [secondary, setSecondary] = useState(secondaryOptions[0].id);
   const [tertiary, setTertiary] = useState(tertiaryOptions[0].id);
 
+<<<<<<< HEAD
   // Scaling and Modes
   const [scale, setScale] = useState(0.8);
   const [isFullPreview, setIsFullPreview] = useState(false);
@@ -341,12 +398,45 @@ export function CustomThemeModal(props: {
   const [customTertiaryAccent, setCustomTertiaryAccent] = useState("#1A1A1E");
 
   const [unlockMainBg, setUnlockMainBg] = useState(false);
+=======
+  // Custom color picker state (hex values)
+  const [useCustomPrimary, setUseCustomPrimary] = useState(false);
+  const [useCustomSecondary, setUseCustomSecondary] = useState(false);
+  const [useCustomTertiary, setUseCustomTertiary] = useState(false);
+  const [customPrimaryColor, setCustomPrimaryColor] = useState("#7B61FF");
+  const [customSecondaryColor, setCustomSecondaryColor] = useState("#FFFFFF");
+  const [customTertiaryColor, setCustomTertiaryColor] = useState("#0F0F12");
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
 
   const [wasShown, setWasShown] = useState(false);
   const [previewMode, setPreviewMode] = useState<"detailed" | "card">(
     "detailed",
   );
 
+<<<<<<< HEAD
+=======
+  if (props.isShown && !wasShown) {
+    setWasShown(true);
+    if (props.themeToEdit) {
+      setName(props.themeToEdit.name);
+      setPrimary(props.themeToEdit.primary);
+      setSecondary(props.themeToEdit.secondary);
+      setTertiary(props.themeToEdit.tertiary);
+    } else {
+      setName("");
+      setPrimary(primaryOptions[0].id);
+      setSecondary(secondaryOptions[0].id);
+      setTertiary(tertiaryOptions[0].id);
+    }
+    setUseCustomPrimary(false);
+    setUseCustomSecondary(false);
+    setUseCustomTertiary(false);
+  } else if (!props.isShown && wasShown) {
+    setWasShown(false);
+  }
+
+  // Sync state to the preview theme in real-time
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
   useEffect(() => {
     if (props.isShown && !wasShown) {
       setWasShown(true);
@@ -436,6 +526,7 @@ export function CustomThemeModal(props: {
     const newTheme: SavedCustomTheme = {
       id,
       name: themeName,
+<<<<<<< HEAD
       primary: useCustomPrimary ? `custom:${customPrimary}` : primary,
       secondary: useCustomSecondary
         ? `custom:${customSecondaryText},${customSecondaryButton}`
@@ -443,6 +534,14 @@ export function CustomThemeModal(props: {
       tertiary: useCustomTertiary
         ? `custom:${customTertiaryBg},${customTertiaryAccent}`
         : tertiary,
+=======
+      primary,
+      secondary,
+      tertiary,
+      ...(useCustomPrimary && { customPrimaryHex: customPrimaryColor }),
+      ...(useCustomSecondary && { customSecondaryHex: customSecondaryColor }),
+      ...(useCustomTertiary && { customTertiaryHex: customTertiaryColor }),
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
     };
 
     if (props.onSave) {
@@ -457,6 +556,7 @@ export function CustomThemeModal(props: {
 
   return (
     <OverlayPortal show={props.isShown}>
+<<<<<<< HEAD
       <div className="absolute inset-0 z-[1000] flex flex-col lg:flex-row bg-background-main text-white pointer-events-auto overflow-hidden animate-in fade-in duration-500">
         {/* Full Modal Live Preview Overlay */}
         {isFullPreview && (
@@ -488,6 +588,25 @@ export function CustomThemeModal(props: {
               <span className="text-white/40">Your Own</span>
               <br />
               Theme
+=======
+      <div className="absolute inset-0 z-[1000] flex flex-col lg:flex-row bg-background-main/95 backdrop-blur-3xl text-white pointer-events-auto overflow-hidden">
+        {/* Left Section - Name, Preview & Actions */}
+        <div className="flex-1 flex flex-col p-6 md:p-12 border-b lg:border-b-0 lg:border-r border-white/5 relative overflow-y-auto">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-black tracking-tighter mb-4 text-white uppercase flex flex-wrap gap-x-3 md:block">
+              <span>
+                {props.themeToEdit
+                  ? t("settings.appearance.customTheme.editBtn", "Edit")
+                  : t("settings.appearance.customTheme.createBtn", "Create")}
+              </span>
+              <br className="hidden md:block" />
+              <span>
+                {t(
+                  "settings.appearance.customTheme.createBtn2",
+                  "Your Own Theme",
+                )}
+              </span>
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
             </h1>
             <div className="flex gap-2">
               <div className="flex bg-white/5 p-1 rounded-xl border border-white/5">
@@ -527,19 +646,29 @@ export function CustomThemeModal(props: {
             </div>
           </div>
 
+<<<<<<< HEAD
           <div className="mb-10">
+=======
+          <div className="my-4">
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
             <input
               type="text"
               id="theme-name-input"
               name="theme-name"
+<<<<<<< HEAD
               className="w-full text-3xl font-black bg-transparent border-none outline-none text-white placeholder-white/10 transition-colors"
               placeholder="Name your theme..."
+=======
+              className="w-full text-2xl md:text-3xl font-black bg-transparent border-none outline-none text-white placeholder-white/20 transition-colors min-w-0"
+              placeholder={t("settings.appearance.customTheme.namePlaceholder")}
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
               value={name}
               onChange={(e) => setName(e.target.value)}
               autoFocus
             />
           </div>
 
+<<<<<<< HEAD
           {/* Scale Control & High-Fidelity Preview Container */}
           <div className="flex-1 flex flex-col justify-center items-center min-h-[400px]">
             <div className="w-full max-w-2xl">
@@ -578,12 +707,29 @@ export function CustomThemeModal(props: {
           <div className="flex flex-col md:flex-row items-center gap-4 mt-12 w-full">
             <Button
               className="w-full md:w-auto md:flex-1 !bg-white/5 hover:!bg-white/10 !text-white !font-bold !px-6 !py-5 !rounded-2xl border border-white/5 transition-all"
+=======
+          {/* Live Preview */}
+          <div className="flex-1 flex flex-col justify-center py-4">
+            <p className="text-white/40 text-xs uppercase tracking-widest mb-3 font-semibold">
+              {t("settings.appearance.customTheme.livePreview")}
+            </p>
+            <LivePreview />
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-3 mt-auto w-full pt-4">
+            <Button
+              className="w-full md:w-auto md:flex-1 !bg-white/5 hover:!bg-white/10 !text-white !font-bold !px-6 !py-4 !rounded-xl transition-all"
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
               onClick={handleClose}
             >
               {t("global.cancel", "Cancel")}
             </Button>
             <Button
+<<<<<<< HEAD
               className="w-full md:w-auto md:flex-[2] !bg-white hover:!bg-gray-200 !text-black !font-black !px-12 !py-5 !rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.1)]"
+=======
+              className="w-full md:w-auto md:flex-[2] !bg-white hover:!bg-gray-200 !text-black !font-black !px-10 !py-4 !rounded-xl transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-2xl shadow-white/10"
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
               onClick={handleSave}
               disabled={name.trim().length === 0}
             >
@@ -592,6 +738,7 @@ export function CustomThemeModal(props: {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* Right Section - Advanced Color Configuration */}
         <div className="w-full lg:w-[420px] xl:w-[480px] flex flex-col gap-10 p-8 md:p-12 overflow-y-auto overflow-x-hidden custom-scrollbar bg-black/10">
           {/* Section: Primary */}
@@ -640,6 +787,36 @@ export function CustomThemeModal(props: {
                   onChange={setCustomPrimary}
                 />
               </div>
+=======
+        {/* Right Section - Color Pickers */}
+        <div className="w-full lg:w-[50%] xl:w-[45%] flex flex-col gap-8 p-6 md:p-12 overflow-y-auto overflow-x-hidden custom-scrollbar">
+          {/* Primary */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold tracking-tight">
+                {t("settings.appearance.customTheme.primaryColor")}
+              </h2>
+              <button
+                type="button"
+                onClick={() => setUseCustomPrimary(!useCustomPrimary)}
+                className={classNames(
+                  "text-xs px-3 py-1.5 rounded-lg transition-colors font-medium",
+                  useCustomPrimary
+                    ? "bg-white/20 text-white"
+                    : "bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10",
+                )}
+              >
+                <Icon icon={Icons.BRUSH} className="mr-1" />
+                {t("settings.appearance.customTheme.customToggle")}
+              </button>
+            </div>
+            {useCustomPrimary ? (
+              <CustomColorPicker
+                label={t("settings.appearance.customTheme.primaryColorLabel")}
+                value={customPrimaryColor}
+                onChange={setCustomPrimaryColor}
+              />
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
             ) : (
               <div className="flex flex-wrap gap-3">
                 {primaryOptions.map((opt) => (
@@ -655,6 +832,7 @@ export function CustomThemeModal(props: {
             )}
           </div>
 
+<<<<<<< HEAD
           <div className="h-px bg-white/5" />
 
           {/* Section: Secondary */}
@@ -715,6 +893,34 @@ export function CustomThemeModal(props: {
                   onChange={setCustomSecondaryButton}
                 />
               </div>
+=======
+          {/* Secondary */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold tracking-tight">
+                {t("settings.appearance.customTheme.secondaryColor")}
+              </h2>
+              <button
+                type="button"
+                onClick={() => setUseCustomSecondary(!useCustomSecondary)}
+                className={classNames(
+                  "text-xs px-3 py-1.5 rounded-lg transition-colors font-medium",
+                  useCustomSecondary
+                    ? "bg-white/20 text-white"
+                    : "bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10",
+                )}
+              >
+                <Icon icon={Icons.BRUSH} className="mr-1" />
+                {t("settings.appearance.customTheme.customToggle")}
+              </button>
+            </div>
+            {useCustomSecondary ? (
+              <CustomColorPicker
+                label={t("settings.appearance.customTheme.secondaryColorLabel")}
+                value={customSecondaryColor}
+                onChange={setCustomSecondaryColor}
+              />
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
             ) : (
               <div className="flex flex-wrap gap-3">
                 {secondaryOptions.map((opt) => (
@@ -731,6 +937,7 @@ export function CustomThemeModal(props: {
             )}
           </div>
 
+<<<<<<< HEAD
           <div className="h-px bg-white/5" />
 
           {/* Section: Tertiary */}
@@ -813,6 +1020,34 @@ export function CustomThemeModal(props: {
                   onChange={setCustomTertiaryAccent}
                 />
               </div>
+=======
+          {/* Tertiary */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold tracking-tight">
+                {t("settings.appearance.customTheme.tertiaryColor")}
+              </h2>
+              <button
+                type="button"
+                onClick={() => setUseCustomTertiary(!useCustomTertiary)}
+                className={classNames(
+                  "text-xs px-3 py-1.5 rounded-lg transition-colors font-medium",
+                  useCustomTertiary
+                    ? "bg-white/20 text-white"
+                    : "bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10",
+                )}
+              >
+                <Icon icon={Icons.BRUSH} className="mr-1" />
+                {t("settings.appearance.customTheme.customToggle")}
+              </button>
+            </div>
+            {useCustomTertiary ? (
+              <CustomColorPicker
+                label={t("settings.appearance.customTheme.tertiaryColorLabel")}
+                value={customTertiaryColor}
+                onChange={setCustomTertiaryColor}
+              />
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
             ) : (
               <div className="flex flex-wrap gap-3">
                 {tertiaryOptions.map((opt) => (
@@ -821,8 +1056,13 @@ export function CustomThemeModal(props: {
                     opt={opt}
                     selected={tertiary === opt.id}
                     onClick={() => setTertiary(opt.id)}
+<<<<<<< HEAD
                     colorKey1="--colors-themePreview-primary"
                     colorKey2="--colors-themePreview-secondary"
+=======
+                    colorKey1="--colors-background-main"
+                    colorKey2="--colors-modal-background"
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
                   />
                 ))}
               </div>

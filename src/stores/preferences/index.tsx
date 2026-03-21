@@ -40,12 +40,16 @@ export interface PreferencesStore {
   enableAutoResumeOnPlaybackError: boolean;
   enableNumberKeySeeking: boolean;
   enablePauseOverlay: boolean;
+<<<<<<< HEAD
   pauseOverlayInactivityTime: number;
   enablePauseOverlayHoverHide: boolean;
   timeFormat12Hour: boolean | null;
   enableGamepadControls: boolean;
   gamepadSetupComplete: boolean;
   gamepadInputMode: "controller" | "kbm" | "both";
+=======
+  enableGamepadControls: boolean;
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
   gamepadMapping: Record<string, string>;
   keyboardShortcuts: KeyboardShortcuts;
 
@@ -81,12 +85,16 @@ export interface PreferencesStore {
   setEnableAutoResumeOnPlaybackError(v: boolean): void;
   setEnableNumberKeySeeking(v: boolean): void;
   setEnablePauseOverlay(v: boolean): void;
+<<<<<<< HEAD
   setPauseOverlayInactivityTime(v: number): void;
   setEnablePauseOverlayHoverHide(v: boolean): void;
   setTimeFormat12Hour(v: boolean | null): void;
   setEnableGamepadControls(v: boolean): void;
   setGamepadSetupComplete(v: boolean): void;
   setGamepadInputMode(v: "controller" | "kbm" | "both"): void;
+=======
+  setEnableGamepadControls(v: boolean): void;
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
   setGamepadMapping(v: Record<string, string>): void;
   setKeyboardShortcuts(v: KeyboardShortcuts): void;
 }
@@ -126,12 +134,16 @@ export const usePreferencesStore = create(
       enableAutoResumeOnPlaybackError: true,
       enableNumberKeySeeking: true,
       enablePauseOverlay: false,
+<<<<<<< HEAD
       pauseOverlayInactivityTime: 2,
       enablePauseOverlayHoverHide: false,
       timeFormat12Hour: null,
       enableGamepadControls: false,
       gamepadSetupComplete: false,
       gamepadInputMode: "both",
+=======
+      enableGamepadControls: false,
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
       gamepadMapping: {},
       keyboardShortcuts: DEFAULT_KEYBOARD_SHORTCUTS,
       setEnableThumbnails(v) {
@@ -299,6 +311,7 @@ export const usePreferencesStore = create(
           s.enablePauseOverlay = v;
         });
       },
+<<<<<<< HEAD
       setPauseOverlayInactivityTime(v) {
         set((s) => {
           s.pauseOverlayInactivityTime = v;
@@ -314,11 +327,14 @@ export const usePreferencesStore = create(
           s.timeFormat12Hour = v;
         });
       },
+=======
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
       setEnableGamepadControls(v) {
         set((s) => {
           s.enableGamepadControls = v;
         });
       },
+<<<<<<< HEAD
       setGamepadSetupComplete(v) {
         set((s) => {
           s.gamepadSetupComplete = v;
@@ -329,6 +345,8 @@ export const usePreferencesStore = create(
           s.gamepadInputMode = v;
         });
       },
+=======
+>>>>>>> 2b486a55be0d924065597078eed63478fc07278a
       setGamepadMapping(v) {
         set((s) => {
           s.gamepadMapping = v;

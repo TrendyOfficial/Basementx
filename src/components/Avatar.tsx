@@ -62,6 +62,13 @@ export function UserAvatar(props: {
 
   const deviceName = bufferSeed
     ? (() => {
+        const parts = auth.account.deviceName?.split(".");
+        if (!parts || parts.length !== 3) {
+          return (
+            auth.account.deviceName ||
+            t("settings.account.devices.unknownDevice")
+          );
+        }
         try {
           return decryptData(auth.account.deviceName, bufferSeed);
         } catch (error) {

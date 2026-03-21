@@ -252,7 +252,9 @@ export function BookmarksCarousel({
     }
   };
 
-  const handleEditBookmark = (bookmarkId: string) => {
+  const handleEditBookmark = (bookmarkId: string, e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     setEditingBookmarkId(bookmarkId);
     editBookmarkModal.show();
   };
@@ -423,7 +425,7 @@ export function BookmarksCarousel({
                           closable={editing}
                           onClose={() => removeBookmark(media.id)}
                           editable={editing}
-                          onEdit={() => handleEditBookmark(media.id)}
+                          onEdit={(e) => handleEditBookmark(media.id, e)}
                         />
                       </div>
                     ))}
@@ -544,7 +546,7 @@ export function BookmarksCarousel({
                             closable={editing}
                             onClose={() => removeBookmark(media.id)}
                             editable={editing}
-                            onEdit={() => handleEditBookmark(media.id)}
+                            onEdit={(e) => handleEditBookmark(media.id, e)}
                           />
                         </div>
                       ))

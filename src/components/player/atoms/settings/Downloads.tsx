@@ -68,7 +68,7 @@ export function DownloadView({ id }: { id: string }) {
     return downloadUrl; // Return original if no specific pattern is found
   }, [downloadUrl]);
 
-  const hlsDownload = `https://hls-downloader.pstream.mov/?url=${encodeURIComponent(processDownloadUrl())}`;
+  const hlsDownload = `https://hlsdownloader.thetuhin.com/?url=${encodeURIComponent(processDownloadUrl())}`;
   const [, copyToClipboard] = useCopyToClipboard();
 
   const sourceType = usePlayerStore((s) => s.source?.type);
@@ -181,7 +181,7 @@ export function DownloadView({ id }: { id: string }) {
                     <Trans i18nKey="player.menus.downloads.hlsDownloader">
                       <a
                         className="text-type-link"
-                        href="https://hls-downloader.pstream.mov/"
+                        href="https://hlsdownloader.thetuhin.com/"
                       />
                     </Trans>
                   </p>

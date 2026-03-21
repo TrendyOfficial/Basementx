@@ -76,14 +76,21 @@ export function DeviceListPart(props: {
     if (!seed) return [];
     let list = sessions.map((session) => {
       let decryptedName: string;
-      try {
-        decryptedName = decryptData(session.device, base64ToBuffer(seed));
-      } catch (error) {
-        console.warn(
-          `Failed to decrypt device name for session ${session.id}:`,
-          error,
-        );
-        decryptedName = t("settings.account.devices.unknownDevice");
+      const parts = session.device?.split(".");
+      if (!parts || parts.length !== 3) {
+        // Legacy plaintext device name (stored before encryption was added)
+        decryptedName =
+          session.device || t("settings.account.devices.unknownDevice");
+      } else {
+        try {
+          decryptedName = decryptData(session.device, base64ToBuffer(seed));
+        } catch (error) {
+          console.warn(
+            `Failed to decrypt device name for session ${session.id}:`,
+            error,
+          );
+          decryptedName = t("settings.account.devices.unknownDevice");
+        }
       }
       return {
         current: session.id === currentSessionId,

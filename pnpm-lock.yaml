@@ -43,8 +43,8 @@ importers:
         specifier: ^1.8.0
         version: 1.8.0
       '@p-stream/providers':
-        specifier: github:p-stream/providers#production
-        version: https://codeload.github.com/p-stream/providers/tar.gz/0a6ebbd7eed6a2e8103b8b306bc633abd7d97874
+        specifier: file:./private-providers
+        version: file:private-providers
       '@plasmohq/messaging':
         specifier: ^0.6.2
         version: 0.6.2(react@18.3.1)
@@ -1481,9 +1481,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/0a6ebbd7eed6a2e8103b8b306bc633abd7d97874':
-    resolution: {tarball: https://codeload.github.com/p-stream/providers/tar.gz/0a6ebbd7eed6a2e8103b8b306bc633abd7d97874}
-    version: 3.2.0
+  '@p-stream/providers@file:private-providers':
+    resolution: {directory: private-providers, type: directory}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -6488,14 +6487,13 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/0a6ebbd7eed6a2e8103b8b306bc633abd7d97874':
+  '@p-stream/providers@file:private-providers':
     dependencies:
       abort-controller: 3.0.0
       cheerio: 1.0.0-rc.12
       cookie: 0.6.0
       crypto-js: 4.2.0
       form-data: 4.0.4
-      fuse.js: 7.1.0
       hls-parser: 0.13.6
       iso-639-1: 3.1.5
       json5: 2.2.3
