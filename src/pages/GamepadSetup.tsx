@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Icon, Icons } from "@/components/Icon";
@@ -25,6 +25,7 @@ export function GamepadSetupPage() {
   const [currentManualButton, setCurrentManualButton] = useState(0);
   const [detectedGamepad, setDetectedGamepad] = useState<string | null>(null);
   const [isListening, setIsListening] = useState(false);
+  const prevButtonStates = useRef<Record<number, boolean>>({});
 
   const setGamepadSetupComplete = usePreferencesStore(
     (s: any) => s.setGamepadSetupComplete,
@@ -52,15 +53,18 @@ export function GamepadSetupPage() {
 
         if (step === "manual") {
           const targetButton = MANUAL_BUTTONS[currentManualButton];
-          if (gp.buttons[targetButton.id]?.pressed) {
+          const isPressed = !!gp.buttons[targetButton.id]?.pressed;
+          const wasPressed = prevButtonStates.current[targetButton.id] ?? false;
+
+          if (isPressed && !wasPressed) {
             if (currentManualButton < MANUAL_BUTTONS.length - 1) {
               setCurrentManualButton((s) => s + 1);
             } else {
               setStep("success");
               setIsListening(false);
             }
-            return;
           }
+          prevButtonStates.current[targetButton.id] = isPressed;
         }
       }
       requestAnimationFrame(poll);
@@ -198,7 +202,7 @@ export function GamepadSetupPage() {
             <button
               type="button"
               onClick={finishSetup}
-              className="bg-white text-black px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform"
+              className="bg-white text-black px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform tabbable focus:outline-none"
             >
               Back to Settings
             </button>

@@ -16,6 +16,7 @@ import { DetailsModal } from "@/components/overlays/detailsModal";
 import { GamepadControlsModal } from "@/components/overlays/GamepadControlsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
+import { MediaControllerMenuModal } from "@/components/overlays/MediaControllerMenu";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
 import { SupportInfoModal } from "@/components/overlays/SupportInfoModal";
 import { TraktAuthHandler } from "@/components/TraktAuthHandler";
@@ -147,6 +148,7 @@ function App() {
       <DetailsModal id="details" />
       <DetailsModal id="discover-details" />
       <DetailsModal id="player-details" />
+      <MediaControllerMenuModal />
       {!showDowntime && (
         <Routes>
           {/* functional routes */}

@@ -11,7 +11,7 @@ export function Toggle(props: {
       onClick={props.disabled ? undefined : props.onClick}
       disabled={props.disabled}
       className={classNames(
-        "w-11 h-6 p-1 rounded-full grid transition-colors duration-100 group/toggle tabbable",
+        "w-11 h-6 p-1 rounded-full grid transition-colors duration-100 group/toggle tabbable focus:outline-none",
         props.enabled ? "bg-buttons-toggle" : "bg-buttons-toggleDisabled",
         props.disabled ? "opacity-50 cursor-not-allowed" : null,
       )}

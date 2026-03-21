@@ -187,10 +187,9 @@ function MediaCardContent({
   return (
     <div ref={targetRef as React.RefObject<HTMLDivElement>}>
       <Flare.Base
-        className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
-          canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
+        className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 ${
+          canLink ? "hover:bg-mediaCard-hoverBackground" : ""
         } ${closable ? "jiggle" : ""}`}
-        tabIndex={canLink ? 0 : -1}
         onKeyUp={(e) => e.key === "Enter" && e.currentTarget.click()}
       >
         <Flare.Light
@@ -356,6 +355,9 @@ export function MediaCard(props: MediaCardProps) {
   const enableDetailsModal = usePreferencesStore(
     (state) => state.enableDetailsModal,
   );
+  const enableGamepadControls = usePreferencesStore(
+    (state: any) => state.enableGamepadControls,
+  );
 
   const isReleased = useCallback(
     () => checkReleased(props.media),
@@ -454,6 +456,19 @@ export function MediaCard(props: MediaCardProps) {
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
+    if (
+      document.body.classList.contains("gamepad-active") &&
+      enableGamepadControls
+    ) {
+      e.preventDefault();
+      showModal("media-controller-menu", {
+        id: Number(media.id),
+        type: media.type === "movie" ? "movie" : "show",
+        media,
+        series: props.series,
+      });
+      return;
+    }
     if (enableDetailsModal && canLink) {
       e.preventDefault();
       handleShowDetails();
@@ -605,9 +620,9 @@ export function MediaCard(props: MediaCardProps) {
   return (
     <Link
       to={link}
-      tabIndex={-1}
+      tabIndex={0}
       className={classNames(
-        "tabbable relative block",
+        "tabbable relative block rounded-xl focus:outline-none",
         props.closable ? "hover:cursor-default" : "",
       )}
       onClick={handleCardClick}

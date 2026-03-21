@@ -14,12 +14,14 @@ export function Card(props: {
     <div
       className={classNames(
         {
-          "bg-onboarding-card duration-300 border border-onboarding-border rounded-lg p-7": true,
+          "bg-onboarding-card duration-300 border border-onboarding-border rounded-lg p-7 tabbable focus:outline-none": true,
           "hover:bg-onboarding-cardHover transition-colors cursor-pointer":
             !!props.onClick,
         },
         props.className,
       )}
+      tabIndex={props.onClick ? 0 : -1}
+      onKeyDown={(e) => e.key === "Enter" && props.onClick?.()}
       onClick={props.onClick}
     >
       {props.children}
@@ -112,9 +114,11 @@ export function Link(props: {
       href={props.href}
       target={props.target}
       className={classNames(
-        "text-onboarding-link cursor-pointer inline-flex gap-2 items-center group hover:opacity-75 transition-opacity",
+        "text-onboarding-link cursor-pointer inline-flex gap-2 items-center group hover:opacity-75 transition-opacity tabbable rounded focus:outline-none",
         props.className,
       )}
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && props.to && navigate(props.to)}
       rel="noreferrer"
     >
       {props.children}

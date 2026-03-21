@@ -55,7 +55,10 @@ export function Modal(props: { id: string; children?: ReactNode }) {
       <Helmet>
         <html data-no-scroll />
       </Helmet>
-      <div className="flex absolute inset-0 items-center justify-center flex-col pointer-events-none">
+      <div
+        id={`modal-${props.id}`}
+        className="flex absolute inset-0 items-center justify-center flex-col pointer-events-none"
+      >
         {props.children}
       </div>
     </OverlayPortal>
@@ -92,7 +95,10 @@ export function FancyModal(props: {
       <Helmet>
         <html data-no-scroll />
       </Helmet>
-      <div className="flex absolute inset-0 items-center justify-center p-4 overflow-hidden">
+      <div
+        id={`modal-${props.id}`}
+        className="flex absolute inset-0 items-center justify-center p-4 overflow-hidden"
+      >
         <div className="overflow-y-auto max-h-[85vh] pointer-events-auto">
           <Flare.Base
             className={classNames(

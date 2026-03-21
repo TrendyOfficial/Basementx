@@ -3,11 +3,14 @@ import { useLocation } from "react-router-dom";
 
 import { useGamepadPolling } from "@/hooks/useGamepad";
 import { useSpatialNavigation } from "@/hooks/useSpatialNavigation";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePreferencesStore } from "@/stores/preferences";
 
 export function GamepadGlobalListener() {
   const { navigate: navigateSpatial } = useSpatialNavigation();
   const location = useLocation();
+  const { hideModal, getTopModal } = useOverlayStack();
+
   const enableGamepadControls = usePreferencesStore(
     (s: any) => s.enableGamepadControls,
   );
@@ -40,14 +43,26 @@ export function GamepadGlobalListener() {
         case "confirm":
           (document.activeElement as HTMLElement)?.click();
           break;
-        case "back":
-          window.history.back();
+        case "back": {
+          const topModal = getTopModal();
+          if (topModal) {
+            hideModal(topModal);
+          } else {
+            window.history.back();
+          }
           break;
+        }
         default:
           break;
       }
     },
-    [navigateSpatial, location.pathname, gamepadInputMode],
+    [
+      navigateSpatial,
+      location.pathname,
+      gamepadInputMode,
+      hideModal,
+      getTopModal,
+    ],
   );
 
   useGamepadPolling({
