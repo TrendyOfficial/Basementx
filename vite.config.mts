@@ -4,10 +4,6 @@ import loadVersion from "vite-plugin-package-version";
 import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
 import path from "path";
-<<<<<<< HEAD
-
-=======
->>>>>>> 2b486a55be0d924065597078eed63478fc07278a
 import { handlebars } from "./plugins/handlebars";
 import { PluginOption, loadEnv, splitVendorChunkPlugin } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
@@ -29,10 +25,6 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.VITE_BASE_URL || "/",
     plugins: [
-<<<<<<< HEAD
-      
-=======
->>>>>>> 2b486a55be0d924065597078eed63478fc07278a
       handlebars({
         vars: {
           opensearchEnabled: env.VITE_OPENSEARCH_ENABLED === "true",

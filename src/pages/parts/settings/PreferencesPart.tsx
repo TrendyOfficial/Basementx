@@ -370,43 +370,6 @@ export function PreferencesPart(props: {
               )}
             </div>
           </div>
-<<<<<<< HEAD
-=======
-          <div className="flex gap-3 max-w-[25rem]">
-            <Button
-              theme="secondary"
-              onClick={() => showModal("keyboard-commands-edit")}
-              className="flex-1"
-            >
-              {t("settings.preferences.keyboardShortcutsLabel")}
-            </Button>
-            <Button
-              theme="secondary"
-              onClick={() => showModal("gamepad-controls-edit")}
-              className="flex-1"
-            >
-              {" "}
-              {t(
-                "settings.preferences.gamepadControlsLabel",
-                "Customizze Controller Keybinds",
-              )}
-            </Button>
-          </div>
-
-          {/* Gamepad Enable Toggle */}
-          <div
-            onClick={() => setEnableGamepadControls(!enableGamepadControls)}
-            className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-          >
-            <Toggle enabled={enableGamepadControls} />
-            <p className="flex-1 text-white font-bold">
-              {t(
-                "settings.preferences.enableGamepadControls",
-                "Enable controller support",
-              )}
-            </p>
-          </div>
->>>>>>> 2b486a55be0d924065597078eed63478fc07278a
         </div>
 
         {/* Column */}
