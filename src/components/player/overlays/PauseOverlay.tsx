@@ -20,7 +20,6 @@ interface PauseDetails {
   voteAverage: number | null;
   genres: string[];
   runtime: number | null;
-  runtime: number | null;
 }
 
 export function PauseOverlay() {
@@ -166,7 +165,6 @@ export function PauseOverlay() {
     const fetchDetails = async () => {
       if (!meta?.tmdbId) {
         setDetails({ voteAverage: null, genres: [], runtime: null });
-        setDetails({ voteAverage: null, genres: [], runtime: null });
         return;
       }
       try {
@@ -207,8 +205,6 @@ export function PauseOverlay() {
           setDetails({ voteAverage: finalVoteAverage, genres, runtime });
         }
       } catch {
-        if (mounted)
-          setDetails({ voteAverage: null, genres: [], runtime: null });
         if (mounted)
           setDetails({ voteAverage: null, genres: [], runtime: null });
       }
