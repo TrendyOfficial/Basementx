@@ -276,6 +276,23 @@ export function PreferencesPart(props: {
             </div>
           </div>
 
+          {/* Keyboard Shortcuts Preference */}
+          <div>
+            <p className="text-white font-bold mb-3">
+              {t("settings.preferences.keyboardShortcuts")}
+            </p>
+            <p className="max-w-[25rem] font-medium">
+              {t("settings.preferences.keyboardShortcutsDescription")}
+            </p>
+            <Button
+              theme="secondary"
+              onClick={() => showModal("keyboard-commands-edit")}
+              className="w-full mt-3"
+            >
+              {t("settings.preferences.keyboardShortcutsLabel")}
+            </Button>
+          </div>
+
           {/* Gamepad Setup & Controls */}
           <div>
             <p className="text-white font-bold mb-3">
