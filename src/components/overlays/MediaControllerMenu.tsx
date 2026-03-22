@@ -103,8 +103,9 @@ export function MediaControllerMenuModal() {
               onClick={handlePlay}
             >
               <Icon icon={Icons.PLAY} className="mr-3" />
-              {t("player.play", "Play")}
+              {t("details.play", "Play")}
             </Button>
+
 
             <div className="grid grid-cols-2 gap-3">
               <Button

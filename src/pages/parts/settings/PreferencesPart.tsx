@@ -54,6 +54,14 @@ export function PreferencesPart(props: {
   const setEnableGamepadControls = usePreferencesStore(
     (s) => s.setEnableGamepadControls,
   );
+  const gamepadSetupComplete = usePreferencesStore(
+    (s) => s.gamepadSetupComplete,
+  );
+  const gamepadInputMode = usePreferencesStore((s) => s.gamepadInputMode);
+  const setGamepadInputMode = usePreferencesStore((s) => s.setGamepadInputMode);
+  const ignoreHeader = usePreferencesStore((s) => s.ignoreHeader);
+  const setIgnoreHeader = usePreferencesStore((s) => s.setIgnoreHeader);
+
   const sorted = sortLangCodes(
     appLanguageOptions.map((item) => item.code),
     props.language,
@@ -305,9 +313,9 @@ export function PreferencesPart(props: {
             </p>
 
             <div className="flex flex-col gap-4 max-w-[25rem]">
-              {!enableGamepadControls ||
-              !usePreferencesStore.getState().gamepadSetupComplete ? (
+              {!enableGamepadControls || !gamepadSetupComplete ? (
                 <Button
+
                   theme="purple"
                   onClick={() => navigate("/gamepad-setup")}
                   className="w-full py-4 text-lg"
@@ -367,35 +375,25 @@ export function PreferencesPart(props: {
                           { id: "both", name: "Both (Recommended)" },
                           { id: "controller", name: "Controller Only" },
                           { id: "kbm", name: "Keyboard & Mouse Only" },
-                        ].find(
-                          (i) =>
-                            i.id ===
-                            usePreferencesStore.getState().gamepadInputMode,
-                        ) || { id: "both", name: "Both (Recommended)" }
+                        ].find((i) => i.id === gamepadInputMode) || {
+                          id: "both",
+                          name: "Both (Recommended)",
+                        }
                       }
                       setSelectedItem={(opt) =>
-                        usePreferencesStore
-                          .getState()
-                          .setGamepadInputMode(
-                            opt.id as "controller" | "kbm" | "both",
-                          )
+                        setGamepadInputMode(
+                          opt.id as "controller" | "kbm" | "both",
+                        )
                       }
+
                     />
                   </div>
 
                   <div
-                    onClick={() =>
-                      usePreferencesStore
-                        .getState()
-                        .setIgnoreHeader(
-                          !usePreferencesStore.getState().ignoreHeader,
-                        )
-                    }
+                    onClick={() => setIgnoreHeader(!ignoreHeader)}
                     className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none cursor-pointer space-x-3 flex items-center py-3 px-4 rounded-lg border border-white/5"
                   >
-                    <Toggle
-                      enabled={usePreferencesStore.getState().ignoreHeader}
-                    />
+                    <Toggle enabled={ignoreHeader} />
                     <div className="flex-1">
                       <p className="text-white font-bold text-left">
                         {t("settings.preferences.gamepadIgnoreHeaderTitle")}
@@ -407,6 +405,7 @@ export function PreferencesPart(props: {
                       </p>
                     </div>
                   </div>
+
                 </>
               )}
             </div>

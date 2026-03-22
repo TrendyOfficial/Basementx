@@ -6,9 +6,10 @@ import { usePreferencesStore } from "@/stores/preferences";
 export type NavigationDirection = "up" | "down" | "left" | "right";
 
 const FOCUSABLE_SELECTOR =
-  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"]), .tabbable';
+  'button:not([tabindex="-1"]), [href]:not([tabindex="-1"]), input:not([tabindex="-1"]), select:not([tabindex="-1"]), textarea:not([tabindex="-1"]), [tabindex]:not([tabindex="-1"]), .tabbable:not([tabindex="-1"])';
 
 export function useSpatialNavigation() {
+
   const getFocusableElements = useCallback(() => {
     const topModalId = useOverlayStack.getState().getTopModal();
     const all = Array.from(
@@ -33,18 +34,25 @@ export function useSpatialNavigation() {
       }
     } else {
       const ignoreHeader = usePreferencesStore.getState().ignoreHeader;
-      if (ignoreHeader) {
-        const header = document.getElementById("mw-header");
+      const activeElement = document.activeElement as HTMLElement;
+      const header = document.getElementById("mw-header");
+      const isInHeader = header?.contains(activeElement);
+
+      // If we are already in the header, we should be able to see header elements to navigate within it
+      // If we are NOT in the header and ignoreHeader is on, we filter them out to prevent jumping TO the header
+      if (ignoreHeader && !isInHeader) {
         if (header) {
           filtered = filtered.filter((el) => !header.contains(el));
         }
       }
     }
 
+
     return filtered;
   }, []);
 
   const navigate = useCallback(
+
     (direction: NavigationDirection) => {
       const activeElement = document.activeElement as HTMLElement;
 
@@ -115,12 +123,15 @@ export function useSpatialNavigation() {
               : Math.abs(dy);
 
           // Penalty for being off-axis
-          const score = primaryDist + secondaryDist * 2;
+          // We reduce the penalty slightly for horizontal moves to help header navigation
+          const axisWeights = direction === "left" || direction === "right" ? 1.5 : 2;
+          const score = primaryDist + secondaryDist * axisWeights;
 
           if (score < minScore) {
             minScore = score;
             bestElement = el;
           }
+
         }
       }
 
@@ -131,6 +142,7 @@ export function useSpatialNavigation() {
     },
     [getFocusableElements],
   );
+
 
   return { navigate };
 }

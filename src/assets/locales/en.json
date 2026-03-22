@@ -149,15 +149,16 @@
       "title": "Folders",
       "counter": "{{count}} / {{max}}",
       "empty": "No folders yet",
-      "moreInfo": "More Info",
+      "moreInfo": "Info",
       "removeFromFolder": "Remove from folder",
       "editDetails": "Edit Details",
       "createFolder": "Create Folder",
       "folderNamePlaceholder": "Folder name...",
       "limitReached": "Folder limit reached ({{max}} max)",
-      "add": "Add to folder",
-      "remove": "Remove from folder"
+      "add": "Bookmark",
+      "remove": "Remove"
     }
+
   },
   "auth": {
     "createAccount": "Don't have an account yet 😬 <0>Create an account.</0>",
@@ -1409,6 +1410,9 @@
       "autoResumeOnPlaybackErrorLabel": "Automatically resume",
       "gamepadIgnoreHeaderTitle": "Ignore Header",
       "gamepadIgnoreHeaderDescription": "Skip the navigation header when scrolling with a controller.",
+      "keybinds": "Keybinds",
+      "redoSetup": "Redo Setup",
+
       "embedOrderEnableLabel": "Custom embed order",
       "manualSource": "Manual source selection",
       "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
@@ -1419,6 +1423,7 @@
       "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
       "lastSuccessfulSourceEnableLabel": "Last used source"
     },
+
     "reset": "Reset",
     "save": "Save",
     "sidebar": {
