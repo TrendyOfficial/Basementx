@@ -48,6 +48,7 @@ export interface PreferencesStore {
   gamepadInputMode: "controller" | "kbm" | "both";
   gamepadMapping: Record<string, string>;
   keyboardShortcuts: KeyboardShortcuts;
+  ignoreHeader: boolean;
 
   setEnableThumbnails(v: boolean): void;
   setEnableAutoplay(v: boolean): void;
@@ -89,6 +90,7 @@ export interface PreferencesStore {
   setGamepadInputMode(v: "controller" | "kbm" | "both"): void;
   setGamepadMapping(v: Record<string, string>): void;
   setKeyboardShortcuts(v: KeyboardShortcuts): void;
+  setIgnoreHeader(v: boolean): void;
 }
 
 export const usePreferencesStore = create(
@@ -134,6 +136,7 @@ export const usePreferencesStore = create(
       gamepadInputMode: "both",
       gamepadMapping: {},
       keyboardShortcuts: DEFAULT_KEYBOARD_SHORTCUTS,
+      ignoreHeader: false,
       setEnableThumbnails(v) {
         set((s) => {
           s.enableThumbnails = v;
@@ -337,6 +340,11 @@ export const usePreferencesStore = create(
       setKeyboardShortcuts(v) {
         set((s) => {
           s.keyboardShortcuts = v;
+        });
+      },
+      setIgnoreHeader(v) {
+        set((s) => {
+          s.ignoreHeader = v;
         });
       },
     })),

@@ -154,7 +154,9 @@
       "editDetails": "Edit Details",
       "createFolder": "Create Folder",
       "folderNamePlaceholder": "Folder name...",
-      "limitReached": "Folder limit reached ({{max}} max)"
+      "limitReached": "Folder limit reached ({{max}} max)",
+      "add": "Add to folder",
+      "remove": "Remove from folder"
     }
   },
   "auth": {

@@ -128,6 +128,7 @@ export function Navigation(props: NavigationProps) {
 
       {/* content */}
       <div
+        id="mw-header"
         className="top-content fixed pointer-events-none left-0 right-0 z-[500] top-0 min-h-[150px]"
         style={{
           top: `${bannerHeight}px`,

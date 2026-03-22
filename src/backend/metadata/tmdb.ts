@@ -123,6 +123,7 @@ export function formatTMDBMetaToMediaItem(media: TMDBMediaResult): MediaItem {
     release_date: media.original_release_date,
     poster: media.poster,
     type,
+    rating: media.vote_average,
   };
 }
 
@@ -589,6 +590,7 @@ export function formatTMDBSearchResult(
       id: show.id,
       original_release_date: new Date(show.first_air_date),
       object_type: mediatype,
+      vote_average: show.vote_average,
     };
   }
 
@@ -600,6 +602,7 @@ export function formatTMDBSearchResult(
     id: movie.id,
     original_release_date: new Date(movie.release_date),
     object_type: mediatype,
+    vote_average: movie.vote_average,
   };
 }
 

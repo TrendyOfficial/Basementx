@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 
 import { useOverlayStack } from "@/stores/interface/overlayStack";
+import { usePreferencesStore } from "@/stores/preferences";
 
 export type NavigationDirection = "up" | "down" | "left" | "right";
 
@@ -29,6 +30,14 @@ export function useSpatialNavigation() {
       const modalElement = document.getElementById(`modal-${topModalId}`);
       if (modalElement) {
         filtered = filtered.filter((el) => modalElement.contains(el));
+      }
+    } else {
+      const ignoreHeader = usePreferencesStore.getState().ignoreHeader;
+      if (ignoreHeader) {
+        const header = document.getElementById("mw-header");
+        if (header) {
+          filtered = filtered.filter((el) => !header.contains(el));
+        }
       }
     }
 

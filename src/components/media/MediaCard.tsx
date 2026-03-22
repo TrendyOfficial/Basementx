@@ -1,7 +1,14 @@
 // I'm sorry this is so confusing 😭
 
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -120,6 +127,7 @@ export interface MediaCardProps {
   forceSkeleton?: boolean;
   editable?: boolean;
   onEdit?: (e?: React.MouseEvent) => void;
+  nestedTabIndex?: number;
 }
 
 function checkReleased(media: MediaItem): boolean {
@@ -147,6 +155,7 @@ function MediaCardContent({
   forceSkeleton,
   editable,
   onEdit,
+  nestedTabIndex,
 }: MediaCardProps) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
@@ -154,9 +163,6 @@ function MediaCardContent({
   const isReleased = useCallback(() => checkReleased(media), [media]);
 
   const canLink = linkable && !closable && isReleased();
-
-  const dotListContent = [t(`media.types.${media.type}`)];
-
   const [searchQuery] = useSearchQuery();
   const enableMinimalCards = usePreferencesStore((s) => s.enableMinimalCards);
 
@@ -176,12 +182,20 @@ function MediaCardContent({
     );
   }
 
-  if (isReleased() && media.year) {
-    dotListContent.push(media.year.toFixed());
-  }
+  const dotListContent: ReactNode[] = [t(`media.types.${media.type}`)];
+  if (media.year) dotListContent.push(media.year.toString());
 
   if (!isReleased()) {
     dotListContent.push(t("media.unreleased"));
+  }
+
+  if (media.rating && media.rating > 0) {
+    dotListContent.push(
+      <span className="text-yellow-500 flex items-center gap-1">
+        <Icon icon={Icons.RISING_STAR} className="text-sm" />
+        {media.rating.toFixed(1)}
+      </span>,
+    );
   }
 
   return (
@@ -190,7 +204,9 @@ function MediaCardContent({
         className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 ${
           canLink ? "hover:bg-mediaCard-hoverBackground" : ""
         } ${closable ? "jiggle" : ""}`}
-        onKeyUp={(e) => e.key === "Enter" && e.currentTarget.click()}
+        onKeyUp={(e) =>
+          e.key === "Enter" && (e.currentTarget as HTMLElement).click()
+        }
       >
         <Flare.Light
           flareSize={300}
@@ -271,13 +287,13 @@ function MediaCardContent({
                 className="absolute bookmark-button"
                 onClick={(e) => e.preventDefault()}
               >
-                <MediaBookmarkButton media={media} />
+                <MediaBookmarkButton media={media} tabIndex={nestedTabIndex} />
               </div>
             )}
 
             {searchQuery.length > 0 && !closable ? (
               <div className="absolute" onClick={(e) => e.preventDefault()}>
-                <MediaBookmarkButton media={media} />
+                <MediaBookmarkButton media={media} tabIndex={nestedTabIndex} />
               </div>
             ) : null}
 
@@ -288,6 +304,7 @@ function MediaCardContent({
             >
               <IconPatch
                 clickable
+                tabIndex={nestedTabIndex}
                 className="text-2xl text-mediaCard-badgeText transition-transform hover:scale-110 duration-500"
                 onClick={() => closable && onClose?.()}
                 icon={Icons.X}
@@ -309,6 +326,7 @@ function MediaCardContent({
                   <button
                     className="media-more-button p-2"
                     type="button"
+                    tabIndex={nestedTabIndex}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -327,6 +345,7 @@ function MediaCardContent({
                   <button
                     className="media-more-button p-2"
                     type="button"
+                    tabIndex={nestedTabIndex}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -358,6 +377,13 @@ export function MediaCard(props: MediaCardProps) {
   const enableGamepadControls = usePreferencesStore(
     (state: any) => state.enableGamepadControls,
   );
+
+  const gamepadActive =
+    enableGamepadControls &&
+    typeof document !== "undefined" &&
+    document.body.classList.contains("gamepad-active");
+
+  const nestedTabIndex = gamepadActive ? -1 : 0;
 
   const isReleased = useCallback(
     () => checkReleased(props.media),
@@ -492,6 +518,7 @@ export function MediaCard(props: MediaCardProps) {
       onEdit={props.onEdit ? handleEditClick : undefined}
       onShowDetails={handleShowDetails}
       forceSkeleton={forceSkeleton}
+      nestedTabIndex={nestedTabIndex}
     />
   );
 
@@ -589,6 +616,7 @@ export function MediaCard(props: MediaCardProps) {
             />
             <button
               type="submit"
+              tabIndex={nestedTabIndex}
               className="text-type-link hover:text-white transition-colors"
               disabled={!newFolderName.trim()}
             >

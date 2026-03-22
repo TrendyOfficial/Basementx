@@ -26,6 +26,7 @@ export type TMDBMediaResult = {
   object_type: TMDBContentTypes;
   seasons?: TMDBSeasonShort[];
   overview?: string;
+  vote_average?: number;
 };
 
 export type TMDBSeasonMetaResult = {
