@@ -9,9 +9,9 @@ const FOCUSABLE_SELECTOR =
   'button:not([tabindex="-1"]), [href]:not([tabindex="-1"]), input:not([tabindex="-1"]), select:not([tabindex="-1"]), textarea:not([tabindex="-1"]), [tabindex]:not([tabindex="-1"]), .tabbable:not([tabindex="-1"])';
 
 export function useSpatialNavigation() {
-
   const getFocusableElements = useCallback(() => {
     const topModalId = useOverlayStack.getState().getTopModal();
+
     const all = Array.from(
       document.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
     );
@@ -47,12 +47,10 @@ export function useSpatialNavigation() {
       }
     }
 
-
     return filtered;
   }, []);
 
   const navigate = useCallback(
-
     (direction: NavigationDirection) => {
       const activeElement = document.activeElement as HTMLElement;
 
@@ -122,16 +120,13 @@ export function useSpatialNavigation() {
               ? Math.abs(dx)
               : Math.abs(dy);
 
-          // Penalty for being off-axis
-          // We reduce the penalty slightly for horizontal moves to help header navigation
-          const axisWeights = direction === "left" || direction === "right" ? 1.5 : 2;
+          const axisWeights =
+            direction === "left" || direction === "right" ? 1.5 : 2;
           const score = primaryDist + secondaryDist * axisWeights;
-
           if (score < minScore) {
             minScore = score;
             bestElement = el;
           }
-
         }
       }
 
@@ -142,7 +137,5 @@ export function useSpatialNavigation() {
     },
     [getFocusableElements],
   );
-
-
   return { navigate };
 }

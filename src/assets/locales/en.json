@@ -158,7 +158,6 @@
       "add": "Bookmark",
       "remove": "Remove"
     }
-
   },
   "auth": {
     "createAccount": "Don't have an account yet 😬 <0>Create an account.</0>",

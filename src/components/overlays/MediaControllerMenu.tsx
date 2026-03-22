@@ -106,7 +106,6 @@ export function MediaControllerMenuModal() {
               {t("details.play", "Play")}
             </Button>
 
-
             <div className="grid grid-cols-2 gap-3">
               <Button
                 theme="secondary"

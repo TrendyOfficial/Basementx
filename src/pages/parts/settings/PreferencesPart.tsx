@@ -315,7 +315,6 @@ export function PreferencesPart(props: {
             <div className="flex flex-col gap-4 max-w-[25rem]">
               {!enableGamepadControls || !gamepadSetupComplete ? (
                 <Button
-
                   theme="purple"
                   onClick={() => navigate("/gamepad-setup")}
                   className="w-full py-4 text-lg"
@@ -385,7 +384,6 @@ export function PreferencesPart(props: {
                           opt.id as "controller" | "kbm" | "both",
                         )
                       }
-
                     />
                   </div>
 
@@ -405,7 +403,6 @@ export function PreferencesPart(props: {
                       </p>
                     </div>
                   </div>
-
                 </>
               )}
             </div>
