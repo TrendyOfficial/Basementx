@@ -189,15 +189,6 @@ function MediaCardContent({
     dotListContent.push(t("media.unreleased"));
   }
 
-  if (media.rating && media.rating > 0) {
-    dotListContent.push(
-      <span className="text-yellow-500 flex items-center gap-1">
-        <Icon icon={Icons.RISING_STAR} className="text-sm" />
-        {media.rating.toFixed(1)}
-      </span>,
-    );
-  }
-
   return (
     <div ref={targetRef as React.RefObject<HTMLDivElement>}>
       <Flare.Base
@@ -324,7 +315,7 @@ function MediaCardContent({
               {!closable && (
                 <div className="absolute bottom-0 translate-y-1 right-1">
                   <button
-                    className="media-more-button p-2"
+                    className="media-more-button p-2 outline-none"
                     type="button"
                     tabIndex={nestedTabIndex}
                     onClick={(e) => {
@@ -341,9 +332,9 @@ function MediaCardContent({
                 </div>
               )}
               {editable && closable && (
-                <div className="absolute bottom-0 translate-y-1 right-1">
+                <div className="absolute bottom-0 translate-y-1 right-1 border-none outline-none">
                   <button
-                    className="media-more-button p-2"
+                    className="media-more-button p-2 outline-none"
                     type="button"
                     tabIndex={nestedTabIndex}
                     onClick={(e) => {
@@ -361,6 +352,9 @@ function MediaCardContent({
               )}
             </>
           )}
+
+          {/* Gamepad Focus Ring */}
+          <div className="absolute inset-0 border-4 border-white rounded-xl opacity-0 group-focus-within:opacity-100 pointer-events-none z-50 transition-opacity duration-200 ring-offset-2 ring-offset-background-main shadow-[0_0_20px_rgba(255,255,255,0.5)] gamepad-focus-ring" />
         </Flare.Child>
       </Flare.Base>
     </div>
@@ -377,11 +371,12 @@ export function MediaCard(props: MediaCardProps) {
   const enableGamepadControls = usePreferencesStore(
     (state: any) => state.enableGamepadControls,
   );
+  const isGamepadActive = usePreferencesStore(
+    (state: any) => state.isGamepadActive,
+  );
 
   const gamepadActive =
-    enableGamepadControls &&
-    typeof document !== "undefined" &&
-    document.body.classList.contains("gamepad-active");
+    enableGamepadControls && typeof document !== "undefined" && isGamepadActive;
 
   const nestedTabIndex = gamepadActive ? -1 : 0;
 
@@ -650,7 +645,7 @@ export function MediaCard(props: MediaCardProps) {
       to={link}
       tabIndex={0}
       className={classNames(
-        "tabbable relative block rounded-xl focus:outline-none",
+        "tabbable relative block rounded-xl focus:outline-none gamepad-focus-ring-parent",
         props.closable ? "hover:cursor-default" : "",
       )}
       onClick={handleCardClick}

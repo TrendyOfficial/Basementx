@@ -23,6 +23,7 @@ export function GamepadGlobalListener() {
 
       // Add gamepad-active class to body to show custom focus outlines
       document.body.classList.add("gamepad-active");
+      usePreferencesStore.getState().setGamepadActive(true);
 
       // Don't intercept if we're in the player (it has its own listener)
       if (location.pathname.startsWith("/media/")) return;
@@ -74,6 +75,9 @@ export function GamepadGlobalListener() {
   useEffect(() => {
     const handleMouseMove = () => {
       document.body.classList.remove("gamepad-active");
+      if (usePreferencesStore.getState().isGamepadActive) {
+        usePreferencesStore.getState().setGamepadActive(false);
+      }
     };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);

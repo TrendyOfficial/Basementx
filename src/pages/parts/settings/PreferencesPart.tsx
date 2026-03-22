@@ -382,6 +382,31 @@ export function PreferencesPart(props: {
                       }
                     />
                   </div>
+
+                  <div
+                    onClick={() =>
+                      usePreferencesStore
+                        .getState()
+                        .setIgnoreHeader(
+                          !usePreferencesStore.getState().ignoreHeader,
+                        )
+                    }
+                    className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none cursor-pointer space-x-3 flex items-center py-3 px-4 rounded-lg border border-white/5"
+                  >
+                    <Toggle
+                      enabled={usePreferencesStore.getState().ignoreHeader}
+                    />
+                    <div className="flex-1">
+                      <p className="text-white font-bold text-left">
+                        {t("settings.preferences.gamepadIgnoreHeaderTitle")}
+                      </p>
+                      <p className="text-xs text-type-dimmed text-left font-medium">
+                        {t(
+                          "settings.preferences.gamepadIgnoreHeaderDescription",
+                        )}
+                      </p>
+                    </div>
+                  </div>
                 </>
               )}
             </div>

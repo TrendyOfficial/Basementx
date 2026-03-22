@@ -277,12 +277,18 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
   outline: 4px solid #ffffff !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
-  border-radius: 4px;
+  border-radius: 12px;
   z-index: 50;
   transition:
     outline 0.2s ease,
     outline-offset 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+/* Specific fix for elements with custom focus rings */
+.gamepad-active .gamepad-focus-ring-parent:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Ensure cards and buttons look good when focused */
