@@ -120,8 +120,15 @@ export function useSpatialNavigation() {
               ? Math.abs(dx)
               : Math.abs(dy);
 
-          const axisWeights =
-            direction === "left" || direction === "right" ? 1.5 : 2;
+          let axisWeights =
+            direction === "left" || direction === "right" ? 1.5 : 1;
+
+          // Special case for header elements to make horizontal navigation smoother
+          const header = document.getElementById("mw-header");
+          if (header && header.contains(el) && header.contains(activeElement)) {
+            axisWeights = 0.5; // Lower weight for vertical misalignment within header
+          }
+
           const score = primaryDist + secondaryDist * axisWeights;
           if (score < minScore) {
             minScore = score;

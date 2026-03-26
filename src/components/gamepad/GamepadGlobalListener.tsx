@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useGamepadPolling } from "@/hooks/useGamepad";
 import { useSpatialNavigation } from "@/hooks/useSpatialNavigation";
@@ -9,6 +9,7 @@ import { usePreferencesStore } from "@/stores/preferences";
 export function GamepadGlobalListener() {
   const { navigate: navigateSpatial } = useSpatialNavigation();
   const location = useLocation();
+  const navigate = useNavigate();
   const { hideModal, getTopModal } = useOverlayStack();
 
   const enableGamepadControls = usePreferencesStore(
@@ -53,6 +54,11 @@ export function GamepadGlobalListener() {
           }
           break;
         }
+        case "go-home": {
+          window.scrollTo(0, 0);
+          navigate("/");
+          break;
+        }
         default:
           break;
       }
@@ -63,6 +69,7 @@ export function GamepadGlobalListener() {
       gamepadInputMode,
       hideModal,
       getTopModal,
+      navigate,
     ],
   );
 
@@ -82,6 +89,25 @@ export function GamepadGlobalListener() {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
+
+  // Browser lock: prevent arrow keys from reaching the browser chrome when gamepad is active
+  useEffect(() => {
+    if (!enableGamepadControls) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const navKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "];
+      if (
+        navKeys.includes(e.key) &&
+        document.body.classList.contains("gamepad-active")
+      ) {
+        // Prevent the browser from scrolling the page or moving focus to browser chrome
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown, { capture: true });
+    return () =>
+      window.removeEventListener("keydown", handleKeyDown, { capture: true });
+  }, [enableGamepadControls]);
 
   return null;
 }

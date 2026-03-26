@@ -352,9 +352,6 @@ function MediaCardContent({
               )}
             </>
           )}
-
-          {/* Gamepad Focus Ring */}
-          <div className="absolute inset-0 border-4 border-white rounded-xl opacity-0 group-focus-within:opacity-100 pointer-events-none z-50 transition-opacity duration-200 ring-offset-2 ring-offset-background-main shadow-[0_0_20px_rgba(255,255,255,0.5)] gamepad-focus-ring" />
         </Flare.Child>
       </Flare.Base>
     </div>
@@ -635,6 +632,8 @@ export function MediaCard(props: MediaCardProps) {
         onContextMenu={handleCardContextMenu}
       >
         {content}
+        {/* Gamepad Focus Ring - Placed here to avoid negative margin clipping */}
+        <div className="absolute inset-0 border-4 border-white rounded-xl opacity-0 group-focus-within:opacity-100 pointer-events-none z-50 transition-opacity duration-200 ring-offset-2 ring-offset-background-main shadow-[0_0_20px_rgba(255,255,255,0.5)] gamepad-focus-ring" />
         {contextMenuEl}
       </span>
     );
@@ -652,6 +651,8 @@ export function MediaCard(props: MediaCardProps) {
       onContextMenu={handleCardContextMenu}
     >
       {content}
+      {/* Gamepad Focus Ring - Placed here to avoid negative margin clipping */}
+      <div className="absolute inset-0 border-4 border-white rounded-xl opacity-0 group-focus-within:opacity-100 pointer-events-none z-50 transition-opacity duration-200 ring-offset-2 ring-offset-background-main shadow-[0_0_20px_rgba(255,255,255,0.5)] gamepad-focus-ring" />
       {contextMenuEl}
     </Link>
   );

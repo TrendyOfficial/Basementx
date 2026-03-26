@@ -32,7 +32,7 @@ export const DEFAULT_GAMEPAD_MAPPING: GamepadMapping = {
   actionNorth: "toggle-captions",
   leftBumper: "skip-backward",
   rightBumper: "skip-forward",
-  leftTrigger: "volume-down",
+  leftTrigger: "go-home",
   rightTrigger: "volume-up",
   start: "play-pause",
   select: "mute",
@@ -186,6 +186,7 @@ export const GAMEPAD_ACTION_LABELS: Record<string, string> = {
   "toggle-captions": "Toggle Captions",
   "next-episode": "Next Episode",
   "previous-episode": "Previous Episode",
+  "go-home": "Go to Home Page",
 };
 
 export const GAMEPAD_BUTTON_LABELS: Record<
