@@ -3,6 +3,13 @@ import { persist } from "zustand/middleware";
 
 import { usePlayerStore } from "@/stores/player/store";
 
+export interface WatchPartyMessage {
+  type: "system" | "chat";
+  text: string;
+  time: number;
+  author?: string;
+}
+
 interface WatchPartyStore {
   // Whether the watch party feature is enabled
   enabled: boolean;
@@ -22,6 +29,10 @@ interface WatchPartyStore {
   disable(): void;
   // Set status overlay visibility
   setShowStatusOverlay(show: boolean): void;
+  // Store for local UI chat and system messages
+  messages: WatchPartyMessage[];
+  // Add a new message
+  pushMessage(msg: WatchPartyMessage): void;
 }
 
 // Generate a random 4-digit code
@@ -46,6 +57,10 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
       roomCode: null,
       isHost: false,
       showStatusOverlay: false,
+      messages: [],
+
+      pushMessage: (msg: WatchPartyMessage) =>
+        set((state) => ({ messages: [...state.messages, msg] })),
 
       enableAsHost: () => {
         resetPlaybackRate();
@@ -53,6 +68,7 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
           enabled: true,
           roomCode: generateRoomCode(),
           isHost: true,
+          messages: [],
         }));
       },
 
@@ -62,6 +78,7 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
           enabled: true,
           roomCode: code,
           isHost: false,
+          messages: [],
         }));
       },
 
@@ -75,6 +92,7 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
         set(() => ({
           enabled: false,
           roomCode: null,
+          messages: [],
         })),
 
       setShowStatusOverlay: (show: boolean) =>

@@ -32,7 +32,7 @@ export function MigrationPage() {
             className="text-type-dimmed text-lg mt-0.5 shrink-0"
           />
           <p className="text-sm text-type-dimmed">
-            Need to export your data from the original P-Stream first?{" "}
+            Need to export your data from the original Basement first?{" "}
             <a
               href="https://pstream-export-visualizer.vercel.app/"
               target="_blank"

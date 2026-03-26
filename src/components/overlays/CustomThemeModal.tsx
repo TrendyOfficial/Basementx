@@ -79,7 +79,7 @@ function CardPreview({
 }
 
 /**
- * High-fidelity Detailed Preview Component (P-Stream Home)
+ * High-fidelity Detailed Preview Component (Basement Home)
  */
 function DetailedPreview({
   vars,
@@ -129,7 +129,7 @@ function DetailedPreview({
               <Icon icon={Icons.LOGO} className="text-xl" />
             </div>
             <span className="font-black tracking-tighter text-sm text-type-text hidden sm:block">
-              P-Stream
+              Basement
             </span>
           </div>
           {/* Nav Icons mimicking Picture 4 */}

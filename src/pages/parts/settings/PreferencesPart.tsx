@@ -308,7 +308,7 @@ export function PreferencesPart(props: {
             <p className="max-w-[25rem] font-medium mb-4">
               {t(
                 "settings.preferences.gamepadDescription",
-                "Navigate P-Stream using your Xbox or PlayStation controller.",
+                "Navigate Basement using your Xbox or PlayStation controller.",
               )}
             </p>
 

@@ -55,16 +55,16 @@ const tokens = {
     c900: "#0f0f0f",
   },
   purple: {
-    c50: "#aaafff",
-    c100: "#8288fe",
-    c200: "#5a62eb",
-    c300: "#454cd4",
-    c400: "#333abe",
-    c500: "#292d86",
-    c600: "#1f2363",
-    c700: "#191b4a",
-    c800: "#111334", // Lightbar
-    c900: "#0b0d22",
+    c50: "#fdf8fb",
+    c100: "#f8eef5",
+    c200: "#f0dceb",
+    c300: "#e4bed8",
+    c400: "#ae5d9c", // Pink highlight
+    c500: "#bd6ca7",
+    c600: "#9f5b8d",
+    c700: "#8e477e",
+    c800: "#753d67", // Lightbar
+    c900: "#4a2441",
   },
   ash: {
     c50: "#8d8d8d",

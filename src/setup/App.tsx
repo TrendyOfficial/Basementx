@@ -14,10 +14,12 @@ import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
 import { GamepadGlobalListener } from "@/components/gamepad/GamepadGlobalListener";
 import { DetailsModal } from "@/components/overlays/detailsModal";
 import { GamepadControlsModal } from "@/components/overlays/GamepadControlsModal";
+import { IntroAnimation } from "@/components/overlays/IntroAnimation";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
 import { MediaControllerMenuModal } from "@/components/overlays/MediaControllerMenu";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
+import { ProfileSelector } from "@/components/overlays/ProfileSelector";
 import { SupportInfoModal } from "@/components/overlays/SupportInfoModal";
 import { TraktAuthHandler } from "@/components/TraktAuthHandler";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
@@ -149,6 +151,8 @@ function App() {
       <DetailsModal id="discover-details" />
       <DetailsModal id="player-details" />
       <MediaControllerMenuModal />
+      <ProfileSelector />
+      <IntroAnimation />
       {!showDowntime && (
         <Routes>
           {/* functional routes */}

@@ -96,7 +96,7 @@ export function GamepadSetupPage() {
               Setup Controller Support
             </Heading2>
             <Paragraph className="max-w-[400px] mb-8">
-              Connect your Xbox or PlayStation controller to navigate P-Stream
+              Connect your Xbox or PlayStation controller to navigate Basement
               with ease. Choose a setup mode below.
             </Paragraph>
 

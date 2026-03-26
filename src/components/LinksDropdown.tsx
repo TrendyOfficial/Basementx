@@ -2,10 +2,8 @@ import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useAsync } from "react-use";
 
 import { base64ToBuffer, decryptData } from "@/backend/accounts/crypto";
-import { getBackendMeta } from "@/backend/accounts/meta";
 import { getRoomStatuses } from "@/backend/player/status";
 import { UserAvatar } from "@/components/Avatar";
 import { Icon, Icons } from "@/components/Icon";
@@ -218,17 +216,6 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
     [seed],
   );
   const { logout } = useAuth();
-  const backendUrl = useBackendUrl();
-
-  // Check backend compatibility for watch party
-  const backendMeta = useAsync(async () => {
-    if (!backendUrl) return;
-    return getBackendMeta(backendUrl);
-  }, [backendUrl]);
-
-  const backendSupportsWatchParty = backendMeta?.value?.version
-    ? backendMeta.value.version >= "2.0.1"
-    : false;
 
   useEffect(() => {
     function onWindowClick(evt: MouseEvent) {
@@ -320,11 +307,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           <DropdownLink href="/watch-history" icon={Icons.CLOCK}>
             {t("home.watchHistory.sectionTitle")}
           </DropdownLink>
-          {process.env.NODE_ENV === "development" ? (
-            <DropdownLink href="/dev" icon={Icons.COMPRESS}>
-              {t("navigation.menu.development")}
-            </DropdownLink>
-          ) : null}
+
           <DropdownLink href="/about" icon={Icons.CIRCLE_QUESTION}>
             {t("navigation.menu.about")}
           </DropdownLink>
@@ -335,14 +318,14 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             }}
             icon={Icons.RISING_STAR}
           >
-            P-Stream Revival
+            Basement Revival
           </DropdownLink>
           {!enableLowPerformanceMode && (
             <DropdownLink href="/discover" icon={Icons.RISING_STAR}>
               {t("navigation.menu.discover")}
             </DropdownLink>
           )}
-          {backendSupportsWatchParty && <WatchPartyInputLink />}
+          <WatchPartyInputLink />
           {deviceName ? (
             <DropdownLink
               className="!text-type-danger opacity-75 hover:opacity-100"

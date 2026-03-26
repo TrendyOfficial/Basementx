@@ -315,6 +315,30 @@ export function OnboardingPage() {
           />
         </div>
         <div className="mt-6">
+          <div className="bg-search-background hover:bg-search-hoverBackground transition-colors rounded-xl p-5 border border-utils-divider flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <Heading3 className="text-white font-bold mb-1">
+                {t(
+                  "onboarding.start.moreInfo.explainer.proxy",
+                  "Custom Proxy Worker",
+                )}
+              </Heading3>
+              <Paragraph className="text-type-secondary mb-0">
+                {t(
+                  "onboarding.start.moreInfo.explainer.proxyDescription",
+                  "Configure a custom proxy to improve connectivity.",
+                )}
+              </Paragraph>
+            </div>
+            <Button
+              theme="purple"
+              onClick={() => navigate("/onboarding/proxy")}
+            >
+              Setup Proxy
+            </Button>
+          </div>
+        </div>
+        <div className="mt-6">
           <DebridEdit
             debridToken={usePreferencesStore((s) => s.debridToken)}
             setdebridToken={usePreferencesStore((s) => s.setdebridToken)}

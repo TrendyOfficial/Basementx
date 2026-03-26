@@ -196,8 +196,18 @@ export function useWatchPartySync(
       // Then sync play state after a short delay
       setTimeout(() => {
         if (hostIsPlaying) {
+          useWatchPartyStore.getState().pushMessage({
+            type: "system",
+            text: "Host resumed the media.",
+            time: Date.now(),
+          });
           display.play();
         } else {
+          useWatchPartyStore.getState().pushMessage({
+            type: "system",
+            text: "Host paused the media.",
+            time: Date.now(),
+          });
           display.pause();
         }
 

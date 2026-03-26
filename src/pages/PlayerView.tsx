@@ -9,6 +9,7 @@ import {
 import { useAsync } from "react-use";
 
 import { DetailedMeta } from "@/backend/metadata/getmeta";
+import { WatchPartyChat } from "@/components/player/atoms/WatchPartyChat";
 import { usePlayer } from "@/components/player/hooks/usePlayer";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { convertProviderCaption } from "@/components/player/utils/captions";
@@ -279,6 +280,7 @@ export function RealPlayerView() {
           currentSourceId={sourceId}
         />
       ) : null}
+      <WatchPartyChat />
     </PlayerPart>
   );
 }
