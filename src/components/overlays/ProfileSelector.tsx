@@ -59,18 +59,73 @@ interface AvatarCategory {
 }
 
 const AVATAR_CATEGORIES: AvatarCategory[] = [
-  { id: "stranger_things", title: "Stranger Things", tmdbId: "66732", type: TMDBContentTypes.TV },
-  { id: "breaking_bad", title: "Breaking Bad", tmdbId: "1396", type: TMDBContentTypes.TV },
-  { id: "game_of_thrones", title: "Game of Thrones", tmdbId: "1399", type: TMDBContentTypes.TV },
-  { id: "the_witcher", title: "The Witcher", tmdbId: "71912", type: TMDBContentTypes.TV },
-  { id: "wednesday", title: "Wednesday", tmdbId: "119051", type: TMDBContentTypes.TV },
-  { id: "squid_game", title: "Squid Game", tmdbId: "93405", type: TMDBContentTypes.TV },
-  { id: "the_last_of_us", title: "The Last of Us", tmdbId: "100088", type: TMDBContentTypes.TV },
-  { id: "cobra_kai", title: "Cobra Kai", tmdbId: "77169", type: TMDBContentTypes.TV },
-  { id: "the_crown", title: "The Crown", tmdbId: "63949", type: TMDBContentTypes.TV },
-  { id: "money_heist", title: "Money Heist", tmdbId: "71446", type: TMDBContentTypes.TV },
+  {
+    id: "stranger_things",
+    title: "Stranger Things",
+    tmdbId: "66732",
+    type: TMDBContentTypes.TV,
+  },
+  {
+    id: "breaking_bad",
+    title: "Breaking Bad",
+    tmdbId: "1396",
+    type: TMDBContentTypes.TV,
+  },
+  {
+    id: "game_of_thrones",
+    title: "Game of Thrones",
+    tmdbId: "1399",
+    type: TMDBContentTypes.TV,
+  },
+  {
+    id: "the_witcher",
+    title: "The Witcher",
+    tmdbId: "71912",
+    type: TMDBContentTypes.TV,
+  },
+  {
+    id: "wednesday",
+    title: "Wednesday",
+    tmdbId: "119051",
+    type: TMDBContentTypes.TV,
+  },
+  {
+    id: "squid_game",
+    title: "Squid Game",
+    tmdbId: "93405",
+    type: TMDBContentTypes.TV,
+  },
+  {
+    id: "the_last_of_us",
+    title: "The Last of Us",
+    tmdbId: "100088",
+    type: TMDBContentTypes.TV,
+  },
+  {
+    id: "cobra_kai",
+    title: "Cobra Kai",
+    tmdbId: "77169",
+    type: TMDBContentTypes.TV,
+  },
+  {
+    id: "the_crown",
+    title: "The Crown",
+    tmdbId: "63949",
+    type: TMDBContentTypes.TV,
+  },
+  {
+    id: "money_heist",
+    title: "Money Heist",
+    tmdbId: "71446",
+    type: TMDBContentTypes.TV,
+  },
   { id: "dark", title: "Dark", tmdbId: "70523", type: TMDBContentTypes.TV },
-  { id: "peaky_blinders", title: "Peaky Blinders", tmdbId: "60574", type: TMDBContentTypes.TV },
+  {
+    id: "peaky_blinders",
+    title: "Peaky Blinders",
+    tmdbId: "60574",
+    type: TMDBContentTypes.TV,
+  },
 ];
 
 /* ─────────────── types ─────────────── */
@@ -91,12 +146,6 @@ interface CastMember {
   id: number;
   name: string;
   profileUrl: string;
-}
-
-interface LoadedCategory {
-  id: string;
-  title: string;
-  cast: CastMember[];
 }
 
 /* ─────────────── helpers ─────────────── */
@@ -226,9 +275,9 @@ function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
       <h3 className="text-sm font-bold text-white mb-2">{category.title}</h3>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/10">
         {cast === null
-          ? Array.from({ length: 6 }).map((_, i) => (
+          ? Array.from({ length: 6 }).map((_, idx) => (
               <div
-                key={i}
+                key={`skeleton-${idx}`}
                 className="w-16 h-16 rounded-xl flex-shrink-0 bg-white/5 animate-pulse"
               />
             ))
@@ -241,9 +290,7 @@ function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
                 className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-150 focus:outline-none hover:scale-105"
                 style={{
                   borderColor:
-                    selectedUrl === member.profileUrl
-                      ? "white"
-                      : "transparent",
+                    selectedUrl === member.profileUrl ? "white" : "transparent",
                   boxShadow:
                     selectedUrl === member.profileUrl
                       ? "0 0 0 2px rgba(255,255,255,0.3)"
@@ -496,7 +543,10 @@ function EditPanel({
                   </div>
                 ) : (
                   <div className="w-24 h-24 rounded-2xl border-2 border-dashed border-white/20 flex items-center justify-center">
-                    <Icon icon={Icons.USER} className="text-white/20 text-4xl" />
+                    <Icon
+                      icon={Icons.USER}
+                      className="text-white/20 text-4xl"
+                    />
                   </div>
                 )}
                 <button
@@ -670,7 +720,10 @@ export function ProfileSelector() {
                     className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-black/70 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 border border-white/20 hover:border-white/60"
                     title="Edit profile"
                   >
-                    <Icon icon={Icons.EDIT} className="text-white text-[10px]" />
+                    <Icon
+                      icon={Icons.EDIT}
+                      className="text-white text-[10px]"
+                    />
                   </button>
                 )}
                 <AvatarDisplay
@@ -720,7 +773,9 @@ export function ProfileSelector() {
       {editState && (
         <EditPanel
           state={editState}
-          onChange={(patch) => setEditState((s) => (s ? { ...s, ...patch } : s))}
+          onChange={(patch) =>
+            setEditState((s) => (s ? { ...s, ...patch } : s))
+          }
           onSave={handleSave}
           onCancel={() => setEditState(null)}
           isNew={editState.profileId === null}

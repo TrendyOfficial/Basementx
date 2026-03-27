@@ -79,7 +79,9 @@ export function IntroAnimation() {
             ? "-translate-x-full"
             : "translate-x-0",
         )}
-        style={{ background: "linear-gradient(to right, #0a0a0f 80%, #12121a)" }}
+        style={{
+          background: "linear-gradient(to right, #0a0a0f 80%, #12121a)",
+        }}
       />
       {/* Right Curtain */}
       <div
