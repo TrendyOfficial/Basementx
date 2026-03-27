@@ -6,6 +6,7 @@ import { getRoomStatuses } from "@/backend/player/status";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
 import { usePlayerStore } from "@/stores/player/store";
+import { usePreferencesStore } from "@/stores/preferences";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
 interface RoomUser {
@@ -58,7 +59,7 @@ export function useWatchPartySync(
 ): WatchPartySyncResult {
   const [roomUsers, setRoomUsers] = useState<RoomUser[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
-  const [userCount, setUserCount] = useState(1);
+  const { userCount, setUserCount } = useWatchPartyStore();
 
   // Refs for tracking state
   const syncStateRef = useRef({
@@ -195,19 +196,31 @@ export function useWatchPartySync(
 
       // Then sync play state after a short delay
       setTimeout(() => {
+        const timeStr = new Date().toLocaleTimeString(undefined, {
+          hour12: Boolean(usePreferencesStore.getState().timeFormat12Hour),
+          hour: "numeric",
+          minute: "2-digit",
+        });
+
+        if (needsPlayStateSync) {
+          if (hostIsPlaying) {
+            useWatchPartyStore.getState().pushMessage({
+              type: "system",
+              text: `Host resumed the media at ${timeStr}.`,
+              time: Date.now(),
+            });
+          } else {
+            useWatchPartyStore.getState().pushMessage({
+              type: "system",
+              text: `Host paused the media at ${timeStr}.`,
+              time: Date.now(),
+            });
+          }
+        }
+
         if (hostIsPlaying) {
-          useWatchPartyStore.getState().pushMessage({
-            type: "system",
-            text: "Host resumed the media.",
-            time: Date.now(),
-          });
           display.play();
         } else {
-          useWatchPartyStore.getState().pushMessage({
-            type: "system",
-            text: "Host paused the media.",
-            time: Date.now(),
-          });
           display.pause();
         }
 
@@ -293,7 +306,7 @@ export function useWatchPartySync(
     } catch (error) {
       console.error("Failed to refresh room data:", error);
     }
-  }, [backendUrl, account, roomCode, enabled]);
+  }, [backendUrl, account, roomCode, enabled, setUserCount]);
 
   // Periodically refresh room data
   useEffect(() => {
@@ -327,7 +340,7 @@ export function useWatchPartySync(
       syncState.previousHostPlaying = null;
       syncState.previousHostTime = null;
     };
-  }, [enabled, roomCode, refreshRoomData]);
+  }, [enabled, roomCode, refreshRoomData, setUserCount]);
 
   return {
     roomUsers,

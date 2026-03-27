@@ -215,6 +215,7 @@ export function PlayerPart(props: PlayerPartProps) {
             status === playerStatus.PLAYING ? (
               <Player.Captions />
             ) : null}
+            <Player.WatchPartyChatToggle />
             <Player.Settings />
             {isShifting || isHoldingFullscreen ? (
               <Player.Widescreen />
@@ -236,6 +237,7 @@ export function PlayerPart(props: PlayerPartProps) {
                 <Player.Captions />
               </div>
             ) : null}
+            <Player.WatchPartyChatToggle />
             <Player.Settings />
           </div>
           <div>

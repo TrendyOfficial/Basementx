@@ -61,7 +61,6 @@ export function AccountActionsPart() {
               theme="purple"
               onClick={() => {
                 setHasSelectedProfileThisSession(false);
-                window.location.href = "/";
               }}
             >
               {t(

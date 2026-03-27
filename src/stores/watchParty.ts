@@ -33,6 +33,15 @@ interface WatchPartyStore {
   messages: WatchPartyMessage[];
   // Add a new message
   pushMessage(msg: WatchPartyMessage): void;
+  // Controls chat visibility
+  isChatOpen: boolean;
+  setIsChatOpen(open: boolean): void;
+  // Controls red dot notification
+  hasUnreadMessages: boolean;
+  setHasUnreadMessages(hasUnread: boolean): void;
+  // Total members in room
+  userCount: number;
+  setUserCount(count: number): void;
 }
 
 // Generate a random 4-digit code
@@ -57,10 +66,21 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
       roomCode: null,
       isHost: false,
       showStatusOverlay: false,
+      isChatOpen: false,
+      hasUnreadMessages: false,
+      userCount: 1,
       messages: [],
 
       pushMessage: (msg: WatchPartyMessage) =>
-        set((state) => ({ messages: [...state.messages, msg] })),
+        set((state) => ({
+          messages: [...state.messages, msg],
+          hasUnreadMessages: !state.isChatOpen ? true : state.hasUnreadMessages,
+        })),
+
+      setIsChatOpen: (open: boolean) => set({ isChatOpen: open }),
+      setHasUnreadMessages: (hasUnread: boolean) =>
+        set({ hasUnreadMessages: hasUnread }),
+      setUserCount: (count: number) => set({ userCount: count }),
 
       enableAsHost: () => {
         resetPlaybackRate();

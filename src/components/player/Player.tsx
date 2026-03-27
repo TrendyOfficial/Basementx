@@ -1,4 +1,7 @@
 export * from "./atoms";
+export * from "./atoms/WatchPartyChatToggle";
+export * from "./atoms/Pip";
+export * from "./atoms/Airplay";
 export * from "./base/Container";
 export * from "./base/TopControls";
 export * from "./base/CenterControls";
