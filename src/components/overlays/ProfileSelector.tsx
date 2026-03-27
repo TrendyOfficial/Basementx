@@ -1,28 +1,31 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import {
+  getMediaCredits,
+  getPersonProfileImage,
+} from "@/backend/metadata/tmdb";
+import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
 import { useAuthStore } from "@/stores/auth";
 import { UserProfile, useProfileStore } from "@/stores/profile";
 
-/* ─────────────────────────────── constants ─────────────────────────────── */
+/* ─────────────── constants ─────────────── */
 
 const generateId = () => Math.random().toString(36).substring(2, 9);
 
-/** Preset gradient swatches — [colorA, colorB] */
 const PRESET_COLORS: Array<[string, string]> = [
-  ["#6366f1", "#4338ca"], // indigo
-  ["#e11d48", "#9f1239"], // rose
-  ["#0891b2", "#0e7490"], // cyan
-  ["#16a34a", "#166534"], // green
-  ["#d97706", "#92400e"], // amber
-  ["#9333ea", "#6b21a8"], // purple
-  ["#ec4899", "#9d174d"], // pink
-  ["#0284c7", "#075985"], // sky
-  ["#14b8a6", "#0f766e"], // teal
-  ["#f97316", "#c2410c"], // orange
+  ["#6366f1", "#4338ca"],
+  ["#e11d48", "#9f1239"],
+  ["#0891b2", "#0e7490"],
+  ["#16a34a", "#166534"],
+  ["#d97706", "#92400e"],
+  ["#9333ea", "#6b21a8"],
+  ["#ec4899", "#9d174d"],
+  ["#0284c7", "#075985"],
+  ["#14b8a6", "#0f766e"],
+  ["#f97316", "#c2410c"],
 ];
 
-/** Selectable icons from the Icon component */
 const SELECTABLE_ICONS: Icons[] = [
   Icons.USER,
   Icons.DRAGON,
@@ -47,115 +50,81 @@ const SELECTABLE_ICONS: Icons[] = [
   Icons.THUMBS_UP,
 ];
 
-// Netflix-style character avatars using DiceBear API (free, no API key needed)
-// These generate illustrated portrait-style avatars
-const CHARACTER_AVATARS = [
-  // Using picsum for stylised character previews with consistent seeds
-  {
-    id: "av_warrior",
-    label: "Warrior",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Warrior&backgroundColor=b6e3f4",
-  },
-  {
-    id: "av_mage",
-    label: "Mage",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Mage&backgroundColor=c0aede",
-  },
-  {
-    id: "av_rogue",
-    label: "Rogue",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Rogue&backgroundColor=ffdfbf",
-  },
-  {
-    id: "av_paladin",
-    label: "Paladin",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Paladin&backgroundColor=d1d4f9",
-  },
-  {
-    id: "av_ranger",
-    label: "Ranger",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Ranger&backgroundColor=c0aede",
-  },
-  {
-    id: "av_bard",
-    label: "Bard",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Bard&backgroundColor=ffd5dc",
-  },
-  {
-    id: "av_druid",
-    label: "Druid",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Druid&backgroundColor=b6e3f4",
-  },
-  {
-    id: "av_monk",
-    label: "Monk",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Monk&backgroundColor=ffdfbf",
-  },
-  {
-    id: "av_samurai",
-    label: "Samurai",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Samurai&backgroundColor=c0aede",
-  },
-  {
-    id: "av_witch",
-    label: "Witch",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Witch&backgroundColor=ffd5dc",
-  },
-  {
-    id: "av_hero",
-    label: "Hero",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Hero&backgroundColor=d1d4f9",
-  },
-  {
-    id: "av_villain",
-    label: "Villain",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Villain&backgroundColor=b6e3f4",
-  },
-  {
-    id: "av_knight",
-    label: "Knight",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Knight&backgroundColor=ffdfbf",
-  },
-  {
-    id: "av_princess",
-    label: "Princess",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Princess&backgroundColor=ffd5dc",
-  },
-  {
-    id: "av_pirate",
-    label: "Pirate",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Pirate&backgroundColor=c0aede",
-  },
-  {
-    id: "av_ninja",
-    label: "Ninja",
-    url: "https://api.dicebear.com/8.x/adventurer/svg?seed=Ninja&backgroundColor=d1d4f9",
-  },
+/** Popular shows/movies with TMDB IDs — Netflix-style avatar categories */
+interface AvatarCategory {
+  id: string;
+  title: string;
+  tmdbId: string;
+  type: TMDBContentTypes;
+}
+
+const AVATAR_CATEGORIES: AvatarCategory[] = [
+  { id: "stranger_things", title: "Stranger Things", tmdbId: "66732", type: TMDBContentTypes.TV },
+  { id: "breaking_bad", title: "Breaking Bad", tmdbId: "1396", type: TMDBContentTypes.TV },
+  { id: "game_of_thrones", title: "Game of Thrones", tmdbId: "1399", type: TMDBContentTypes.TV },
+  { id: "the_witcher", title: "The Witcher", tmdbId: "71912", type: TMDBContentTypes.TV },
+  { id: "wednesday", title: "Wednesday", tmdbId: "119051", type: TMDBContentTypes.TV },
+  { id: "squid_game", title: "Squid Game", tmdbId: "93405", type: TMDBContentTypes.TV },
+  { id: "the_last_of_us", title: "The Last of Us", tmdbId: "100088", type: TMDBContentTypes.TV },
+  { id: "cobra_kai", title: "Cobra Kai", tmdbId: "77169", type: TMDBContentTypes.TV },
+  { id: "the_crown", title: "The Crown", tmdbId: "63949", type: TMDBContentTypes.TV },
+  { id: "money_heist", title: "Money Heist", tmdbId: "71446", type: TMDBContentTypes.TV },
+  { id: "dark", title: "Dark", tmdbId: "70523", type: TMDBContentTypes.TV },
+  { id: "peaky_blinders", title: "Peaky Blinders", tmdbId: "60574", type: TMDBContentTypes.TV },
 ];
 
-/* ─────────────────────────────── types ─────────────────────────────── */
+/* ─────────────── types ─────────────── */
 
-type AvatarType = "icon" | "character" | "custom";
+type AvatarTab = "icon" | "character" | "custom";
 
 interface EditingState {
-  profileId: string | null; // null = new profile
+  profileId: string | null;
   name: string;
   colorA: string;
   colorB: string;
   icon: Icons;
-  avatarType: AvatarType;
-  characterAvatarUrl: string | null;
-  customImageUrl: string | null;
+  avatarTab: AvatarTab;
+  imageUrl: string | null; // set when character or custom is chosen
 }
 
-/* ─────────────────────────────── helpers ─────────────────────────────── */
+interface CastMember {
+  id: number;
+  name: string;
+  profileUrl: string;
+}
 
-/** Returns whether a stored icon string looks like a URL */
+interface LoadedCategory {
+  id: string;
+  title: string;
+  cast: CastMember[];
+}
+
+/* ─────────────── helpers ─────────────── */
+
 function isUrl(s: string) {
   return s.startsWith("http") || s.startsWith("data:");
 }
 
-/* ─────────────────────────────── sub-components ─────────────────────────────── */
+function blankEdit(override?: Partial<EditingState>): EditingState {
+  const pair = PRESET_COLORS[Math.floor(Math.random() * PRESET_COLORS.length)];
+  return {
+    profileId: null,
+    name: "",
+    colorA: pair[0],
+    colorB: pair[1],
+    icon: Icons.USER,
+    avatarTab: "icon",
+    imageUrl: null,
+    ...override,
+  };
+}
+
+function resolveAvatar(state: EditingState): string {
+  if (state.imageUrl) return state.imageUrl;
+  return state.icon;
+}
+
+/* ─────────────── AvatarDisplay ─────────────── */
 
 interface AvatarDisplayProps {
   iconValue: string;
@@ -164,9 +133,24 @@ interface AvatarDisplayProps {
   size?: "sm" | "md" | "lg";
 }
 
-function AvatarDisplay({ iconValue, colorA, colorB, size = "md" }: AvatarDisplayProps) {
-  const sizeClass = size === "sm" ? "w-16 h-16" : size === "lg" ? "w-28 h-28 md:w-32 md:h-32" : "w-20 h-20 md:w-24 md:h-24";
-  const iconSize = size === "sm" ? "text-2xl" : size === "lg" ? "text-5xl md:text-6xl" : "text-3xl md:text-4xl";
+function AvatarDisplay({
+  iconValue,
+  colorA,
+  colorB,
+  size = "md",
+}: AvatarDisplayProps) {
+  const sizeClass =
+    size === "sm"
+      ? "w-16 h-16"
+      : size === "lg"
+        ? "w-28 h-28 md:w-32 md:h-32"
+        : "w-20 h-20 md:w-24 md:h-24";
+  const iconSize =
+    size === "sm"
+      ? "text-2xl"
+      : size === "lg"
+        ? "text-5xl md:text-6xl"
+        : "text-3xl md:text-4xl";
 
   if (isUrl(iconValue)) {
     return (
@@ -174,7 +158,11 @@ function AvatarDisplay({ iconValue, colorA, colorB, size = "md" }: AvatarDisplay
         className={`${sizeClass} rounded-2xl overflow-hidden flex-shrink-0`}
         style={{ boxShadow: `0 6px 24px ${colorA}55` }}
       >
-        <img src={iconValue} alt="avatar" className="w-full h-full object-cover" />
+        <img
+          src={iconValue}
+          alt="avatar"
+          className="w-full h-full object-cover"
+        />
       </div>
     );
   }
@@ -187,12 +175,94 @@ function AvatarDisplay({ iconValue, colorA, colorB, size = "md" }: AvatarDisplay
         boxShadow: `0 6px 24px ${colorA}55`,
       }}
     >
-      <Icon icon={(iconValue as Icons) || Icons.USER} className={`text-white ${iconSize} drop-shadow-md`} />
+      <Icon
+        icon={(iconValue as Icons) || Icons.USER}
+        className={`text-white ${iconSize} drop-shadow-md`}
+      />
     </div>
   );
 }
 
-/* ─────────────────────────────── Edit Panel ─────────────────────────────── */
+/* ─────────────── CategoryRow (lazy-loaded) ─────────────── */
+
+interface CategoryRowProps {
+  category: AvatarCategory;
+  selectedUrl: string | null;
+  onSelect: (url: string) => void;
+}
+
+function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
+  const [cast, setCast] = useState<CastMember[] | null>(null);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    getMediaCredits(category.tmdbId, category.type)
+      .then((credits) => {
+        if (cancelled) return;
+        const members: CastMember[] = credits.cast
+          .filter((c) => c.profile_path)
+          .slice(0, 10)
+          .map((c) => ({
+            id: c.id,
+            name: c.name,
+            profileUrl: getPersonProfileImage(c.profile_path ?? null) ?? "",
+          }))
+          .filter((m) => m.profileUrl);
+        setCast(members);
+      })
+      .catch(() => {
+        if (!cancelled) setError(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [category.tmdbId, category.type]);
+
+  if (error || (cast !== null && cast.length === 0)) return null;
+
+  return (
+    <div className="mb-5">
+      <h3 className="text-sm font-bold text-white mb-2">{category.title}</h3>
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/10">
+        {cast === null
+          ? Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="w-16 h-16 rounded-xl flex-shrink-0 bg-white/5 animate-pulse"
+              />
+            ))
+          : cast.map((member) => (
+              <button
+                key={member.id}
+                type="button"
+                onClick={() => onSelect(member.profileUrl)}
+                title={member.name}
+                className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-150 focus:outline-none hover:scale-105"
+                style={{
+                  borderColor:
+                    selectedUrl === member.profileUrl
+                      ? "white"
+                      : "transparent",
+                  boxShadow:
+                    selectedUrl === member.profileUrl
+                      ? "0 0 0 2px rgba(255,255,255,0.3)"
+                      : "none",
+                }}
+              >
+                <img
+                  src={member.profileUrl}
+                  alt={member.name}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────── EditPanel ─────────────── */
 
 interface EditPanelProps {
   state: EditingState;
@@ -202,35 +272,26 @@ interface EditPanelProps {
   isNew?: boolean;
 }
 
-function EditPanel({ state, onChange, onSave, onCancel, isNew }: EditPanelProps) {
-  const [avatarTab, setAvatarTab] = useState<AvatarType>(state.avatarType);
+function EditPanel({
+  state,
+  onChange,
+  onSave,
+  onCancel,
+  isNew,
+}: EditPanelProps) {
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleCustomUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
-      const url = ev.target?.result as string;
-      onChange({ customImageUrl: url, avatarType: "custom", characterAvatarUrl: null });
+      onChange({ imageUrl: ev.target?.result as string, avatarTab: "custom" });
     };
     reader.readAsDataURL(file);
   };
 
-  const selectCharacter = (url: string) => {
-    onChange({ characterAvatarUrl: url, avatarType: "character", customImageUrl: null });
-  };
-
-  const selectIcon = (icon: Icons) => {
-    onChange({ icon, avatarType: "icon", characterAvatarUrl: null, customImageUrl: null });
-  };
-
-  const currentAvatarValue =
-    state.avatarType === "character"
-      ? (state.characterAvatarUrl ?? state.icon)
-      : state.avatarType === "custom"
-        ? (state.customImageUrl ?? state.icon)
-        : state.icon;
+  const currentAvatar = resolveAvatar(state);
 
   return (
     <div
@@ -241,10 +302,10 @@ function EditPanel({ state, onChange, onSave, onCancel, isNew }: EditPanelProps)
         className="relative w-full max-w-lg bg-[#121218] border border-white/10 rounded-3xl shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+        {/* ── Header ── */}
         <div className="flex items-center gap-4 px-6 pt-6 pb-4">
           <AvatarDisplay
-            iconValue={currentAvatarValue}
+            iconValue={currentAvatar}
             colorA={state.colorA}
             colorB={state.colorB}
             size="sm"
@@ -268,33 +329,35 @@ function EditPanel({ state, onChange, onSave, onCancel, isNew }: EditPanelProps)
           </button>
         </div>
 
-        <div className="px-6 pb-6 space-y-5 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10">
-          {/* ── Gradient colors ── */}
+        <div className="px-6 pb-2 max-h-[68vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 space-y-5">
+          {/* ── Colour one ── */}
           <section>
             <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-3">
               Profile colour one
             </p>
             <div className="flex flex-wrap gap-2 items-center">
-              {PRESET_COLORS.map(([a]) => (
+              {PRESET_COLORS.map(([colorA, colorB]) => (
                 <button
-                  key={a}
+                  key={colorA}
                   type="button"
-                  onClick={() => {
-                    const pair = PRESET_COLORS.find(([pa]) => pa === a)!;
-                    onChange({ colorA: pair[0], colorB: pair[1] });
-                  }}
+                  onClick={() => onChange({ colorA, colorB })}
                   className="w-8 h-8 rounded-lg border-2 transition-all duration-200 focus:outline-none hover:scale-110"
                   style={{
-                    background: a,
-                    borderColor: state.colorA === a ? "white" : "transparent",
-                    transform: state.colorA === a ? "scale(1.25)" : "scale(1)",
+                    background: colorA,
+                    borderColor:
+                      state.colorA === colorA ? "white" : "transparent",
+                    transform:
+                      state.colorA === colorA ? "scale(1.25)" : "scale(1)",
                   }}
                 />
               ))}
-              {/* Custom colour picker */}
-              <label className="relative w-8 h-8 rounded-lg border-2 border-white/20 overflow-hidden cursor-pointer hover:border-white/60 transition-colors flex items-center justify-center"
-                title="Custom colour">
-                <span className="text-white/50 text-xl leading-none select-none">+</span>
+              <label
+                className="relative w-8 h-8 rounded-lg border-2 border-white/20 overflow-hidden cursor-pointer hover:border-white/60 transition-colors flex items-center justify-center"
+                title="Custom colour"
+              >
+                <span className="text-white/50 text-xl leading-none select-none">
+                  +
+                </span>
                 <input
                   type="color"
                   value={state.colorA}
@@ -305,27 +368,34 @@ function EditPanel({ state, onChange, onSave, onCancel, isNew }: EditPanelProps)
             </div>
           </section>
 
+          {/* ── Colour two ── */}
           <section>
             <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-3">
               Profile colour two
             </p>
             <div className="flex flex-wrap gap-2 items-center">
-              {PRESET_COLORS.map(([a, b]) => (
+              {PRESET_COLORS.map(([, colorB]) => (
                 <button
-                  key={b}
+                  key={colorB}
                   type="button"
-                  onClick={() => onChange({ colorB: b })}
+                  onClick={() => onChange({ colorB })}
                   className="w-8 h-8 rounded-lg border-2 transition-all duration-200 focus:outline-none hover:scale-110"
                   style={{
-                    background: b,
-                    borderColor: state.colorB === b ? "white" : "transparent",
-                    transform: state.colorB === b ? "scale(1.25)" : "scale(1)",
+                    background: colorB,
+                    borderColor:
+                      state.colorB === colorB ? "white" : "transparent",
+                    transform:
+                      state.colorB === colorB ? "scale(1.25)" : "scale(1)",
                   }}
                 />
               ))}
-              <label className="relative w-8 h-8 rounded-lg border-2 border-white/20 overflow-hidden cursor-pointer hover:border-white/60 transition-colors flex items-center justify-center"
-                title="Custom colour">
-                <span className="text-white/50 text-xl leading-none select-none">+</span>
+              <label
+                className="relative w-8 h-8 rounded-lg border-2 border-white/20 overflow-hidden cursor-pointer hover:border-white/60 transition-colors flex items-center justify-center"
+                title="Custom colour"
+              >
+                <span className="text-white/50 text-xl leading-none select-none">
+                  +
+                </span>
                 <input
                   type="color"
                   value={state.colorB}
@@ -336,45 +406,54 @@ function EditPanel({ state, onChange, onSave, onCancel, isNew }: EditPanelProps)
             </div>
           </section>
 
-          {/* ── Avatar section ── */}
+          {/* ── Avatar ── */}
           <section>
             <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-3">
               Avatar
             </p>
 
             {/* Tab switcher */}
-            <div className="flex gap-1 bg-white/5 rounded-xl p-1 mb-3">
-              {(["icon", "character", "custom"] as AvatarType[]).map((tab) => (
+            <div className="flex gap-1 bg-white/5 rounded-xl p-1 mb-4">
+              {(["icon", "character", "custom"] as AvatarTab[]).map((tab) => (
                 <button
                   key={tab}
                   type="button"
-                  onClick={() => {
-                    setAvatarTab(tab);
-                    onChange({ avatarType: tab });
-                  }}
+                  onClick={() => onChange({ avatarTab: tab })}
                   className="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 capitalize"
                   style={{
-                    background: avatarTab === tab ? "rgba(255,255,255,0.12)" : "transparent",
-                    color: avatarTab === tab ? "white" : "rgba(255,255,255,0.4)",
+                    background:
+                      state.avatarTab === tab
+                        ? "rgba(255,255,255,0.12)"
+                        : "transparent",
+                    color:
+                      state.avatarTab === tab
+                        ? "white"
+                        : "rgba(255,255,255,0.4)",
                   }}
                 >
-                  {tab === "character" ? "Avatars" : tab === "custom" ? "Custom" : "Icons"}
+                  {tab === "character"
+                    ? "Characters"
+                    : tab === "custom"
+                      ? "Custom"
+                      : "Icons"}
                 </button>
               ))}
             </div>
 
-            {/* Icon grid */}
-            {avatarTab === "icon" && (
+            {/* Icons grid */}
+            {state.avatarTab === "icon" && (
               <div className="grid grid-cols-8 gap-1.5">
                 {SELECTABLE_ICONS.map((ic) => (
                   <button
                     key={ic}
                     type="button"
-                    onClick={() => selectIcon(ic)}
+                    onClick={() =>
+                      onChange({ icon: ic, imageUrl: null, avatarTab: "icon" })
+                    }
                     className="aspect-square rounded-xl flex items-center justify-center transition-all duration-150 focus:outline-none hover:bg-white/10"
                     style={{
                       background:
-                        state.avatarType === "icon" && state.icon === ic
+                        state.avatarTab === "icon" && state.icon === ic
                           ? `linear-gradient(135deg, ${state.colorA}, ${state.colorB})`
                           : "rgba(255,255,255,0.05)",
                     }}
@@ -385,49 +464,35 @@ function EditPanel({ state, onChange, onSave, onCancel, isNew }: EditPanelProps)
               </div>
             )}
 
-            {/* Character avatar grid */}
-            {avatarTab === "character" && (
-              <div className="grid grid-cols-4 gap-2">
-                {CHARACTER_AVATARS.map((av) => (
-                  <button
-                    key={av.id}
-                    type="button"
-                    onClick={() => selectCharacter(av.url)}
-                    className="flex flex-col items-center gap-1 focus:outline-none"
-                  >
-                    <div
-                      className="w-full aspect-square rounded-xl overflow-hidden border-2 transition-all duration-150"
-                      style={{
-                        borderColor:
-                          state.characterAvatarUrl === av.url && state.avatarType === "character"
-                            ? "white"
-                            : "transparent",
-                        boxShadow:
-                          state.characterAvatarUrl === av.url && state.avatarType === "character"
-                            ? "0 0 0 3px rgba(255,255,255,0.2)"
-                            : "none",
-                      }}
-                    >
-                      <img
-                        src={av.url}
-                        alt={av.label}
-                        className="w-full h-full object-cover bg-white/10"
-                      />
-                    </div>
-                    <span className="text-white/40 text-[10px] truncate w-full text-center">
-                      {av.label}
-                    </span>
-                  </button>
+            {/* Netflix-style category rows */}
+            {state.avatarTab === "character" && (
+              <div>
+                {AVATAR_CATEGORIES.map((cat) => (
+                  <CategoryRow
+                    key={cat.id}
+                    category={cat}
+                    selectedUrl={state.imageUrl}
+                    onSelect={(url) =>
+                      onChange({
+                        imageUrl: url,
+                        avatarTab: "character",
+                      })
+                    }
+                  />
                 ))}
               </div>
             )}
 
             {/* Custom upload */}
-            {avatarTab === "custom" && (
+            {state.avatarTab === "custom" && (
               <div className="flex flex-col items-center gap-3">
-                {state.customImageUrl ? (
+                {state.imageUrl ? (
                   <div className="w-24 h-24 rounded-2xl overflow-hidden">
-                    <img src={state.customImageUrl} alt="Custom" className="w-full h-full object-cover" />
+                    <img
+                      src={state.imageUrl}
+                      alt="Custom"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 ) : (
                   <div className="w-24 h-24 rounded-2xl border-2 border-dashed border-white/20 flex items-center justify-center">
@@ -439,23 +504,23 @@ function EditPanel({ state, onChange, onSave, onCancel, isNew }: EditPanelProps)
                   onClick={() => fileRef.current?.click()}
                   className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white/80 text-sm font-medium transition-colors"
                 >
-                  {state.customImageUrl ? "Change Image" : "Upload Image"}
+                  {state.imageUrl ? "Change Image" : "Upload Image"}
                 </button>
-                <p className="text-white/30 text-xs">JPG, PNG, GIF — max 2MB</p>
+                <p className="text-white/30 text-xs">JPG, PNG, GIF</p>
                 <input
                   ref={fileRef}
                   type="file"
                   accept="image/*"
                   className="hidden"
-                  onChange={handleCustomUpload}
+                  onChange={handleUpload}
                 />
               </div>
             )}
           </section>
         </div>
 
-        {/* Footer */}
-        <div className="px-6 pb-6 flex gap-3 border-t border-white/5 pt-4">
+        {/* ── Footer ── */}
+        <div className="px-6 pb-6 pt-4 flex gap-3 border-t border-white/5">
           <button
             type="button"
             onClick={onCancel}
@@ -482,28 +547,7 @@ function EditPanel({ state, onChange, onSave, onCancel, isNew }: EditPanelProps)
   );
 }
 
-/* ─────────────────────────────── Main Component ─────────────────────────────── */
-
-function blankEditState(override?: Partial<EditingState>): EditingState {
-  const randomPair = PRESET_COLORS[Math.floor(Math.random() * PRESET_COLORS.length)];
-  return {
-    profileId: null,
-    name: "",
-    colorA: randomPair[0],
-    colorB: randomPair[1],
-    icon: Icons.USER,
-    avatarType: "icon",
-    characterAvatarUrl: null,
-    customImageUrl: null,
-    ...override,
-  };
-}
-
-function resolveIconValue(state: EditingState): string {
-  if (state.avatarType === "character" && state.characterAvatarUrl) return state.characterAvatarUrl;
-  if (state.avatarType === "custom" && state.customImageUrl) return state.customImageUrl;
-  return state.icon;
-}
+/* ─────────────── Main ProfileSelector ─────────────── */
 
 export function ProfileSelector() {
   const account = useAuthStore((s) => s.account);
@@ -542,7 +586,7 @@ export function ProfileSelector() {
   const allProfiles: UserProfile[] = [mainProfile, ...userProfiles];
 
   const handleSelect = (id: string) => {
-    if (editState) return; // don't select while editing
+    if (editState) return;
     setActiveProfile(id);
   };
 
@@ -553,48 +597,34 @@ export function ProfileSelector() {
 
   const handleEditClick = (e: React.MouseEvent, profile: UserProfile) => {
     e.stopPropagation();
-    if (profile.id === "main") return; // can't edit main from here
+    if (profile.id === "main") return;
     const iconVal = profile.icon;
-    const isCharacter = isUrl(iconVal) && iconVal.includes("dicebear");
-    const isCustom = isUrl(iconVal) && !iconVal.includes("dicebear");
+    const hasUrl = isUrl(iconVal);
     setEditState({
       profileId: profile.id,
       name: profile.name,
       colorA: profile.colorA,
       colorB: profile.colorB,
-      icon: isUrl(iconVal) ? Icons.USER : (iconVal as Icons),
-      avatarType: isCharacter ? "character" : isCustom ? "custom" : "icon",
-      characterAvatarUrl: isCharacter ? iconVal : null,
-      customImageUrl: isCustom ? iconVal : null,
+      icon: hasUrl ? Icons.USER : (iconVal as Icons),
+      avatarTab: hasUrl ? "character" : "icon",
+      imageUrl: hasUrl ? iconVal : null,
     });
-  };
-
-  const handleNewProfile = () => {
-    setEditState(blankEditState());
   };
 
   const handleSave = () => {
     if (!editState) return;
-    const iconValue = resolveIconValue(editState);
+    const iconValue = resolveAvatar(editState);
+    const data = {
+      name: editState.name.trim(),
+      icon: iconValue,
+      colorA: editState.colorA,
+      colorB: editState.colorB,
+    };
 
     if (editState.profileId === null) {
-      // New profile
-      const newProfile: UserProfile = {
-        id: generateId(),
-        name: editState.name.trim(),
-        icon: iconValue,
-        colorA: editState.colorA,
-        colorB: editState.colorB,
-      };
-      addProfile(account.userId, newProfile);
+      addProfile(account.userId, { id: generateId(), ...data });
     } else {
-      // Update existing
-      updateProfile(account.userId, editState.profileId, {
-        name: editState.name.trim(),
-        icon: iconValue,
-        colorA: editState.colorA,
-        colorB: editState.colorB,
-      });
+      updateProfile(account.userId, editState.profileId, data);
     }
     setEditState(null);
   };
@@ -604,7 +634,6 @@ export function ProfileSelector() {
       <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden">
         {/* Backdrop */}
         <div className="absolute inset-0 bg-black/85 backdrop-blur-xl" />
-
         {/* Top glow */}
         <div
           className="absolute inset-0 opacity-20 pointer-events-none"
@@ -615,7 +644,6 @@ export function ProfileSelector() {
         />
 
         <div className="relative z-10 flex flex-col items-center w-full px-4">
-          {/* Title */}
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-1 tracking-wide">
             Who&apos;s watching?
           </h1>
@@ -623,53 +651,45 @@ export function ProfileSelector() {
             Select your profile to continue
           </p>
 
-          {/* Profiles grid */}
+          {/* Profiles */}
           <div className="flex flex-wrap justify-center gap-4 md:gap-7 max-w-3xl">
-            {allProfiles.map((p, i) => {
-              const iconVal = p.icon;
-              const isActive = p.id === activeProfileId;
-              return (
-                <div
-                  key={p.id}
-                  className="flex flex-col items-center group relative cursor-pointer w-24 md:w-28 transition-all duration-300 hover:scale-105"
-                  style={{ animationDelay: `${i * 60}ms` }}
-                  onClick={() => handleSelect(p.id)}
-                >
-                  {/* Active indicator */}
-                  {isActive && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-black z-10" />
-                  )}
-
-                  {/* Edit button (not for main) */}
-                  {p.id !== "main" && (
-                    <button
-                      type="button"
-                      onClick={(e) => handleEditClick(e, p)}
-                      className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-black/70 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 border border-white/20 hover:border-white/60"
-                      title="Edit profile"
-                    >
-                      <Icon icon={Icons.EDIT} className="text-white text-[10px]" />
-                    </button>
-                  )}
-
-                  <AvatarDisplay
-                    iconValue={iconVal}
-                    colorA={p.colorA}
-                    colorB={p.colorB}
-                    size="md"
-                  />
-                  <p className="mt-3 text-white/50 group-hover:text-white font-medium text-sm truncate w-full text-center transition-colors duration-300">
-                    {p.name}
-                  </p>
-                </div>
-              );
-            })}
+            {allProfiles.map((p, i) => (
+              <div
+                key={p.id}
+                className="flex flex-col items-center group relative cursor-pointer w-24 md:w-28 transition-all duration-300 hover:scale-105"
+                style={{ animationDelay: `${i * 60}ms` }}
+                onClick={() => handleSelect(p.id)}
+              >
+                {p.id === activeProfileId && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-black z-10" />
+                )}
+                {p.id !== "main" && (
+                  <button
+                    type="button"
+                    onClick={(e) => handleEditClick(e, p)}
+                    className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-black/70 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 border border-white/20 hover:border-white/60"
+                    title="Edit profile"
+                  >
+                    <Icon icon={Icons.EDIT} className="text-white text-[10px]" />
+                  </button>
+                )}
+                <AvatarDisplay
+                  iconValue={p.icon}
+                  colorA={p.colorA}
+                  colorB={p.colorB}
+                  size="md"
+                />
+                <p className="mt-3 text-white/50 group-hover:text-white font-medium text-sm truncate w-full text-center transition-colors duration-300">
+                  {p.name}
+                </p>
+              </div>
+            ))}
 
             {/* Add Profile */}
             {allProfiles.length < 5 && (
               <button
                 type="button"
-                onClick={handleNewProfile}
+                onClick={() => setEditState(blankEdit())}
                 className="flex flex-col items-center group cursor-pointer w-24 md:w-28 transition-all duration-300 hover:scale-105 focus:outline-none"
               >
                 <div className="w-full aspect-square rounded-2xl flex items-center justify-center transition-all duration-300 border-2 border-dashed border-white/20 group-hover:border-white/50 group-hover:bg-white/5">
@@ -685,7 +705,6 @@ export function ProfileSelector() {
             )}
           </div>
 
-          {/* Dismiss (only when manually opened) */}
           {forceShowProfileSelector && (
             <button
               type="button"
@@ -698,17 +717,14 @@ export function ProfileSelector() {
         </div>
       </div>
 
-      {/* Edit panel rendered on top */}
       {editState && (
-        <div className="z-[10001]">
-          <EditPanel
-            state={editState}
-            onChange={(patch) => setEditState((s) => (s ? { ...s, ...patch } : s))}
-            onSave={handleSave}
-            onCancel={() => setEditState(null)}
-            isNew={editState.profileId === null}
-          />
-        </div>
+        <EditPanel
+          state={editState}
+          onChange={(patch) => setEditState((s) => (s ? { ...s, ...patch } : s))}
+          onSave={handleSave}
+          onCancel={() => setEditState(null)}
+          isNew={editState.profileId === null}
+        />
       )}
     </>
   );

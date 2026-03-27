@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 
+const LETTERS = "BASEMENT".split("").map((letter, i) => ({ letter, id: i }));
+
 export function IntroAnimation() {
   const [show, setShow] = useState(
     () => !sessionStorage.getItem("hasSeenIntro"),
@@ -11,12 +13,10 @@ export function IntroAnimation() {
 
   useEffect(() => {
     if (show) {
-      // Stage 1: Logo animation runs for 1.8s
       const curtainTimer = setTimeout(() => {
         setStage("curtains");
       }, 2000);
 
-      // Stage 2: Curtains open for 1s, then unmount
       const unmountTimer = setTimeout(() => {
         setStage("done");
         setShow(false);
@@ -79,10 +79,7 @@ export function IntroAnimation() {
             ? "-translate-x-full"
             : "translate-x-0",
         )}
-        style={{
-          background:
-            "linear-gradient(to right, #0a0a0f 80%, #12121a)",
-        }}
+        style={{ background: "linear-gradient(to right, #0a0a0f 80%, #12121a)" }}
       />
       {/* Right Curtain */}
       <div
@@ -92,10 +89,7 @@ export function IntroAnimation() {
             ? "translate-x-full"
             : "translate-x-0",
         )}
-        style={{
-          background:
-            "linear-gradient(to left, #0a0a0f 80%, #12121a)",
-        }}
+        style={{ background: "linear-gradient(to left, #0a0a0f 80%, #12121a)" }}
       />
 
       {/* Logo + text */}
@@ -141,11 +135,11 @@ export function IntroAnimation() {
 
         {/* Brand name — letters rise in one by one */}
         <div className="flex mt-6 gap-[3px]">
-          {"BASEMENT".split("").map((letter, i) => (
+          {LETTERS.map(({ letter, id }) => (
             <span
-              key={i}
+              key={id}
               className="animate-letter-rise text-3xl md:text-5xl font-bold tracking-[0.18em] text-white"
-              style={{ animationDelay: `${0.3 + i * 0.06}s` }}
+              style={{ animationDelay: `${0.3 + id * 0.06}s` }}
             >
               {letter}
             </span>
@@ -153,9 +147,7 @@ export function IntroAnimation() {
         </div>
 
         {/* Tagline */}
-        <p
-          className="animate-tagline-fade text-type-secondary text-xs md:text-sm tracking-[0.35em] uppercase mt-2"
-        >
+        <p className="animate-tagline-fade text-type-secondary text-xs md:text-sm tracking-[0.35em] uppercase mt-2">
           Stream Together
         </p>
       </div>
