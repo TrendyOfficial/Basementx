@@ -243,6 +243,12 @@ interface CategoryRowProps {
 function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
   const [cast, setCast] = useState<CastMember[] | null>(null);
   const [error, setError] = useState(false);
+  // Create stable keys for skeleton items
+  const [skeletonKeys] = useState(() =>
+    Array.from({ length: 6 }, () =>
+      `${category.id}-${Math.random().toString(36).substring(2, 9)}`
+    )
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -275,10 +281,9 @@ function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
       <h3 className="text-sm font-bold text-white mb-2">{category.title}</h3>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/10">
         {cast === null
-          ? Array.from({ length: 6 }).map((_, idx) => (
-              // eslint-disable-next-line react/no-array-index-key
+          ? skeletonKeys.map((key) => (
               <div
-                key={`skeleton-${category.id}-${idx}`}
+                key={key}
                 className="w-16 h-16 rounded-xl flex-shrink-0 bg-white/5 animate-pulse"
               />
             ))
