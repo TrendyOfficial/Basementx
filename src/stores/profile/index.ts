@@ -71,6 +71,13 @@ export const useProfileStore = create(
     })),
     {
       name: "__MW::profiles",
+      // hasSelectedProfileThisSession must NOT be persisted, it should reset
+      // to false on every page load so the "Who's watching?" screen shows on
+      // entry and the Switch Profile button works correctly.
+      partialize: (state) => ({
+        profiles: state.profiles,
+        activeProfileId: state.activeProfileId,
+      }),
     },
   ),
 );
