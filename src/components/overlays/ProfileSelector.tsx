@@ -275,8 +275,8 @@ function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
       <h3 className="text-sm font-bold text-white mb-2">{category.title}</h3>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/10">
         {cast === null
-          ? // eslint-disable-next-line react/no-array-index-key
-            Array.from({ length: 6 }).map((_, idx) => (
+          ? Array.from({ length: 6 }).map((_, idx) => (
+              /* eslint-disable-next-line react/no-array-index-key */
               <div
                 key={`skeleton-${idx}`}
                 className="w-16 h-16 rounded-xl flex-shrink-0 bg-white/5 animate-pulse"
