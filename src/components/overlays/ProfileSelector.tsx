@@ -245,8 +245,9 @@ function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
   const [error, setError] = useState(false);
   // Create stable keys for skeleton items
   const [skeletonKeys] = useState(() =>
-    Array.from({ length: 6 }, () =>
-      `${category.id}-${Math.random().toString(36).substring(2, 9)}`
+    Array.from(
+      { length: 6 },
+      () => `${category.id}-${Math.random().toString(36).substring(2, 9)}`
     )
   );
 
