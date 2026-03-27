@@ -112,10 +112,9 @@ export function WatchPartyChat() {
             Welcome to the Watch Party!
           </div>
         ) : (
-          messages.map((msg, i) => (
-            // eslint-disable-next-line react/no-array-index-key
+          messages.map((msg) => (
             <div
-              key={`${msg.time}-${msg.author}-${i}`}
+              key={`${msg.time}-${msg.author}-${msg.text.length}`}
               className={classNames(
                 "p-2 rounded-lg text-sm max-w-[90%]",
                 msg.type === "system"
