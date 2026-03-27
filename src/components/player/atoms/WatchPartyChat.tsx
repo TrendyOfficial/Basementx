@@ -113,6 +113,7 @@ export function WatchPartyChat() {
           </div>
         ) : (
           messages.map((msg, i) => (
+            // eslint-disable-next-line react/no-array-index-key
             <div
               key={`${msg.time}-${msg.author}-${i}`}
               className={classNames(
