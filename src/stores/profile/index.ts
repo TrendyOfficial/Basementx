@@ -14,6 +14,7 @@ interface ProfileStore {
   profiles: Record<string, UserProfile[]>; // Keyed by account.userId
   activeProfileId: string | null;
   hasSelectedProfileThisSession: boolean;
+  forceShowProfileSelector: boolean;
   addProfile: (userId: string, profile: UserProfile) => void;
   removeProfile: (userId: string, profileId: string) => void;
   updateProfile: (
@@ -23,6 +24,7 @@ interface ProfileStore {
   ) => void;
   setActiveProfile: (profileId: string | null) => void;
   setHasSelectedProfileThisSession: (hasSelected: boolean) => void;
+  setForceShowProfileSelector: (force: boolean) => void;
 }
 
 export const useProfileStore = create(
@@ -31,6 +33,7 @@ export const useProfileStore = create(
       profiles: {},
       activeProfileId: null,
       hasSelectedProfileThisSession: false,
+      forceShowProfileSelector: false,
       addProfile: (userId, profile) => {
         set((s) => {
           if (!s.profiles[userId]) s.profiles[userId] = [];
@@ -61,6 +64,7 @@ export const useProfileStore = create(
         set((s) => {
           s.activeProfileId = profileId;
           s.hasSelectedProfileThisSession = true;
+          s.forceShowProfileSelector = false;
         });
       },
       setHasSelectedProfileThisSession: (hasSelected) => {
@@ -68,12 +72,18 @@ export const useProfileStore = create(
           s.hasSelectedProfileThisSession = hasSelected;
         });
       },
+      setForceShowProfileSelector: (force) => {
+        set((s) => {
+          s.forceShowProfileSelector = force;
+          // When manually opening the selector, also reset the session flag
+          if (force) s.hasSelectedProfileThisSession = false;
+        });
+      },
     })),
     {
       name: "__MW::profiles",
-      // hasSelectedProfileThisSession must NOT be persisted, it should reset
-      // to false on every page load so the "Who's watching?" screen shows on
-      // entry and the Switch Profile button works correctly.
+      // hasSelectedProfileThisSession and forceShowProfileSelector must NOT
+      // be persisted — they should reset on every page load.
       partialize: (state) => ({
         profiles: state.profiles,
         activeProfileId: state.activeProfileId,

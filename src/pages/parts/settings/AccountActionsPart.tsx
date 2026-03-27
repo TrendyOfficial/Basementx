@@ -19,8 +19,8 @@ export function AccountActionsPart() {
   const account = useAuthStore((s) => s.account);
   const { logout } = useAuthData();
   const deleteModal = useModal("account-delete");
-  const setHasSelectedProfileThisSession = useProfileStore(
-    (s) => s.setHasSelectedProfileThisSession,
+  const setForceShowProfileSelector = useProfileStore(
+    (s) => s.setForceShowProfileSelector,
   );
 
   const [deleteResult, deleteExec] = useAsyncFn(async () => {
@@ -60,7 +60,7 @@ export function AccountActionsPart() {
             <Button
               theme="purple"
               onClick={() => {
-                setHasSelectedProfileThisSession(false);
+                setForceShowProfileSelector(true);
               }}
             >
               {t(
