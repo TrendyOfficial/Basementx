@@ -275,7 +275,8 @@ function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
       <h3 className="text-sm font-bold text-white mb-2">{category.title}</h3>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/10">
         {cast === null
-          ? Array.from({ length: 6 }).map((_, idx) => (
+          ? // eslint-disable-next-line react/no-array-index-key
+            Array.from({ length: 6 }).map((_, idx) => (
               <div
                 key={`skeleton-${idx}`}
                 className="w-16 h-16 rounded-xl flex-shrink-0 bg-white/5 animate-pulse"
@@ -703,11 +704,11 @@ export function ProfileSelector() {
 
           {/* Profiles */}
           <div className="flex flex-wrap justify-center gap-4 md:gap-7 max-w-3xl">
-            {allProfiles.map((p) => (
+            {allProfiles.map((p, i) => (
               <div
                 key={p.id}
                 className="flex flex-col items-center group relative cursor-pointer w-24 md:w-28 transition-all duration-300 hover:scale-105"
-                style={{ animationDelay: `${allProfiles.indexOf(p) * 60}ms` }}
+                style={{ animationDelay: `${i * 60}ms` }}
                 onClick={() => handleSelect(p.id)}
               >
                 {p.id === activeProfileId && (
