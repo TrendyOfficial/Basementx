@@ -703,11 +703,11 @@ export function ProfileSelector() {
 
           {/* Profiles */}
           <div className="flex flex-wrap justify-center gap-4 md:gap-7 max-w-3xl">
-            {allProfiles.map((p, i) => (
+            {allProfiles.map((p) => (
               <div
                 key={p.id}
                 className="flex flex-col items-center group relative cursor-pointer w-24 md:w-28 transition-all duration-300 hover:scale-105"
-                style={{ animationDelay: `${i * 60}ms` }}
+                style={{ animationDelay: `${allProfiles.indexOf(p) * 60}ms` }}
                 onClick={() => handleSelect(p.id)}
               >
                 {p.id === activeProfileId && (
