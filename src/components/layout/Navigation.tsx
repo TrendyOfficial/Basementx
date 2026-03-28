@@ -14,6 +14,8 @@ import { conf } from "@/setup/config";
 import { useBannerSize } from "@/stores/banner";
 import { usePreferencesStore } from "@/stores/preferences";
 
+import { useProfileStore } from "@/stores/profile";
+
 import { BrandPill } from "./BrandPill";
 
 export interface NavigationProps {
@@ -29,6 +31,7 @@ export function Navigation(props: NavigationProps) {
   const { loggedIn } = useAuth();
   const [scrollPosition, setScrollPosition] = useState(0);
   const { openNotifications, getUnreadCount } = useNotifications();
+  const { activeProfileId, setForceShowProfileSelector } = useProfileStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -203,11 +206,24 @@ export function Navigation(props: NavigationProps) {
                 })()}
               </a>
             </div>
-            <div className="relative pointer-events-auto">
-              <LinksDropdown>
-                {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
-              </LinksDropdown>
-            </div>
+              <div className="flex items-center space-x-3">
+                {loggedIn && activeProfileId && activeProfileId !== "main" && (
+                  <div 
+                    className="flex items-center group cursor-pointer"
+                    onClick={() => setForceShowProfileSelector(true)}
+                    title="Switch Profile"
+                  >
+                    <UserAvatar 
+                      sizeClass="w-8 h-8 rounded-xl" 
+                      iconClass="text-sm"
+                    />
+                    <div className="w-1 h-1 rounded-full bg-white/20 mx-2" />
+                  </div>
+                )}
+                <LinksDropdown>
+                  {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
+                </LinksDropdown>
+              </div>
           </div>
         </div>
       </div>

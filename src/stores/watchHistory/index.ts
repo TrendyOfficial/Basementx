@@ -42,8 +42,11 @@ export interface WatchHistoryUpdateItem {
 }
 
 export interface WatchHistoryStore {
-  items: Record<string, WatchHistoryItem>;
+  items: Record<string, WatchHistoryItem>; // Active profile slice
+  profiles: Record<string, Record<string, WatchHistoryItem>>; // Full storage
   updateQueue: WatchHistoryUpdateItem[];
+  
+  switchProfile(profileId: string | null): void;
   addItem(
     meta: PlayerMeta,
     progress: { watched: number; duration: number },
@@ -67,7 +70,21 @@ export const useWatchHistoryStore = create(
   persist(
     immer<WatchHistoryStore>((set) => ({
       items: {},
+      profiles: {},
       updateQueue: [],
+
+      switchProfile(profileId) {
+        if (!profileId) {
+          set((s) => {
+            s.items = {};
+          });
+          return;
+        }
+        set((s) => {
+          s.items = s.profiles[profileId] || {};
+        });
+      },
+
       addItem(meta, progress, completed) {
         set((s) => {
           const key = meta.episode
@@ -114,6 +131,10 @@ export const useWatchHistoryStore = create(
             seasonNumber: meta.season?.number,
             episodeNumber: meta.episode?.number,
           };
+
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.items };
         });
       },
       updateItem(id, progress, completed) {
@@ -151,6 +172,10 @@ export const useWatchHistoryStore = create(
           existingItem.progress = { ...progress };
           existingItem.watchedAt = Date.now();
           existingItem.completed = completed;
+
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.items };
         });
       },
       removeItem(id) {
@@ -174,16 +199,24 @@ export const useWatchHistoryStore = create(
           });
 
           delete s.items[id];
+
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.items };
         });
       },
       replaceItems(items: Record<string, WatchHistoryItem>) {
         set((s) => {
           s.items = items;
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = items;
         });
       },
       clear() {
         set((s) => {
           s.items = {};
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = {};
         });
       },
       clearUpdateQueue() {

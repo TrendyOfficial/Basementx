@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -180,6 +181,7 @@ interface AvatarDisplayProps {
   colorA: string;
   colorB: string;
   size?: "sm" | "md" | "lg";
+  isActive?: boolean;
 }
 
 function AvatarDisplay({
@@ -187,6 +189,7 @@ function AvatarDisplay({
   colorA,
   colorB,
   size = "md",
+  isActive,
 }: AvatarDisplayProps) {
   const sizeClass =
     size === "sm"
@@ -201,12 +204,17 @@ function AvatarDisplay({
         ? "text-5xl md:text-6xl"
         : "text-3xl md:text-4xl";
 
+  const containerClass = classNames(
+    sizeClass,
+    "rounded-2xl overflow-hidden flex-shrink-0 transition-all duration-300",
+    {
+      "ring-4 ring-white ring-offset-4 ring-offset-background-main": isActive,
+    },
+  );
+
   if (isUrl(iconValue)) {
     return (
-      <div
-        className={`${sizeClass} rounded-2xl overflow-hidden flex-shrink-0`}
-        style={{ boxShadow: `0 6px 24px ${colorA}55` }}
-      >
+      <div className={containerClass}>
         <img
           src={iconValue}
           alt="avatar"
@@ -218,15 +226,17 @@ function AvatarDisplay({
 
   return (
     <div
-      className={`${sizeClass} rounded-2xl flex items-center justify-center flex-shrink-0`}
+      className={classNames(
+        containerClass,
+        "flex items-center justify-center bg-gradient-to-br",
+      )}
       style={{
-        background: `linear-gradient(135deg, ${colorA}, ${colorB})`,
-        boxShadow: `0 6px 24px ${colorA}55`,
+        backgroundImage: `linear-gradient(135deg, ${colorA}, ${colorB})`,
       }}
     >
       <Icon
         icon={(iconValue as Icons) || Icons.USER}
-        className={`text-white ${iconSize} drop-shadow-md`}
+        className={classNames("text-white drop-shadow-md", iconSize)}
       />
     </div>
   );
@@ -278,7 +288,7 @@ function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
   if (error || (cast !== null && cast.length === 0)) return null;
 
   return (
-    <div className="mb-5">
+    <div className="mb-5 px-6">
       <h3 className="text-sm font-bold text-white mb-2">{category.title}</h3>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/10">
         {cast === null
@@ -298,10 +308,6 @@ function CategoryRow({ category, selectedUrl, onSelect }: CategoryRowProps) {
                 style={{
                   borderColor:
                     selectedUrl === member.profileUrl ? "white" : "transparent",
-                  boxShadow:
-                    selectedUrl === member.profileUrl
-                      ? "0 0 0 2px rgba(255,255,255,0.3)"
-                      : "none",
                 }}
               >
                 <img
@@ -349,15 +355,15 @@ function EditPanel({
 
   return (
     <div
-      className="fixed inset-0 z-[10001] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[10001] flex items-center justify-center p-4 bg-black/60"
       onClick={onCancel}
     >
       <div
-        className="relative w-full max-w-lg bg-[#121218] border border-white/10 rounded-3xl shadow-2xl overflow-hidden"
+        className="relative w-full max-w-2xl bg-background-main border border-utils-divider rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ── Header ── */}
-        <div className="flex items-center gap-4 px-6 pt-6 pb-4">
+        <div className="flex items-center gap-6 p-8 border-b border-utils-divider">
           <AvatarDisplay
             iconValue={currentAvatar}
             colorA={state.colorA}
@@ -365,154 +371,128 @@ function EditPanel({
             size="sm"
           />
           <div className="flex-1 min-w-0">
+            <h2 className="text-xl font-bold text-white mb-2">
+              {isNew ? "Create Profile" : "Edit Profile"}
+            </h2>
             <input
               type="text"
               value={state.name}
               onChange={(e) => onChange({ name: e.target.value })}
               placeholder="Profile name"
               maxLength={20}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-white/30 transition-colors"
+              className="w-full bg-white/5 border border-utils-divider rounded-xl px-4 py-2.5 text-white text-lg placeholder-white/20 focus:outline-none focus:border-white/40 transition-colors"
             />
           </div>
           <button
             type="button"
             onClick={onCancel}
-            className="text-white/40 hover:text-white transition-colors flex-shrink-0"
+            className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 text-white transition-colors flex-shrink-0"
           >
-            <Icon icon={Icons.X} className="text-lg" />
+            <Icon icon={Icons.X} className="text-xl" />
           </button>
         </div>
 
-        <div className="px-6 pb-2 max-h-[68vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 space-y-5">
-          {/* ── Colour one ── */}
-          <section>
-            <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-3">
-              Profile colour one
-            </p>
-            <div className="flex flex-wrap gap-2 items-center">
-              {PRESET_COLORS.map(([colorA, colorB]) => (
-                <button
-                  key={colorA}
-                  type="button"
-                  onClick={() => onChange({ colorA, colorB })}
-                  className="w-8 h-8 rounded-lg border-2 transition-all duration-200 focus:outline-none hover:scale-110"
-                  style={{
-                    background: colorA,
-                    borderColor:
-                      state.colorA === colorA ? "white" : "transparent",
-                    transform:
-                      state.colorA === colorA ? "scale(1.25)" : "scale(1)",
-                  }}
-                />
-              ))}
-              <label
-                className="relative w-8 h-8 rounded-lg border-2 border-white/20 overflow-hidden cursor-pointer hover:border-white/60 transition-colors flex items-center justify-center"
-                title="Custom colour"
-              >
-                <span className="text-white/50 text-xl leading-none select-none">
-                  +
-                </span>
-                <input
-                  type="color"
-                  value={state.colorA}
-                  onChange={(e) => onChange({ colorA: e.target.value })}
-                  className="absolute opacity-0 w-0 h-0"
-                />
-              </label>
-            </div>
-          </section>
+        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 p-2 space-y-8">
+          {/* ── Appearance ── */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+            <section>
+              <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">
+                Primary Color
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {PRESET_COLORS.map(([colorA, colorB]) => (
+                  <button
+                    key={colorA}
+                    type="button"
+                    onClick={() => onChange({ colorA, colorB })}
+                    className={classNames(
+                      "w-10 h-10 rounded-xl border-2 transition-all duration-200",
+                      state.colorA === colorA ? "border-white" : "border-transparent"
+                    )}
+                    style={{ background: colorA }}
+                  />
+                ))}
+                <label className="w-10 h-10 rounded-xl border-2 border-dashed border-white/20 flex items-center justify-center cursor-pointer hover:border-white/40 transition-colors">
+                  <Icon icon={Icons.PLUS} className="text-white/40" />
+                  <input
+                    type="color"
+                    value={state.colorA}
+                    onChange={(e) => onChange({ colorA: e.target.value })}
+                    className="absolute opacity-0 w-0 h-0"
+                  />
+                </label>
+              </div>
+            </section>
 
-          {/* ── Colour two ── */}
-          <section>
-            <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-3">
-              Profile colour two
-            </p>
-            <div className="flex flex-wrap gap-2 items-center">
-              {PRESET_COLORS.map(([, colorB]) => (
-                <button
-                  key={colorB}
-                  type="button"
-                  onClick={() => onChange({ colorB })}
-                  className="w-8 h-8 rounded-lg border-2 transition-all duration-200 focus:outline-none hover:scale-110"
-                  style={{
-                    background: colorB,
-                    borderColor:
-                      state.colorB === colorB ? "white" : "transparent",
-                    transform:
-                      state.colorB === colorB ? "scale(1.25)" : "scale(1)",
-                  }}
-                />
-              ))}
-              <label
-                className="relative w-8 h-8 rounded-lg border-2 border-white/20 overflow-hidden cursor-pointer hover:border-white/60 transition-colors flex items-center justify-center"
-                title="Custom colour"
-              >
-                <span className="text-white/50 text-xl leading-none select-none">
-                  +
-                </span>
-                <input
-                  type="color"
-                  value={state.colorB}
-                  onChange={(e) => onChange({ colorB: e.target.value })}
-                  className="absolute opacity-0 w-0 h-0"
-                />
-              </label>
-            </div>
-          </section>
+            <section>
+              <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">
+                Secondary Color
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {PRESET_COLORS.map(([, colorB]) => (
+                  <button
+                    key={colorB}
+                    type="button"
+                    onClick={() => onChange({ colorB })}
+                    className={classNames(
+                      "w-10 h-10 rounded-xl border-2 transition-all duration-200",
+                      state.colorB === colorB ? "border-white" : "border-transparent"
+                    )}
+                    style={{ background: colorB }}
+                  />
+                ))}
+                <label className="w-10 h-10 rounded-xl border-2 border-dashed border-white/20 flex items-center justify-center cursor-pointer hover:border-white/40 transition-colors">
+                  <Icon icon={Icons.PLUS} className="text-white/40" />
+                  <input
+                    type="color"
+                    value={state.colorB}
+                    onChange={(e) => onChange({ colorB: e.target.value })}
+                    className="absolute opacity-0 w-0 h-0"
+                  />
+                </label>
+              </div>
+            </section>
+          </div>
 
-          {/* ── Avatar ── */}
+          {/* ── Avatar Tabs ── */}
           <section>
-            <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-3">
-              Avatar
-            </p>
-
-            {/* Tab switcher */}
-            <div className="flex gap-1 bg-white/5 rounded-xl p-1 mb-4">
-              {(["icon", "character", "custom"] as AvatarTab[]).map((tab) => (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => onChange({ avatarTab: tab })}
-                  className="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 capitalize"
-                  style={{
-                    background:
-                      state.avatarTab === tab
-                        ? "rgba(255,255,255,0.12)"
-                        : "transparent",
-                    color:
-                      state.avatarTab === tab
-                        ? "white"
-                        : "rgba(255,255,255,0.4)",
-                  }}
-                >
-                  {tab === "character"
-                    ? "Characters"
-                    : tab === "custom"
-                      ? "Custom"
-                      : "Icons"}
-                </button>
-              ))}
+            <div className="px-6 mb-6">
+              <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">
+                Choose Avatar
+              </p>
+              <div className="flex gap-2 p-1 bg-white/5 rounded-2xl">
+                {(["icon", "character", "custom"] as AvatarTab[]).map((tab) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => onChange({ avatarTab: tab })}
+                    className={classNames(
+                      "flex-1 py-2 rounded-xl text-sm font-bold transition-all capitalize",
+                      state.avatarTab === tab ? "bg-white/10 text-white shadow-sm" : "text-white/40 hover:text-white/60"
+                    )}
+                  >
+                    {tab === "character" ? "Characters" : tab === "custom" ? "Custom" : "Icons"}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Icons grid */}
             {state.avatarTab === "icon" && (
-              <div className="grid grid-cols-8 gap-1.5">
+              <div className="grid grid-cols-5 ssm:grid-cols-7 gap-3 px-6">
                 {SELECTABLE_ICONS.map((ic) => (
                   <button
                     key={ic}
                     type="button"
-                    onClick={() =>
-                      onChange({ icon: ic, imageUrl: null, avatarTab: "icon" })
-                    }
-                    className="aspect-square rounded-xl flex items-center justify-center transition-all duration-150 focus:outline-none hover:bg-white/10"
-                    style={{
-                      background:
-                        state.avatarTab === "icon" && state.icon === ic
-                          ? `linear-gradient(135deg, ${state.colorA}, ${state.colorB})`
-                          : "rgba(255,255,255,0.05)",
-                    }}
+                    onClick={() => onChange({ icon: ic, imageUrl: null, avatarTab: "icon" })}
+                    className={classNames(
+                      "aspect-square rounded-2xl flex items-center justify-center transition-all border-2",
+                      state.avatarTab === "icon" && state.icon === ic 
+                        ? "border-white bg-white/10" 
+                        : "border-transparent bg-white/5 hover:bg-white/10"
+                    )}
                   >
-                    <Icon icon={ic} className="text-white text-base" />
+                    <Icon icon={ic} className="text-white text-xl" />
                   </button>
                 ))}
               </div>
@@ -520,18 +500,13 @@ function EditPanel({
 
             {/* Netflix-style category rows */}
             {state.avatarTab === "character" && (
-              <div>
+              <div className="space-y-4">
                 {AVATAR_CATEGORIES.map((cat) => (
                   <CategoryRow
                     key={cat.id}
                     category={cat}
                     selectedUrl={state.imageUrl}
-                    onSelect={(url) =>
-                      onChange({
-                        imageUrl: url,
-                        avatarTab: "character",
-                      })
-                    }
+                    onSelect={(url) => onChange({ imageUrl: url, avatarTab: "character" })}
                   />
                 ))}
               </div>
@@ -539,31 +514,21 @@ function EditPanel({
 
             {/* Custom upload */}
             {state.avatarTab === "custom" && (
-              <div className="flex flex-col items-center gap-3">
-                {state.imageUrl ? (
-                  <div className="w-24 h-24 rounded-2xl overflow-hidden">
-                    <img
-                      src={state.imageUrl}
-                      alt="Custom"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-24 h-24 rounded-2xl border-2 border-dashed border-white/20 flex items-center justify-center">
-                    <Icon
-                      icon={Icons.USER}
-                      className="text-white/20 text-4xl"
-                    />
-                  </div>
-                )}
+              <div className="flex flex-col items-center py-8 gap-4 px-6 bg-white/5 mx-6 rounded-3xl border border-dashed border-white/10">
+                <AvatarDisplay
+                  iconValue={state.imageUrl || ""}
+                  colorA={state.colorA}
+                  colorB={state.colorB}
+                  size="lg"
+                />
                 <button
                   type="button"
                   onClick={() => fileRef.current?.click()}
-                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white/80 text-sm font-medium transition-colors"
+                  className="px-6 py-2.5 rounded-xl bg-white text-black font-bold hover:bg-white/90 transition-colors"
                 >
-                  {state.imageUrl ? "Change Image" : "Upload Image"}
+                  {state.imageUrl ? "Replace Image" : "Upload Image"}
                 </button>
-                <p className="text-white/30 text-xs">JPG, PNG, GIF</p>
+                <p className="text-white/20 text-xs font-bold tracking-widest uppercase">JPG, PNG, GIF</p>
                 <input
                   ref={fileRef}
                   type="file"
@@ -577,11 +542,11 @@ function EditPanel({
         </div>
 
         {/* ── Footer ── */}
-        <div className="px-6 pb-6 pt-4 flex gap-3 border-t border-white/5">
+        <div className="p-8 border-t border-utils-divider flex gap-4">
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white/70 text-sm font-semibold transition-colors"
+            className="flex-1 py-3 text-sm font-bold text-white/60 hover:text-white transition-colors"
           >
             Cancel
           </button>
@@ -589,14 +554,12 @@ function EditPanel({
             type="button"
             disabled={!state.name.trim()}
             onClick={onSave}
-            className="flex-1 py-2.5 rounded-xl text-white text-sm font-semibold transition-all disabled:opacity-40"
-            style={{
-              background: state.name.trim()
-                ? `linear-gradient(135deg, ${state.colorA}, ${state.colorB})`
-                : "rgba(255,255,255,0.1)",
-            }}
+            className={classNames(
+              "flex-[2] py-3 rounded-2xl text-black font-bold transition-all disabled:opacity-50",
+              state.name.trim() ? "bg-white hover:scale-[1.02] active:scale-[0.98]" : "bg-white/10 text-white/20"
+            )}
           >
-            {isNew ? "Create Profile" : "Save Changes"}
+            {isNew ? "Create Profile" : "Save Settings"}
           </button>
         </div>
       </div>
@@ -688,90 +651,84 @@ export function ProfileSelector() {
 
   return (
     <>
-      <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden">
-        {/* Backdrop */}
-        <div className="absolute inset-0 bg-black/85 backdrop-blur-xl" />
-        {/* Top glow */}
-        <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.6), transparent)",
-          }}
-        />
+      <div className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-background-main overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/20 blur-[120px] rounded-full animate-pulse" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/20 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: "1s" }} />
+        </div>
 
-        <div className="relative z-10 flex flex-col items-center w-full px-4">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-1 tracking-wide">
+        <div className="relative z-10 flex flex-col items-center w-full px-4 animate-in fade-in zoom-in duration-500">
+          <h1 className="text-4xl md:text-6xl font-black text-white mb-4 tracking-tighter">
             Who&apos;s watching?
           </h1>
-          <p className="text-white/40 text-sm mb-10">
-            Select your profile to continue
+          <p className="text-white/20 text-lg font-bold uppercase tracking-widest mb-16">
+            P-Stream Excellence
           </p>
 
-          {/* Profiles */}
-          <div className="flex flex-wrap justify-center gap-4 md:gap-7 max-w-3xl">
+          {/* Profiles Grid */}
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12 max-w-5xl">
             {allProfiles.map((p, i) => (
               <div
                 key={p.id}
-                className="flex flex-col items-center group relative cursor-pointer w-24 md:w-28 transition-all duration-300 hover:scale-105"
-                style={{ animationDelay: `${i * 60}ms` }}
+                className="flex flex-col items-center group relative cursor-pointer w-28 md:w-36"
+                style={{ animationDelay: `${i * 100}ms` }}
                 onClick={() => handleSelect(p.id)}
               >
-                {p.id === activeProfileId && (
-                  <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-black z-10" />
-                )}
-                {p.id !== "main" && (
-                  <button
-                    type="button"
-                    onClick={(e) => handleEditClick(e, p)}
-                    className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-black/70 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 border border-white/20 hover:border-white/60"
-                    title="Edit profile"
-                  >
-                    <Icon
-                      icon={Icons.EDIT}
-                      className="text-white text-[10px]"
-                    />
-                  </button>
-                )}
-                <AvatarDisplay
-                  iconValue={p.icon}
-                  colorA={p.colorA}
-                  colorB={p.colorB}
-                  size="md"
-                />
-                <p className="mt-3 text-white/50 group-hover:text-white font-medium text-sm truncate w-full text-center transition-colors duration-300">
+                <div className="relative mb-6">
+                  <AvatarDisplay
+                    iconValue={p.icon}
+                    colorA={p.colorA}
+                    colorB={p.colorB}
+                    size="lg"
+                    isActive={p.id === activeProfileId}
+                  />
+                  {p.id !== "main" && (
+                    <button
+                      type="button"
+                      onClick={(e) => handleEditClick(e, p)}
+                      className="absolute -bottom-2 -right-2 w-10 h-10 rounded-2xl bg-white text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 shadow-xl scale-75 group-hover:scale-100"
+                    >
+                      <Icon icon={Icons.EDIT} className="text-base" />
+                    </button>
+                  )}
+                </div>
+                <p className={classNames(
+                  "text-lg font-bold transition-all duration-300 truncate w-full text-center px-2",
+                  p.id === activeProfileId ? "text-white" : "text-white/30 group-hover:text-white/60"
+                )}>
                   {p.name}
                 </p>
               </div>
             ))}
 
-            {/* Add Profile */}
+            {/* Add Profile Button */}
             {allProfiles.length < 5 && (
               <button
                 type="button"
                 onClick={() => setEditState(blankEdit())}
-                className="flex flex-col items-center group cursor-pointer w-24 md:w-28 transition-all duration-300 hover:scale-105 focus:outline-none"
+                className="flex flex-col items-center group cursor-pointer w-28 md:w-36 focus:outline-none"
               >
-                <div className="w-full aspect-square rounded-2xl flex items-center justify-center transition-all duration-300 border-2 border-dashed border-white/20 group-hover:border-white/50 group-hover:bg-white/5">
+                <div className="w-28 h-28 md:w-32 md:h-32 rounded-3xl flex items-center justify-center transition-all duration-300 bg-white/5 border-2 border-dashed border-white/10 group-hover:border-white/20 group-hover:bg-white/10 group-hover:scale-105 active:scale-95 mb-6">
                   <Icon
                     icon={Icons.PLUS}
-                    className="text-white/30 group-hover:text-white text-4xl md:text-5xl transition-colors duration-300"
+                    className="text-white/20 group-hover:text-white/40 text-4xl transition-all"
                   />
                 </div>
-                <p className="mt-3 text-white/30 group-hover:text-white font-medium text-sm text-center transition-colors duration-300">
+                <p className="text-lg font-bold text-white/20 group-hover:text-white/40 transition-colors">
                   Add Profile
                 </p>
               </button>
             )}
           </div>
 
-          {forceShowProfileSelector && (
+          {(forceShowProfileSelector || userProfiles.length > 0) && (
             <button
               type="button"
               onClick={handleDismiss}
-              className="mt-10 text-white/30 hover:text-white text-sm transition-colors duration-200 border-b border-white/20 hover:border-white/50 pb-px"
+              className="mt-24 px-8 py-3 rounded-full border border-white/10 text-white/20 hover:text-white hover:border-white/30 transition-all duration-300 font-bold uppercase tracking-widest text-xs"
             >
-              Continue as {account.nickname || "current profile"}
+              Skip for now
             </button>
           )}
         </div>
@@ -780,9 +737,7 @@ export function ProfileSelector() {
       {editState && (
         <EditPanel
           state={editState}
-          onChange={(patch) =>
-            setEditState((s) => (s ? { ...s, ...patch } : s))
-          }
+          onChange={(patch) => setEditState((s) => (s ? { ...s, ...patch } : s))}
           onSave={handleSave}
           onCancel={() => setEditState(null)}
           isNew={editState.profileId === null}

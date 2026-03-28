@@ -115,9 +115,37 @@ function QueryView() {
   return null;
 }
 
+import { useBookmarkStore } from "@/stores/bookmarks";
+import { useLanguageStore } from "@/stores/language";
+import { usePreferencesStore } from "@/stores/preferences";
+import { useProfileStore } from "@/stores/profile";
+import { useProgressStore } from "@/stores/progress";
+import { useWatchHistoryStore } from "@/stores/watchHistory";
+
+function useProfileSync() {
+  useEffect(() => {
+    const unsub = useProfileStore.subscribe((state, prevState) => {
+      if (state.activeProfileId !== prevState.activeProfileId) {
+        useBookmarkStore.getState().switchProfile(state.activeProfileId);
+        useProgressStore.getState().switchProfile(state.activeProfileId);
+        useWatchHistoryStore.getState().switchProfile(state.activeProfileId);
+        usePreferencesStore.getState().switchProfile(state.activeProfileId);
+
+        const currentLang =
+          useLanguageStore.getState().languages[
+            state.activeProfileId || "main"
+          ] || "en";
+        useLanguageStore.getState().setLanguage(currentLang);
+      }
+    });
+    return () => unsub();
+  }, []);
+}
+
 export const maintenanceTime = "March 31th 11:00 PM - 5:00 AM EST";
 
 function App() {
+  useProfileSync();
   useHistoryListener();
   useOnlineListener();
   useGlobalKeyboardEvents();

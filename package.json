@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:pwa": "cross-env VITE_PWA_ENABLED=true vite build",
-    "update-and-build": "pnpm remove @p-stream/providers && pnpm add github:p-stream/providers#production && pnpm run build",
+    "update-and-build": "pnpm remove @p-stream/providers && pnpm add github:TrendyOfficial/providers#production && pnpm run build",
     "update-providers": "pnpm update @p-stream/providers",
     "test": "vitest run",
     "preview": "vite preview",
@@ -76,7 +76,7 @@
     "slugify": "^1.6.6",
     "socket.io-client": "^4.7.5",
     "subsrt-ts": "^2.1.2",
-    "wyzie-lib": "^2.4.0",
+    "wyzie-lib": "^2.5.1",
     "zustand": "^4.5.7"
   },
   "devDependencies": {

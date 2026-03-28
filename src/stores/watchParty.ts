@@ -8,6 +8,8 @@ export interface WatchPartyMessage {
   text: string;
   time: number;
   author?: string;
+  authorIcon?: string;
+  authorColor?: string;
 }
 
 interface WatchPartyStore {

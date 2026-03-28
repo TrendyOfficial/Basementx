@@ -36,9 +36,12 @@ export interface BookmarkUpdateItem {
 }
 
 export interface BookmarkStore {
-  bookmarks: Record<string, BookmarkMediaItem>;
+  bookmarks: Record<string, BookmarkMediaItem>; // Active profile slice
+  profiles: Record<string, Record<string, BookmarkMediaItem>>; // Full storage
   updateQueue: BookmarkUpdateItem[];
   traktUpdateQueue: BookmarkUpdateItem[];
+  
+  switchProfile(profileId: string | null): void;
   addBookmark(meta: PlayerMeta): void;
   addBookmarkWithGroups(meta: PlayerMeta, groups?: string[]): void;
   removeBookmark(id: string): void;
@@ -68,10 +71,24 @@ let updateId = 0;
 
 export const useBookmarkStore = create(
   persist(
-    immer<BookmarkStore>((set) => ({
+    immer<BookmarkStore>((set, get) => ({
       bookmarks: {},
+      profiles: {},
       updateQueue: [],
       traktUpdateQueue: [],
+
+      switchProfile(profileId) {
+        if (!profileId) {
+          set((s) => {
+            s.bookmarks = {};
+          });
+          return;
+        }
+        set((s) => {
+          s.bookmarks = s.profiles[profileId] || {};
+        });
+      },
+
       removeBookmark(id) {
         set((s) => {
           const existing = s.bookmarks[id];
@@ -89,6 +106,10 @@ export const useBookmarkStore = create(
           s.traktUpdateQueue.push(item);
 
           delete s.bookmarks[id];
+          
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.bookmarks };
         });
       },
       addBookmark(meta) {
@@ -113,6 +134,10 @@ export const useBookmarkStore = create(
             poster: meta.poster,
             updatedAt: Date.now(),
           };
+
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.bookmarks };
         });
       },
       addBookmarkWithGroups(meta, groups) {
@@ -141,16 +166,24 @@ export const useBookmarkStore = create(
             updatedAt: Date.now(),
             group: groups,
           };
+
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.bookmarks };
         });
       },
       replaceBookmarks(items: Record<string, BookmarkMediaItem>) {
         set((s) => {
           s.bookmarks = items;
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = items;
         });
       },
       clear() {
         set((s) => {
           s.bookmarks = {};
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = {};
         });
       },
       clearUpdateQueue() {
@@ -183,7 +216,6 @@ export const useBookmarkStore = create(
         set((s) => {
           if (!s.bookmarks[showId]) {
             // If the show is not bookmarked, create a basic bookmark first
-            // We'll need to get the show metadata from the player store or pass it in
             s.bookmarks[showId] = {
               title: showMeta?.title || "Unknown Show",
               type: "show",
@@ -224,17 +256,21 @@ export const useBookmarkStore = create(
           };
           s.updateQueue.push(item);
           s.traktUpdateQueue.push(item);
+
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.bookmarks };
         });
       },
       isEpisodeFavorited(showId: string, episodeId: string): boolean {
-        const state = useBookmarkStore.getState();
+        const state = get();
         const bookmark = state.bookmarks[showId];
         const isFavorited =
           bookmark?.favoriteEpisodes?.includes(episodeId) ?? false;
         return isFavorited;
       },
       getFavoriteEpisodes(showId: string): string[] {
-        const bookmark = useBookmarkStore.getState().bookmarks[showId];
+        const bookmark = get().bookmarks[showId];
         return bookmark?.favoriteEpisodes ?? [];
       },
       modifyBookmarks(
@@ -277,6 +313,9 @@ export const useBookmarkStore = create(
           }
 
           s.bookmarks = modifiedBookmarks;
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.bookmarks };
         });
 
         return result;
@@ -320,6 +359,9 @@ export const useBookmarkStore = create(
           }
 
           s.bookmarks = modifiedBookmarks;
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.bookmarks };
         });
 
         return result;

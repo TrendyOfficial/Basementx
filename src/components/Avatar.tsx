@@ -7,9 +7,10 @@ import { Icon, Icons } from "@/components/Icon";
 import { UserIcon } from "@/components/UserIcon";
 import { AccountProfile } from "@/pages/parts/auth/AccountCreatePart";
 import { useAuthStore } from "@/stores/auth";
+import { useProfileStore } from "@/stores/profile";
 
 export interface AvatarProps {
-  profile: AccountProfile["profile"];
+  profile: AccountProfile["profile"] & { name?: string };
   sizeClass?: string;
   iconClass?: string;
   bottom?: React.ReactNode;
@@ -48,6 +49,7 @@ export function UserAvatar(props: {
   withName?: boolean;
 }) {
   const auth = useAuthStore();
+  const { profiles, activeProfileId } = useProfileStore();
 
   const bufferSeed = useMemo(
     () =>
@@ -81,10 +83,21 @@ export function UserAvatar(props: {
       })()
     : "...";
 
+  // Get active profile data
+  const currentProfile = useMemo(() => {
+    if (!auth.account) return null;
+    if (!activeProfileId || activeProfileId === "main")
+      return { ...auth.account.profile, name: auth.account.nickname };
+    const userProfiles = profiles[auth.account.userId] || [];
+    return userProfiles.find((p) => p.id === activeProfileId) || { ...auth.account.profile, name: auth.account.nickname };
+  }, [auth.account, profiles, activeProfileId]);
+
+  if (!currentProfile) return null;
+
   return (
     <>
       <Avatar
-        profile={auth.account.profile}
+        profile={currentProfile}
         sizeClass={
           props.sizeClass ?? "w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem]"
         }
@@ -93,9 +106,9 @@ export function UserAvatar(props: {
       />
       {props.withName && bufferSeed ? (
         <span className="hidden md:inline-block">
-          {deviceName.length >= 20
-            ? `${deviceName.slice(0, 20 - 1)}…`
-            : deviceName}
+          {currentProfile.name || deviceName.length >= 20
+            ? `${(currentProfile.name || deviceName).slice(0, 20 - 1)}…`
+            : currentProfile.name || deviceName}
         </span>
       ) : null}
     </>

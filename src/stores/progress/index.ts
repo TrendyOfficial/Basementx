@@ -64,8 +64,11 @@ export interface UpdateItemOptions {
 }
 
 export interface ProgressStore {
-  items: Record<string, ProgressMediaItem>;
+  items: Record<string, ProgressMediaItem>; // Active profile slice
+  profiles: Record<string, Record<string, ProgressMediaItem>>; // Full storage
   updateQueue: ProgressUpdateItem[];
+  
+  switchProfile(profileId: string | null): void;
   updateItem(ops: UpdateItemOptions): void;
   removeItem(id: string): void;
   replaceItems(items: Record<string, ProgressMediaItem>): void;
@@ -84,7 +87,21 @@ export const useProgressStore = create(
   persist(
     immer<ProgressStore>((set) => ({
       items: {},
+      profiles: {},
       updateQueue: [],
+
+      switchProfile(profileId) {
+        if (!profileId) {
+          set((s) => {
+            s.items = {};
+          });
+          return;
+        }
+        set((s) => {
+          s.items = s.profiles[profileId] || {};
+        });
+      },
+
       removeItem(id) {
         set((s) => {
           updateId += 1;
@@ -95,11 +112,17 @@ export const useProgressStore = create(
           });
 
           delete s.items[id];
+          
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.items };
         });
       },
       replaceItems(items: Record<string, ProgressMediaItem>) {
         set((s) => {
           s.items = items;
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = items;
         });
       },
       updateItem({ meta, progress }) {
@@ -154,48 +177,51 @@ export const useProgressStore = create(
             if (isCompleted && !wasCompleted) {
               useWatchHistoryStore.getState().addItem(meta, progress, true);
             }
-            return;
+          } else if (meta.episode && meta.season) {
+            if (!item.seasons[meta.season.tmdbId])
+              item.seasons[meta.season.tmdbId] = {
+                id: meta.season.tmdbId,
+                number: meta.season.number,
+                title: meta.season.title,
+              };
+
+            if (!item.episodes[meta.episode.tmdbId])
+              item.episodes[meta.episode.tmdbId] = {
+                id: meta.episode.tmdbId,
+                number: meta.episode.number,
+                title: meta.episode.title,
+                seasonId: meta.season.tmdbId,
+                updatedAt: Date.now(),
+                progress: {
+                  duration: 0,
+                  watched: 0,
+                },
+              };
+
+            const episodeItem = item.episodes[meta.episode.tmdbId];
+            const wasCompleted =
+              episodeItem.progress.duration > 0 &&
+              episodeItem.progress.watched / episodeItem.progress.duration > 0.9;
+            episodeItem.progress = { ...progress };
+
+            // Update watch history only if becoming completed
+            const isCompleted =
+              progress.duration > 0 && progress.watched / progress.duration > 0.9;
+            if (isCompleted && !wasCompleted) {
+              useWatchHistoryStore.getState().addItem(meta, progress, true);
+            }
           }
 
-          if (!meta.episode || !meta.season) return;
-
-          if (!item.seasons[meta.season.tmdbId])
-            item.seasons[meta.season.tmdbId] = {
-              id: meta.season.tmdbId,
-              number: meta.season.number,
-              title: meta.season.title,
-            };
-
-          if (!item.episodes[meta.episode.tmdbId])
-            item.episodes[meta.episode.tmdbId] = {
-              id: meta.episode.tmdbId,
-              number: meta.episode.number,
-              title: meta.episode.title,
-              seasonId: meta.season.tmdbId,
-              updatedAt: Date.now(),
-              progress: {
-                duration: 0,
-                watched: 0,
-              },
-            };
-
-          const episodeItem = item.episodes[meta.episode.tmdbId];
-          const wasCompleted =
-            episodeItem.progress.duration > 0 &&
-            episodeItem.progress.watched / episodeItem.progress.duration > 0.9;
-          episodeItem.progress = { ...progress };
-
-          // Update watch history only if becoming completed
-          const isCompleted =
-            progress.duration > 0 && progress.watched / progress.duration > 0.9;
-          if (isCompleted && !wasCompleted) {
-            useWatchHistoryStore.getState().addItem(meta, progress, true);
-          }
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.items };
         });
       },
       clear() {
         set((s) => {
           s.items = {};
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = {};
         });
       },
       clearUpdateQueue() {
@@ -242,6 +268,10 @@ export const useProgressStore = create(
               }
             });
           }
+
+          // Sync with profiles storage
+          const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
+          s.profiles[profileStore] = { ...s.items };
         });
 
         return result;
