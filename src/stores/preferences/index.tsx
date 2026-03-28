@@ -159,7 +159,7 @@ function syncStoreWithProfile(s: any) {
 
 export const usePreferencesStore = create(
   persist(
-    immer<PreferencesStore>((set, get) => ({
+    immer<PreferencesStore>((set, _get) => ({
       ...DEFAULT_PREFERENCES,
       profiles: {},
 

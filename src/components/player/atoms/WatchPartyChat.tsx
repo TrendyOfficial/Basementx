@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Socket, io } from "socket.io-client";
 
-import { Icon, Icons } from "@/components/Icon";
 import { Avatar } from "@/components/Avatar";
+import { Icon, Icons } from "@/components/Icon";
 import { useAuthStore } from "@/stores/auth";
 import { useProfileStore } from "@/stores/profile";
 import { useWatchPartyStore } from "@/stores/watchParty";
@@ -21,7 +21,7 @@ export function WatchPartyChat() {
     userCount,
     setHasUnreadMessages,
   } = useWatchPartyStore();
-  
+
   const auth = useAuthStore();
   const { profiles, activeProfileId } = useProfileStore();
   const [chatInput, setChatInput] = useState("");
@@ -34,7 +34,12 @@ export function WatchPartyChat() {
     if (!activeProfileId || activeProfileId === "main")
       return { ...auth.account.profile, name: auth.account.nickname };
     const userProfiles = profiles[auth.account.userId] || [];
-    return userProfiles.find((p) => p.id === activeProfileId) || { ...auth.account.profile, name: auth.account.nickname };
+    return (
+      userProfiles.find((p) => p.id === activeProfileId) || {
+        ...auth.account.profile,
+        name: auth.account.nickname,
+      }
+    );
   })();
 
   const scrollToBottom = useCallback((instant = false) => {
@@ -70,11 +75,12 @@ export function WatchPartyChat() {
     }
 
     if (!socketRef.current) {
-      const socketUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? "http://localhost:3001" 
-        : window.location.origin;
-      
-      console.log(`[Chat] Connecting to ${socketUrl}...`);
+      const socketUrl =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+          ? "http://localhost:3001"
+          : window.location.origin;
+
       socketRef.current = io(socketUrl, {
         reconnection: true,
         reconnectionAttempts: 5,
@@ -83,16 +89,10 @@ export function WatchPartyChat() {
       });
 
       socketRef.current.on("connect", () => {
-        console.log("[Chat] Connected to server");
         socketRef.current?.emit("join", { room: roomCode });
       });
 
-      socketRef.current.on("connect_error", (err) => {
-        console.error("[Chat] Connection error:", err);
-      });
-
       socketRef.current.on("chat_message", (data: any) => {
-        console.log("[Chat] Received message:", data);
         pushMessage({
           type: "chat",
           author: data.author,
@@ -125,13 +125,10 @@ export function WatchPartyChat() {
       authorColor: currentProfile.colorA,
     };
 
-    console.log("[Chat] Sending message:", newMsg);
     pushMessage(newMsg);
 
     if (socketRef.current && socketRef.current.connected) {
       socketRef.current.emit("chat_message", { ...newMsg, room: roomCode });
-    } else {
-      console.warn("[Chat] Socket not connected, could not emit message");
     }
 
     setChatInput("");
@@ -142,94 +139,106 @@ export function WatchPartyChat() {
   return (
     <div
       className={classNames(
-        "fixed top-24 bottom-28 right-6 w-85 bg-background-main border border-utils-divider z-[200] flex flex-col shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] rounded-[2.5rem] transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1) transform overflow-hidden",
+        "fixed bottom-28 right-6 top-24 z-[200] flex w-85 transform flex-col overflow-hidden rounded-[2.5rem] border border-utils-divider bg-background-main shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1)",
         isChatOpen
           ? "translate-x-0 opacity-100 pointer-events-auto"
           : "translate-x-[120%] opacity-0 pointer-events-none",
       )}
     >
       {/* Header */}
-      <div className="px-8 py-7 border-b border-utils-divider flex items-center justify-between bg-white/[0.03]">
+      <div className="flex items-center justify-between border-b border-utils-divider bg-white/[0.03] px-8 py-7">
         <div className="flex flex-col">
-          <h2 className="text-white font-black text-xs uppercase tracking-[0.25em] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.6)]" />
+          <h2 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.25em] text-white">
+            <span className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.6)]" />
             Watch Party
           </h2>
-          <span className="text-white/20 text-[10px] font-bold uppercase tracking-[0.2em] mt-1.5">
+          <span className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/20">
             {userCount} members connected
           </span>
         </div>
         <button
           type="button"
           onClick={() => setIsChatOpen(false)}
-          className="w-10 h-10 rounded-2xl flex items-center justify-center bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all transform active:scale-95"
+          className="flex h-10 w-10 transform items-center justify-center rounded-2xl bg-white/5 text-white/40 transition-all active:scale-95 hover:bg-white/10 hover:text-white"
         >
           <Icon icon={Icons.X} className="text-lg" />
         </button>
       </div>
 
       {/* Messages */}
-      <div 
+      <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto px-8 py-6 space-y-6 flex flex-col scrollbar-none"
+        className="scrollbar-none flex flex-1 flex-col space-y-6 overflow-y-auto px-8 py-6"
       >
         {messages.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center py-10">
-            <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mb-6">
-              <Icon icon={Icons.WATCH_PARTY} className="text-3xl text-white/20" />
+          <div className="flex flex-1 flex-col items-center justify-center py-10 text-center">
+            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-3xl bg-white/5">
+              <Icon
+                icon={Icons.WATCH_PARTY}
+                className="text-3xl text-white/20"
+              />
             </div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/10">Waiting for messages</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/10">
+              Waiting for messages
+            </p>
           </div>
         ) : (
-          messages.map((msg, i) => {
+          messages.map((msg) => {
             const isMe = msg.author === (currentProfile?.name || "Guest");
             const isSystem = msg.type === "system";
 
             if (isSystem) {
               return (
-                <div key={`${msg.time}-${i}`} className="bg-white/5 px-4 py-2 rounded-full self-center">
-                   <p className="text-[9px] font-black uppercase text-white/30 tracking-widest text-center">
-                     {msg.text}
-                   </p>
+                <div
+                  key={`${msg.time}-${msg.text.length}`}
+                  className="self-center rounded-full bg-white/5 px-4 py-2"
+                >
+                  <p className="text-center text-[9px] font-black uppercase tracking-widest text-white/30">
+                    {msg.text}
+                  </p>
                 </div>
               );
             }
 
             return (
               <div
-                key={`${msg.time}-${i}`}
+                key={`${msg.time}-${msg.author}-${msg.text.slice(0, 10)}`}
                 className={classNames(
-                  "flex items-end gap-3 max-w-[90%]",
-                  isMe ? "self-end flex-row-reverse" : "self-start flex-row"
+                  "flex max-w-[90%] items-end gap-3",
+                  isMe ? "flex-row-reverse self-end" : "flex-row self-start",
                 )}
               >
                 {/* Profile Icon Primary */}
-                <div className="flex-shrink-0 mb-1">
-                  <Avatar 
+                <div className="mb-1 flex-shrink-0">
+                  <Avatar
                     profile={{
                       icon: msg.authorIcon || Icons.USER,
                       colorA: msg.authorColor || "#555",
                       colorB: msg.authorColor || "#333",
-                      name: msg.author
+                      name: msg.author,
                     }}
                     sizeClass="w-8 h-8"
                     iconClass="text-[10px]"
                   />
                 </div>
 
-                <div className={classNames(
-                  "flex flex-col gap-1.5",
-                  isMe ? "items-end" : "items-start"
-                )}>
-                  <span className="text-[9px] font-black text-white/15 uppercase tracking-[0.15em] px-1">
+                <div
+                  className={classNames(
+                    "flex flex-col gap-1.5",
+                    isMe ? "items-end" : "items-start",
+                  )}
+                >
+                  <span className="px-1 text-[9px] font-black uppercase tracking-[0.15em] text-white/15">
                     {msg.author}
                   </span>
-                  <div className={classNames(
-                    "px-5 py-3 rounded-2xl text-[13px] font-medium leading-relaxed shadow-lg",
-                    isMe 
-                      ? "bg-white text-black rounded-br-none" 
-                      : "bg-white/5 text-white/90 border border-white/5 rounded-bl-none"
-                  )}>
+                  <div
+                    className={classNames(
+                      "rounded-2xl px-5 py-3 text-[13px] font-medium leading-relaxed shadow-lg",
+                      isMe
+                        ? "rounded-br-none bg-white text-black"
+                        : "rounded-bl-none border border-white/5 bg-white/5 text-white/90",
+                    )}
+                  >
                     {msg.text}
                   </div>
                 </div>
@@ -242,22 +251,22 @@ export function WatchPartyChat() {
       {/* Input */}
       <form
         onSubmit={handleSend}
-        className="p-8 border-t border-utils-divider bg-white/[0.01]"
+        className="border-t border-utils-divider bg-white/[0.01] p-8"
       >
-        <div className="relative flex items-center group">
+        <div className="group relative flex items-center">
           <input
             type="text"
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
             placeholder="Send a message..."
-            className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm text-white placeholder-white/10 focus:outline-none focus:border-white/30 transition-all focus:bg-white/[0.08]"
+            className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-sm text-white transition-all placeholder:text-white/10 focus:border-white/30 focus:bg-white/[0.08] focus:outline-none"
           />
-          <button 
+          <button
             type="submit"
             disabled={!chatInput.trim()}
-            className="absolute right-3 w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center transition-all disabled:opacity-0 hover:scale-105 active:scale-95 shadow-xl"
+            className="absolute right-3 flex h-10 w-10 transform items-center justify-center rounded-xl bg-white text-black shadow-xl transition-all active:scale-95 disabled:opacity-0 hover:scale-105"
           >
-            <Icon icon={Icons.PLAY} className="text-lg rotate-[-90deg]" />
+            <Icon icon={Icons.PLAY} className="rotate-[-90deg] text-lg" />
           </button>
         </div>
       </form>
