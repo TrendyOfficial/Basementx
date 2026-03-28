@@ -50,15 +50,29 @@ export function UserAvatar(props: {
 }) {
   const auth = useAuthStore();
   const { profiles, activeProfileId } = useProfileStore();
+  const { t } = useTranslation();
+
+  // Get active profile data
+  const currentProfile = useMemo(() => {
+    if (!auth.account) return null;
+    if (!activeProfileId || activeProfileId === "main")
+      return { ...auth.account.profile, name: auth.account.nickname };
+    const userProfiles = profiles[auth.account.userId] || [];
+    return (
+      userProfiles.find((p) => p.id === activeProfileId) || {
+        ...auth.account.profile,
+        name: auth.account.nickname,
+      }
+    );
+  }, [auth.account, profiles, activeProfileId]);
 
   const bufferSeed = useMemo(
     () =>
       auth.account && auth.account.seed
         ? base64ToBuffer(auth.account.seed)
         : null,
-    [auth],
+    [auth.account],
   );
-  const { t } = useTranslation();
 
   if (!auth.account || auth.account === null) return null;
 
@@ -82,20 +96,6 @@ export function UserAvatar(props: {
         }
       })()
     : "...";
-
-  // Get active profile data
-  const currentProfile = useMemo(() => {
-    if (!auth.account) return null;
-    if (!activeProfileId || activeProfileId === "main")
-      return { ...auth.account.profile, name: auth.account.nickname };
-    const userProfiles = profiles[auth.account.userId] || [];
-    return (
-      userProfiles.find((p) => p.id === activeProfileId) || {
-        ...auth.account.profile,
-        name: auth.account.nickname,
-      }
-    );
-  }, [auth.account, profiles, activeProfileId]);
 
   if (!currentProfile) return null;
 

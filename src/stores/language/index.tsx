@@ -9,6 +9,7 @@ import { useProfileStore } from "@/stores/profile";
 import { getLocaleInfo } from "@/utils/language";
 
 export interface LanguageStore {
+  language: string; // Current profile language (backward compatibility)
   languages: Record<string, string>; // Keyed by profileId
   setLanguage(v: string): void;
 }
@@ -20,11 +21,13 @@ function getActiveProfileId() {
 export const useLanguageStore = create(
   persist(
     immer<LanguageStore>((set) => ({
+      language: navigator.language.split("-")[0],
       languages: {},
       setLanguage(v) {
         const profileId = getActiveProfileId();
         set((s) => {
           s.languages[profileId] = v;
+          s.language = v;
         });
       },
     })),
@@ -48,6 +51,18 @@ export function isRightToLeft(language: string) {
   const lang = getLocaleInfo(language);
   if (!lang) return false;
   return lang.isRtl;
+}
+
+export function LanguageSyncer() {
+  const language = useCurrentLanguage();
+
+  useEffect(() => {
+    useLanguageStore.setState((s) => {
+      s.language = language;
+    });
+  }, [language]);
+
+  return null;
 }
 
 export function LanguageProvider() {
