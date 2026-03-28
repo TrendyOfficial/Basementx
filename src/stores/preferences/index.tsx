@@ -150,7 +150,7 @@ const DEFAULT_PREFERENCES = {
 function syncStoreWithProfile(s: any) {
   const profileId = (window as any).__PSTREAM_PROFILE_ID__ || "main";
   if (!s.profiles[profileId]) s.profiles[profileId] = {};
-  
+
   // Update all root properties into the profile storage
   Object.keys(DEFAULT_PREFERENCES).forEach((key) => {
     s.profiles[profileId][key] = (s as any)[key];

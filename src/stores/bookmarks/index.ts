@@ -40,7 +40,7 @@ export interface BookmarkStore {
   profiles: Record<string, Record<string, BookmarkMediaItem>>; // Full storage
   updateQueue: BookmarkUpdateItem[];
   traktUpdateQueue: BookmarkUpdateItem[];
-  
+
   switchProfile(profileId: string | null): void;
   addBookmark(meta: PlayerMeta): void;
   addBookmarkWithGroups(meta: PlayerMeta, groups?: string[]): void;
@@ -106,7 +106,7 @@ export const useBookmarkStore = create(
           s.traktUpdateQueue.push(item);
 
           delete s.bookmarks[id];
-          
+
           // Sync with profiles storage
           const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
           s.profiles[profileStore] = { ...s.bookmarks };

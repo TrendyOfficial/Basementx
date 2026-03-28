@@ -407,7 +407,9 @@ function EditPanel({
                     onClick={() => onChange({ colorA, colorB })}
                     className={classNames(
                       "w-10 h-10 rounded-xl border-2 transition-all duration-200",
-                      state.colorA === colorA ? "border-white" : "border-transparent"
+                      state.colorA === colorA
+                        ? "border-white"
+                        : "border-transparent",
                     )}
                     style={{ background: colorA }}
                   />
@@ -436,7 +438,9 @@ function EditPanel({
                     onClick={() => onChange({ colorB })}
                     className={classNames(
                       "w-10 h-10 rounded-xl border-2 transition-all duration-200",
-                      state.colorB === colorB ? "border-white" : "border-transparent"
+                      state.colorB === colorB
+                        ? "border-white"
+                        : "border-transparent",
                     )}
                     style={{ background: colorB }}
                   />
@@ -468,10 +472,16 @@ function EditPanel({
                     onClick={() => onChange({ avatarTab: tab })}
                     className={classNames(
                       "flex-1 py-2 rounded-xl text-sm font-bold transition-all capitalize",
-                      state.avatarTab === tab ? "bg-white/10 text-white shadow-sm" : "text-white/40 hover:text-white/60"
+                      state.avatarTab === tab
+                        ? "bg-white/10 text-white shadow-sm"
+                        : "text-white/40 hover:text-white/60",
                     )}
                   >
-                    {tab === "character" ? "Characters" : tab === "custom" ? "Custom" : "Icons"}
+                    {tab === "character"
+                      ? "Characters"
+                      : tab === "custom"
+                        ? "Custom"
+                        : "Icons"}
                   </button>
                 ))}
               </div>
@@ -484,12 +494,14 @@ function EditPanel({
                   <button
                     key={ic}
                     type="button"
-                    onClick={() => onChange({ icon: ic, imageUrl: null, avatarTab: "icon" })}
+                    onClick={() =>
+                      onChange({ icon: ic, imageUrl: null, avatarTab: "icon" })
+                    }
                     className={classNames(
                       "aspect-square rounded-2xl flex items-center justify-center transition-all border-2",
-                      state.avatarTab === "icon" && state.icon === ic 
-                        ? "border-white bg-white/10" 
-                        : "border-transparent bg-white/5 hover:bg-white/10"
+                      state.avatarTab === "icon" && state.icon === ic
+                        ? "border-white bg-white/10"
+                        : "border-transparent bg-white/5 hover:bg-white/10",
                     )}
                   >
                     <Icon icon={ic} className="text-white text-xl" />
@@ -506,7 +518,9 @@ function EditPanel({
                     key={cat.id}
                     category={cat}
                     selectedUrl={state.imageUrl}
-                    onSelect={(url) => onChange({ imageUrl: url, avatarTab: "character" })}
+                    onSelect={(url) =>
+                      onChange({ imageUrl: url, avatarTab: "character" })
+                    }
                   />
                 ))}
               </div>
@@ -528,7 +542,9 @@ function EditPanel({
                 >
                   {state.imageUrl ? "Replace Image" : "Upload Image"}
                 </button>
-                <p className="text-white/20 text-xs font-bold tracking-widest uppercase">JPG, PNG, GIF</p>
+                <p className="text-white/20 text-xs font-bold tracking-widest uppercase">
+                  JPG, PNG, GIF
+                </p>
                 <input
                   ref={fileRef}
                   type="file"
@@ -556,7 +572,9 @@ function EditPanel({
             onClick={onSave}
             className={classNames(
               "flex-[2] py-3 rounded-2xl text-black font-bold transition-all disabled:opacity-50",
-              state.name.trim() ? "bg-white hover:scale-[1.02] active:scale-[0.98]" : "bg-white/10 text-white/20"
+              state.name.trim()
+                ? "bg-white hover:scale-[1.02] active:scale-[0.98]"
+                : "bg-white/10 text-white/20",
             )}
           >
             {isNew ? "Create Profile" : "Save Settings"}
@@ -655,7 +673,10 @@ export function ProfileSelector() {
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/20 blur-[120px] rounded-full animate-pulse" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/20 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: "1s" }} />
+          <div
+            className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/20 blur-[120px] rounded-full animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
         </div>
 
         <div className="relative z-10 flex flex-col items-center w-full px-4 animate-in fade-in zoom-in duration-500">
@@ -693,10 +714,14 @@ export function ProfileSelector() {
                     </button>
                   )}
                 </div>
-                <p className={classNames(
-                  "text-lg font-bold transition-all duration-300 truncate w-full text-center px-2",
-                  p.id === activeProfileId ? "text-white" : "text-white/30 group-hover:text-white/60"
-                )}>
+                <p
+                  className={classNames(
+                    "text-lg font-bold transition-all duration-300 truncate w-full text-center px-2",
+                    p.id === activeProfileId
+                      ? "text-white"
+                      : "text-white/30 group-hover:text-white/60",
+                  )}
+                >
                   {p.name}
                 </p>
               </div>
@@ -737,7 +762,9 @@ export function ProfileSelector() {
       {editState && (
         <EditPanel
           state={editState}
-          onChange={(patch) => setEditState((s) => (s ? { ...s, ...patch } : s))}
+          onChange={(patch) =>
+            setEditState((s) => (s ? { ...s, ...patch } : s))
+          }
           onSave={handleSave}
           onCancel={() => setEditState(null)}
           isNew={editState.profileId === null}

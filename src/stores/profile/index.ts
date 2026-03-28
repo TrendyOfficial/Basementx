@@ -65,7 +65,7 @@ export const useProfileStore = create(
           s.activeProfileId = profileId;
           s.hasSelectedProfileThisSession = true;
           s.forceShowProfileSelector = false;
-          
+
           if (typeof window !== "undefined") {
             (window as any).__PSTREAM_PROFILE_ID__ = profileId;
           }

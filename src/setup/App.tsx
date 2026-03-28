@@ -49,9 +49,14 @@ import { RegisterPage } from "@/pages/Register";
 import { SupportPage } from "@/pages/Support";
 import { WatchHistory } from "@/pages/watchHistory/WatchHistory";
 import { Layout } from "@/setup/Layout";
+import { useBookmarkStore } from "@/stores/bookmarks";
 import { useHistoryListener } from "@/stores/history";
 import { useClearModalsOnNavigation } from "@/stores/interface/overlayStack";
-import { LanguageProvider } from "@/stores/language";
+import { LanguageProvider, useLanguageStore } from "@/stores/language";
+import { usePreferencesStore } from "@/stores/preferences";
+import { useProfileStore } from "@/stores/profile";
+import { useProgressStore } from "@/stores/progress";
+import { useWatchHistoryStore } from "@/stores/watchHistory";
 
 const DeveloperPage = lazy(() => import("@/pages/DeveloperPage"));
 const TestView = lazy(() => import("@/pages/developer/TestView"));
@@ -114,13 +119,6 @@ function QueryView() {
 
   return null;
 }
-
-import { useBookmarkStore } from "@/stores/bookmarks";
-import { useLanguageStore } from "@/stores/language";
-import { usePreferencesStore } from "@/stores/preferences";
-import { useProfileStore } from "@/stores/profile";
-import { useProgressStore } from "@/stores/progress";
-import { useWatchHistoryStore } from "@/stores/watchHistory";
 
 function useProfileSync() {
   useEffect(() => {

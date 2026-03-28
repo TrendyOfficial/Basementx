@@ -45,7 +45,7 @@ export interface WatchHistoryStore {
   items: Record<string, WatchHistoryItem>; // Active profile slice
   profiles: Record<string, Record<string, WatchHistoryItem>>; // Full storage
   updateQueue: WatchHistoryUpdateItem[];
-  
+
   switchProfile(profileId: string | null): void;
   addItem(
     meta: PlayerMeta,

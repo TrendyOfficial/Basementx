@@ -67,7 +67,7 @@ export interface ProgressStore {
   items: Record<string, ProgressMediaItem>; // Active profile slice
   profiles: Record<string, Record<string, ProgressMediaItem>>; // Full storage
   updateQueue: ProgressUpdateItem[];
-  
+
   switchProfile(profileId: string | null): void;
   updateItem(ops: UpdateItemOptions): void;
   removeItem(id: string): void;
@@ -112,7 +112,7 @@ export const useProgressStore = create(
           });
 
           delete s.items[id];
-          
+
           // Sync with profiles storage
           const profileStore = (window as any).__PSTREAM_PROFILE_ID__ || "main";
           s.profiles[profileStore] = { ...s.items };
@@ -201,12 +201,14 @@ export const useProgressStore = create(
             const episodeItem = item.episodes[meta.episode.tmdbId];
             const wasCompleted =
               episodeItem.progress.duration > 0 &&
-              episodeItem.progress.watched / episodeItem.progress.duration > 0.9;
+              episodeItem.progress.watched / episodeItem.progress.duration >
+                0.9;
             episodeItem.progress = { ...progress };
 
             // Update watch history only if becoming completed
             const isCompleted =
-              progress.duration > 0 && progress.watched / progress.duration > 0.9;
+              progress.duration > 0 &&
+              progress.watched / progress.duration > 0.9;
             if (isCompleted && !wasCompleted) {
               useWatchHistoryStore.getState().addItem(meta, progress, true);
             }

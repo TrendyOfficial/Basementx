@@ -3,32 +3,29 @@ import { useEffect, useState } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 
-/*
-// OLD INTRO ANIMATION PRESERVED (REMOVED FOR SANITY, SEE GIT HISTORY IF NEEDED)
-// The user requested to comment it out, so I will keep a skeleton for reference.
-function OldIntroAnimation() { return null; }
-*/
-
-const BRAND_NAME = "BASEMENT";
+const LETTERS = "BASEMENT".split("").map((letter, i) => ({ letter, id: i }));
 
 export function IntroAnimation() {
-  const [show, setShow] = useState(() => !sessionStorage.getItem("hasSeenIntro"));
-  const [stage, setStage] = useState<"enter" | "reveal" | "exit" | "done">("enter");
+  const [show, setShow] = useState(
+    () => !sessionStorage.getItem("hasSeenIntro"),
+  );
+  const [stage, setStage] = useState<"logo" | "curtains" | "done">("logo");
 
   useEffect(() => {
     if (show) {
-      const revealTimer = setTimeout(() => setStage("reveal"), 100);
-      const exitTimer = setTimeout(() => setStage("exit"), 2100);
-      const doneTimer = setTimeout(() => {
+      const curtainTimer = setTimeout(() => {
+        setStage("curtains");
+      }, 2000);
+
+      const unmountTimer = setTimeout(() => {
         setStage("done");
         setShow(false);
         sessionStorage.setItem("hasSeenIntro", "true");
       }, 2900);
 
       return () => {
-        clearTimeout(revealTimer);
-        clearTimeout(exitTimer);
-        clearTimeout(doneTimer);
+        clearTimeout(curtainTimer);
+        clearTimeout(unmountTimer);
       };
     }
   }, [show]);
@@ -39,63 +36,134 @@ export function IntroAnimation() {
     <div className="fixed inset-0 z-[10000] flex items-center justify-center pointer-events-none overflow-hidden">
       <style>
         {`
-          @keyframes ps-logo-in {
-            0% { transform: scale(0.9) translateY(30px); opacity: 0; filter: blur(15px); }
-            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0px); }
+          @keyframes basement-zoom {
+            0%   { transform: scale(2.5); opacity: 0; filter: blur(12px); }
+            30%  { opacity: 1; filter: blur(0px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0px); }
           }
-          @keyframes ps-logo-out {
-            0% { transform: scale(1); opacity: 1; filter: blur(0px); }
-            100% { transform: scale(1.05); opacity: 0; filter: blur(30px); }
+          @keyframes basement-glow-pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50%       { opacity: 0.75; transform: scale(1.08); }
           }
-          @keyframes ps-text-reveal {
-             0% { opacity: 0; letter-spacing: 1.2em; filter: blur(12px); }
-             100% { opacity: 1; letter-spacing: 0.4em; filter: blur(0px); }
+          @keyframes basement-letter-rise {
+            0%   { opacity: 0; transform: translateY(16px); }
+            100% { opacity: 1; transform: translateY(0); }
           }
-          .animate-ps-in { animation: ps-logo-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-          .animate-ps-out { animation: ps-logo-out 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-          .animate-ps-text { animation: ps-text-reveal 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+          @keyframes basement-tagline-fade {
+            0%   { opacity: 0; }
+            100% { opacity: 1; }
+          }
+          .animate-basement-zoom {
+            animation: basement-zoom 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          }
+          .animate-basement-glow {
+            animation: basement-glow-pulse 1.6s ease-in-out infinite;
+          }
+          .animate-letter-rise {
+            animation: basement-letter-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+          }
+          .animate-tagline-fade {
+            animation: basement-tagline-fade 0.6s ease-in forwards;
+            animation-delay: 1.2s;
+            opacity: 0;
+          }
         `}
       </style>
 
-      {/* Solid Theme Background */}
-      <div 
+      {/* Left Curtain */}
+      <div
         className={classNames(
-          "absolute inset-0 transition-opacity duration-800 ease-in-out bg-background-main",
-          stage === "exit" || stage === "done" ? "opacity-0" : "opacity-100"
+          "absolute top-0 left-0 bottom-0 w-1/2 transition-transform duration-700 ease-in-out z-10",
+          stage === "curtains" || stage === "done"
+            ? "-translate-x-full"
+            : "translate-x-0",
         )}
+        style={{
+          // OLD UI: background: "linear-gradient(to right, #0a0a0f 80%, #12121a)",
+          backgroundColor: "var(--colors-background-main)",
+          backgroundImage:
+            "linear-gradient(to right, var(--colors-background-main) 80%, rgba(var(--colors-type-logo), 0.05))",
+        }}
+      />
+      {/* Right Curtain */}
+      <div
+        className={classNames(
+          "absolute top-0 right-0 bottom-0 w-1/2 transition-transform duration-700 ease-in-out z-10",
+          stage === "curtains" || stage === "done"
+            ? "translate-x-full"
+            : "translate-x-0",
+        )}
+        style={{
+          // OLD UI: background: "linear-gradient(to left, #0a0a0f 80%, #12121a)",
+          backgroundColor: "var(--colors-background-main)",
+          backgroundImage:
+            "linear-gradient(to left, var(--colors-background-main) 80%, rgba(var(--colors-type-logo), 0.05))",
+        }}
       />
 
-      {/* Main Branding */}
-      <div className={classNames(
-        "relative z-20 flex flex-col items-center",
-        stage === "exit" ? "animate-ps-out" : "animate-ps-in"
-      )}>
-        {/* Dynamic Glow */}
-        <div 
-          className="absolute w-72 h-72 rounded-full opacity-30 blur-[100px] pointer-events-none transition-all duration-1000"
-          style={{ background: "rgb(var(--colors-type-logo))" }}
+      {/* Logo + text */}
+      <div
+        className={classNames(
+          "relative z-20 flex flex-col items-center transition-opacity duration-400",
+          stage === "logo" ? "opacity-100" : "opacity-0",
+        )}
+      >
+        {/* Glow backdrop - Reacts to theme */}
+        <div
+          className="absolute rounded-full animate-basement-glow pointer-events-none"
+          style={{
+            width: "260px",
+            height: "260px",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background:
+              "radial-gradient(circle, rgba(var(--colors-type-logo), 0.45) 0%, transparent 70%)",
+            filter: "blur(24px)",
+          }}
         />
 
-        <div className="relative">
-             <Icon 
-               icon={Icons.LOGO} 
-               className="text-9xl md:text-[10rem] text-type-logo drop-shadow-[0_0_30px_rgba(var(--colors-type-logo),0.5)]"
-             />
+        {/* Logo icon */}
+        <div className="animate-basement-zoom relative">
+          <div
+            className="w-28 h-28 md:w-36 md:h-36 rounded-3xl flex items-center justify-center"
+            style={{
+              /* OLD UI:
+              background: "linear-gradient(135deg, rgba(139,92,246,0.25), rgba(99,102,241,0.15))",
+              boxShadow: "0 0 60px rgba(139,92,246,0.4), inset 0 0 30px rgba(255,255,255,0.04)",
+              border: "1px solid rgba(139,92,246,0.3)",
+              */
+              background:
+                "linear-gradient(135deg, rgba(var(--colors-type-logo), 0.25), rgba(var(--colors-type-logo), 0.15))",
+              boxShadow:
+                "0 0 60px rgba(var(--colors-type-logo), 0.4), inset 0 0 30px rgba(255,255,255,0.04)",
+              border: "1px solid rgba(var(--colors-type-logo), 0.3)",
+            }}
+          >
+            <Icon
+              icon={Icons.LOGO}
+              className="text-7xl md:text-8xl drop-shadow-2xl text-type-logo"
+            />
+          </div>
         </div>
 
-        <div className="mt-10 overflow-hidden">
-          <h1 className="animate-ps-text text-white text-4xl md:text-6xl font-black uppercase whitespace-nowrap tracking-[0.4em]">
-            {BRAND_NAME}
-          </h1>
+        {/* Brand name — letters rise in one by one */}
+        <div className="flex mt-6 gap-[3px]">
+          {LETTERS.map(({ letter, id }) => (
+            <span
+              key={id}
+              className="animate-letter-rise text-3xl md:text-5xl font-bold tracking-[0.18em] text-white"
+              style={{ animationDelay: `${0.3 + id * 0.06}s` }}
+            >
+              {letter}
+            </span>
+          ))}
         </div>
 
-        <div className={classNames(
-          "mt-6 h-[2px] transition-all duration-1500 ease-out",
-          stage === "reveal" ? "w-48 bg-gradient-to-r from-transparent via-white/40 to-transparent" : "w-0 bg-transparent"
-        )} />
-        
-        <p className="mt-8 text-white/20 text-xs font-bold uppercase tracking-[0.8em] animate-in fade-in slide-in-from-bottom-2 duration-1000 delay-500">
-          The Pinnacle of Streaming
+        {/* Tagline */}
+        <p className="animate-tagline-fade text-type-secondary text-xs md:text-sm tracking-[0.35em] uppercase mt-2">
+          Stream Together
         </p>
       </div>
     </div>

@@ -89,7 +89,12 @@ export function UserAvatar(props: {
     if (!activeProfileId || activeProfileId === "main")
       return { ...auth.account.profile, name: auth.account.nickname };
     const userProfiles = profiles[auth.account.userId] || [];
-    return userProfiles.find((p) => p.id === activeProfileId) || { ...auth.account.profile, name: auth.account.nickname };
+    return (
+      userProfiles.find((p) => p.id === activeProfileId) || {
+        ...auth.account.profile,
+        name: auth.account.nickname,
+      }
+    );
   }, [auth.account, profiles, activeProfileId]);
 
   if (!currentProfile) return null;
