@@ -51,7 +51,7 @@ export function RevivalAnnouncementModal() {
                 </div>
                 <div className="space-y-4 text-base text-type-secondary">
                   <p className="text-white font-bold border-l-2 border-white pl-3">
-                    This is a fork of the original Basement. Basement holds no
+                    This is a fork of the original P-stream. Basement holds no
                     ownership over the original project and makes no claim to
                     it.
                   </p>
@@ -62,7 +62,7 @@ export function RevivalAnnouncementModal() {
                   </p>
                   <p>
                     Basement has taken on the responsibility of continuing their
-                    legacy. We are committed to keeping Basement{" "}
+                    legacy. We are committed to keeping P-stream{" "}
                     <strong className="text-white">open source</strong> and{" "}
                     <strong className="text-white">completely ad-free</strong>.
                   </p>

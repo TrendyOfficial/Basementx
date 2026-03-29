@@ -53,6 +53,10 @@ export function Avatar(props: AvatarProps) {
   );
 }
 
+export function isUrl(s: string) {
+  return s.startsWith("http") || s.startsWith("data:");
+}
+
 export function UserAvatar(props: {
   sizeClass?: string;
   iconClass?: string;

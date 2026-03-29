@@ -102,6 +102,12 @@ export function WatchPartyChat() {
           authorColor: data.authorColor,
         });
       });
+      socketRef.current.on("user_count", (data: any) => {
+        const count = typeof data === "number" ? data : data.count;
+        if (count !== undefined) {
+          useWatchPartyStore.getState().setUserCount(count);
+        }
+      });
     } else {
       // Room code changed but socket exists
       socketRef.current.emit("join", { room: roomCode });
@@ -264,7 +270,7 @@ export function WatchPartyChat() {
           <button
             type="submit"
             disabled={!chatInput.trim()}
-            className="absolute right-3 flex h-10 w-10 transform items-center justify-center rounded-xl bg-white text-black shadow-xl transition-all active:scale-95 disabled:opacity-0 hover:scale-105"
+            className="absolute right-3 flex h-10 w-10 transform items-center justify-center rounded-xl bg-white text-black shadow-xl transition-all active:scale-95 disabled:opacity-20 disabled:pointer-events-none hover:scale-105"
           >
             <Icon icon={Icons.PLAY} className="rotate-[-90deg] text-lg" />
           </button>

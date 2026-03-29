@@ -25,7 +25,7 @@ const PRESET_COLORS: Array<[string, string]> = [
   ["#ec4899", "#9d174d"],
   ["#0284c7", "#075985"],
   ["#14b8a6", "#0f766e"],
-  ["#f97316", "#c2410c"],
+  ["#71717a", "#3f3f46"],
 ];
 
 const SELECTABLE_ICONS: UserIcons[] = [
@@ -547,12 +547,12 @@ function EditPanel({
                   {state.imageUrl ? "Replace Image" : "Upload Image"}
                 </button>
                 <p className="text-white/20 text-xs font-bold tracking-widest uppercase">
-                  JPG, PNG, GIF
+                  JPG, PNG
                 </p>
                 <input
                   ref={fileRef}
                   type="file"
-                  accept="image/*"
+                  accept="image/png, image/jpeg"
                   className="hidden"
                   onChange={handleUpload}
                 />
@@ -601,8 +601,6 @@ export function ProfileSelector() {
     setActiveProfile,
     addProfile,
     updateProfile,
-    setForceShowProfileSelector,
-    setHasSelectedProfileThisSession,
   } = useProfileStore();
 
   const [editState, setEditState] = useState<EditingState | null>(null);
@@ -630,11 +628,6 @@ export function ProfileSelector() {
   const handleSelect = (id: string) => {
     if (editState) return;
     setActiveProfile(id);
-  };
-
-  const handleDismiss = () => {
-    setForceShowProfileSelector(false);
-    setHasSelectedProfileThisSession(true);
   };
 
   const handleEditClick = (e: React.MouseEvent, profile: UserProfile) => {
@@ -708,6 +701,11 @@ export function ProfileSelector() {
                     size="lg"
                     isActive={p.id === activeProfileId}
                   />
+                  {p.id === "main" && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-white text-[10px] font-black text-black rounded-lg shadow-xl tracking-tighter z-20">
+                      MAIN
+                    </div>
+                  )}
                   {p.id !== "main" && (
                     <button
                       type="button"
@@ -750,16 +748,6 @@ export function ProfileSelector() {
               </button>
             )}
           </div>
-
-          {(forceShowProfileSelector || userProfiles.length > 0) && (
-            <button
-              type="button"
-              onClick={handleDismiss}
-              className="mt-24 px-8 py-3 rounded-full border border-white/10 text-white/20 hover:text-white hover:border-white/30 transition-all duration-300 font-bold uppercase tracking-widest text-xs"
-            >
-              Skip for now
-            </button>
-          )}
         </div>
       </div>
 

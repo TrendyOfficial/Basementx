@@ -13,7 +13,6 @@ import { BlurEllipsis } from "@/pages/layouts/SubPageLayout";
 import { conf } from "@/setup/config";
 import { useBannerSize } from "@/stores/banner";
 import { usePreferencesStore } from "@/stores/preferences";
-import { useProfileStore } from "@/stores/profile";
 
 import { BrandPill } from "./BrandPill";
 
@@ -30,7 +29,6 @@ export function Navigation(props: NavigationProps) {
   const { loggedIn } = useAuth();
   const [scrollPosition, setScrollPosition] = useState(0);
   const { openNotifications, getUnreadCount } = useNotifications();
-  const { activeProfileId, setForceShowProfileSelector } = useProfileStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -206,21 +204,6 @@ export function Navigation(props: NavigationProps) {
               </a>
             </div>
             <div className="flex items-center space-x-3 pointer-events-auto">
-              {loggedIn && activeProfileId && activeProfileId !== "main" && (
-                <div className="flex items-center">
-                  <div
-                    className="flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
-                    onClick={() => setForceShowProfileSelector(true)}
-                    title="Switch Profile"
-                  >
-                    <UserAvatar
-                      sizeClass="w-8 h-8 rounded-xl"
-                      iconClass="text-sm"
-                    />
-                  </div>
-                  <div className="w-1.5 h-1.5 rounded-full bg-type-logo/20 mx-4" />
-                </div>
-              )}
               <LinksDropdown>
                 {loggedIn ? <UserAvatar withName onlyMain /> : <NoUserAvatar />}
               </LinksDropdown>
