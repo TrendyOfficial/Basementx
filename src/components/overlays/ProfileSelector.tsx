@@ -392,69 +392,71 @@ function EditPanel({
 
         <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 p-2 space-y-8">
           {/* ── Appearance ── */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
-            <section>
-              <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">
-                Primary Color
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {PRESET_COLORS.map(([colorA]) => (
-                  <button
-                    key={colorA}
-                    type="button"
-                    onClick={() => onChange({ colorA })}
-                    className={classNames(
-                      "w-10 h-10 rounded-xl border-2 transition-all duration-200",
-                      state.colorA === colorA
-                        ? "border-white"
-                        : "border-transparent",
-                    )}
-                    style={{ background: colorA }}
-                  />
-                ))}
-                <label className="w-10 h-10 rounded-xl border-2 border-dashed border-white/20 flex items-center justify-center cursor-pointer hover:border-white/40 transition-colors">
-                  <Icon icon={Icons.PLUS} className="text-white/40" />
-                  <input
-                    type="color"
-                    value={state.colorA}
-                    onChange={(e) => onChange({ colorA: e.target.value })}
-                    className="absolute opacity-0 w-0 h-0"
-                  />
-                </label>
-              </div>
-            </section>
+          {state.avatarTab === "icon" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+              <section>
+                <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">
+                  Primary Color
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {PRESET_COLORS.map(([colorA]) => (
+                    <button
+                      key={colorA}
+                      type="button"
+                      onClick={() => onChange({ colorA })}
+                      className={classNames(
+                        "w-10 h-10 rounded-xl border-2 transition-all duration-200",
+                        state.colorA === colorA
+                          ? "border-white"
+                          : "border-transparent",
+                      )}
+                      style={{ background: colorA }}
+                    />
+                  ))}
+                  <label className="w-10 h-10 rounded-xl border-2 border-dashed border-white/20 flex items-center justify-center cursor-pointer hover:border-white/40 transition-colors">
+                    <Icon icon={Icons.PLUS} className="text-white/40" />
+                    <input
+                      type="color"
+                      value={state.colorA}
+                      onChange={(e) => onChange({ colorA: e.target.value })}
+                      className="absolute opacity-0 w-0 h-0"
+                    />
+                  </label>
+                </div>
+              </section>
 
-            <section>
-              <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">
-                Secondary Color
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {PRESET_COLORS.map(([, colorB]) => (
-                  <button
-                    key={colorB}
-                    type="button"
-                    onClick={() => onChange({ colorB })}
-                    className={classNames(
-                      "w-10 h-10 rounded-xl border-2 transition-all duration-200",
-                      state.colorB === colorB
-                        ? "border-white"
-                        : "border-transparent",
-                    )}
-                    style={{ background: colorB }}
-                  />
-                ))}
-                <label className="w-10 h-10 rounded-xl border-2 border-dashed border-white/20 flex items-center justify-center cursor-pointer hover:border-white/40 transition-colors">
-                  <Icon icon={Icons.PLUS} className="text-white/40" />
-                  <input
-                    type="color"
-                    value={state.colorB}
-                    onChange={(e) => onChange({ colorB: e.target.value })}
-                    className="absolute opacity-0 w-0 h-0"
-                  />
-                </label>
-              </div>
-            </section>
-          </div>
+              <section>
+                <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">
+                  Secondary Color
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {PRESET_COLORS.map(([, colorB]) => (
+                    <button
+                      key={colorB}
+                      type="button"
+                      onClick={() => onChange({ colorB })}
+                      className={classNames(
+                        "w-10 h-10 rounded-xl border-2 transition-all duration-200",
+                        state.colorB === colorB
+                          ? "border-white"
+                          : "border-transparent",
+                      )}
+                      style={{ background: colorB }}
+                    />
+                  ))}
+                  <label className="w-10 h-10 rounded-xl border-2 border-dashed border-white/20 flex items-center justify-center cursor-pointer hover:border-white/40 transition-colors">
+                    <Icon icon={Icons.PLUS} className="text-white/40" />
+                    <input
+                      type="color"
+                      value={state.colorB}
+                      onChange={(e) => onChange({ colorB: e.target.value })}
+                      className="absolute opacity-0 w-0 h-0"
+                    />
+                  </label>
+                </div>
+              </section>
+            </div>
+          )}
 
           {/* ── Avatar Tabs ── */}
           <section>

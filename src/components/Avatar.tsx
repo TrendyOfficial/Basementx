@@ -28,10 +28,21 @@ export function Avatar(props: AvatarProps) {
           background: `linear-gradient(to bottom right, ${props.profile.colorA}, ${props.profile.colorB})`,
         }}
       >
-        <UserIcon
-          className={props.iconClass}
-          icon={props.profile.icon as any}
-        />
+        {props.profile.icon && props.profile.icon.startsWith("http") ? (
+          <img
+            src={props.profile.icon}
+            alt=""
+            className={classNames(
+              props.iconClass,
+              "object-cover w-full h-full",
+            )}
+          />
+        ) : (
+          <UserIcon
+            className={props.iconClass}
+            icon={props.profile.icon as any}
+          />
+        )}
       </div>
       {props.bottom ? (
         <div className="absolute bottom-0 left-1/2 transform translate-y-1/2 -translate-x-1/2">
@@ -47,6 +58,7 @@ export function UserAvatar(props: {
   iconClass?: string;
   bottom?: React.ReactNode;
   withName?: boolean;
+  onlyMain?: boolean;
 }) {
   const auth = useAuthStore();
   const { profiles, activeProfileId } = useProfileStore();
@@ -55,7 +67,7 @@ export function UserAvatar(props: {
   // Get active profile data
   const currentProfile = useMemo(() => {
     if (!auth.account) return null;
-    if (!activeProfileId || activeProfileId === "main")
+    if (props.onlyMain || !activeProfileId || activeProfileId === "main")
       return { ...auth.account.profile, name: auth.account.nickname };
     const userProfiles = profiles[auth.account.userId] || [];
     return (
@@ -64,7 +76,7 @@ export function UserAvatar(props: {
         name: auth.account.nickname,
       }
     );
-  }, [auth.account, profiles, activeProfileId]);
+  }, [auth.account, profiles, activeProfileId, props.onlyMain]);
 
   const bufferSeed = useMemo(
     () =>

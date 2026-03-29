@@ -27,12 +27,23 @@ interface ProfileStore {
   setForceShowProfileSelector: (force: boolean) => void;
 }
 
+const getStoredSessionFlag = () => {
+  if (typeof window === "undefined") return false;
+  return sessionStorage.getItem("__MW::profile_selected") === "true";
+};
+
+const setStoredSessionFlag = (val: boolean) => {
+  if (typeof window === "undefined") return;
+  if (val) sessionStorage.setItem("__MW::profile_selected", "true");
+  else sessionStorage.removeItem("__MW::profile_selected");
+};
+
 export const useProfileStore = create(
   persist(
     immer<ProfileStore>((set) => ({
       profiles: {},
       activeProfileId: null,
-      hasSelectedProfileThisSession: false,
+      hasSelectedProfileThisSession: getStoredSessionFlag(),
       forceShowProfileSelector: false,
       addProfile: (userId, profile) => {
         set((s) => {
@@ -64,6 +75,7 @@ export const useProfileStore = create(
         set((s) => {
           s.activeProfileId = profileId;
           s.hasSelectedProfileThisSession = true;
+          setStoredSessionFlag(true);
           s.forceShowProfileSelector = false;
 
           if (typeof window !== "undefined") {
@@ -74,20 +86,22 @@ export const useProfileStore = create(
       setHasSelectedProfileThisSession: (hasSelected) => {
         set((s) => {
           s.hasSelectedProfileThisSession = hasSelected;
+          setStoredSessionFlag(hasSelected);
         });
       },
       setForceShowProfileSelector: (force) => {
         set((s) => {
           s.forceShowProfileSelector = force;
           // When manually opening the selector, also reset the session flag
-          if (force) s.hasSelectedProfileThisSession = false;
+          if (force) {
+            s.hasSelectedProfileThisSession = false;
+            setStoredSessionFlag(false);
+          }
         });
       },
     })),
     {
       name: "__MW::profiles",
-      // hasSelectedProfileThisSession and forceShowProfileSelector must NOT
-      // be persisted — they should reset on every page load.
       partialize: (state) => ({
         profiles: state.profiles,
         activeProfileId: state.activeProfileId,

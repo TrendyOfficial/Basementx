@@ -207,20 +207,22 @@ export function Navigation(props: NavigationProps) {
             </div>
             <div className="flex items-center space-x-3 pointer-events-auto">
               {loggedIn && activeProfileId && activeProfileId !== "main" && (
-                <div
-                  className="flex items-center group cursor-pointer"
-                  onClick={() => setForceShowProfileSelector(true)}
-                  title="Switch Profile"
-                >
-                  <UserAvatar
-                    sizeClass="w-8 h-8 rounded-xl"
-                    iconClass="text-sm transition-transform group-hover:scale-110"
-                  />
-                  <div className="w-1 h-1 rounded-full bg-type-logo/40 mx-3 group-hover:bg-type-logo/60 transition-colors" />
+                <div className="flex items-center">
+                  <div
+                    className="flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
+                    onClick={() => setForceShowProfileSelector(true)}
+                    title="Switch Profile"
+                  >
+                    <UserAvatar
+                      sizeClass="w-8 h-8 rounded-xl"
+                      iconClass="text-sm"
+                    />
+                  </div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-type-logo/20 mx-4" />
                 </div>
               )}
               <LinksDropdown>
-                {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
+                {loggedIn ? <UserAvatar withName onlyMain /> : <NoUserAvatar />}
               </LinksDropdown>
             </div>
           </div>
