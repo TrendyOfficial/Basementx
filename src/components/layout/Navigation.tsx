@@ -131,7 +131,7 @@ export function Navigation(props: NavigationProps) {
       {/* content */}
       <div
         id="mw-header"
-        className="top-content fixed pointer-events-none left-0 right-0 z-[500] top-0 min-h-[150px]"
+        className="top-content fixed pointer-events-none left-0 right-0 z-[500] top-2 min-h-[150px]"
         style={{
           top: `${bannerHeight}px`,
         }}
@@ -205,7 +205,7 @@ export function Navigation(props: NavigationProps) {
                 })()}
               </a>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 pointer-events-auto">
               {loggedIn && activeProfileId && activeProfileId !== "main" && (
                 <div
                   className="flex items-center group cursor-pointer"
@@ -214,9 +214,9 @@ export function Navigation(props: NavigationProps) {
                 >
                   <UserAvatar
                     sizeClass="w-8 h-8 rounded-xl"
-                    iconClass="text-sm"
+                    iconClass="text-sm transition-transform group-hover:scale-110"
                   />
-                  <div className="w-1 h-1 rounded-full bg-white/20 mx-2" />
+                  <div className="w-1 h-1 rounded-full bg-type-logo/40 mx-3 group-hover:bg-type-logo/60 transition-colors" />
                 </div>
               )}
               <LinksDropdown>

@@ -7,6 +7,7 @@ import {
 } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
+import { UserIcon, UserIcons } from "@/components/UserIcon";
 import { useAuthStore } from "@/stores/auth";
 import { UserProfile, useProfileStore } from "@/stores/profile";
 
@@ -27,28 +28,25 @@ const PRESET_COLORS: Array<[string, string]> = [
   ["#f97316", "#c2410c"],
 ];
 
-const SELECTABLE_ICONS: Icons[] = [
-  Icons.USER,
-  Icons.DRAGON,
-  Icons.FILM,
-  Icons.CLAPPER_BOARD,
-  Icons.BOOKMARK,
-  Icons.CLOCK,
-  Icons.SEARCH,
-  Icons.PLAY,
-  Icons.WATCH_PARTY,
-  Icons.WAND,
-  Icons.BRUSH,
-  Icons.RISING_STAR,
-  Icons.COINS,
-  Icons.BELL,
-  Icons.GEAR,
-  Icons.LOCK,
-  Icons.MAIL,
-  Icons.TRANSLATE,
-  Icons.TACHOMETER,
-  Icons.EDIT,
-  Icons.THUMBS_UP,
+const SELECTABLE_ICONS: UserIcons[] = [
+  UserIcons.CAT,
+  UserIcons.WEED,
+  UserIcons.USER_GROUP,
+  UserIcons.COUCH,
+  UserIcons.MOBILE,
+  UserIcons.TICKET,
+  UserIcons.SATURN,
+  UserIcons.HEADPHONES,
+  UserIcons.TV,
+  UserIcons.GHOST,
+  UserIcons.COFFEE,
+  UserIcons.FIRE,
+  UserIcons.MEGAPHONE,
+  UserIcons.DRAGON,
+  UserIcons.RISING_STAR,
+  UserIcons.CLOUD_ARROW_UP,
+  UserIcons.WAND,
+  UserIcons.CLAPPER_BOARD,
 ];
 
 /** Popular shows/movies with TMDB IDs — Netflix-style avatar categories */
@@ -138,7 +136,7 @@ interface EditingState {
   name: string;
   colorA: string;
   colorB: string;
-  icon: Icons;
+  icon: UserIcons;
   avatarTab: AvatarTab;
   imageUrl: string | null; // set when character or custom is chosen
 }
@@ -162,7 +160,7 @@ function blankEdit(override?: Partial<EditingState>): EditingState {
     name: "",
     colorA: pair[0],
     colorB: pair[1],
-    icon: Icons.USER,
+    icon: UserIcons.USER_GROUP,
     avatarTab: "icon",
     imageUrl: null,
     ...override,
@@ -234,8 +232,8 @@ function AvatarDisplay({
         backgroundImage: `linear-gradient(135deg, ${colorA}, ${colorB})`,
       }}
     >
-      <Icon
-        icon={(iconValue as Icons) || Icons.USER}
+      <UserIcon
+        icon={(iconValue as UserIcons) || UserIcons.USER_GROUP}
         className={classNames("text-white drop-shadow-md", iconSize)}
       />
     </div>
@@ -400,11 +398,11 @@ function EditPanel({
                 Primary Color
               </p>
               <div className="flex flex-wrap gap-3">
-                {PRESET_COLORS.map(([colorA, colorB]) => (
+                {PRESET_COLORS.map(([colorA]) => (
                   <button
                     key={colorA}
                     type="button"
-                    onClick={() => onChange({ colorA, colorB })}
+                    onClick={() => onChange({ colorA })}
                     className={classNames(
                       "w-10 h-10 rounded-xl border-2 transition-all duration-200",
                       state.colorA === colorA
@@ -495,7 +493,11 @@ function EditPanel({
                     key={ic}
                     type="button"
                     onClick={() =>
-                      onChange({ icon: ic, imageUrl: null, avatarTab: "icon" })
+                      onChange({
+                        icon: ic,
+                        imageUrl: null,
+                        avatarTab: "icon",
+                      })
                     }
                     className={classNames(
                       "aspect-square rounded-2xl flex items-center justify-center transition-all border-2",
@@ -504,7 +506,7 @@ function EditPanel({
                         : "border-transparent bg-white/5 hover:bg-white/10",
                     )}
                   >
-                    <Icon icon={ic} className="text-white text-xl" />
+                    <UserIcon icon={ic} className="text-white text-xl" />
                   </button>
                 ))}
               </div>
@@ -643,7 +645,7 @@ export function ProfileSelector() {
       name: profile.name,
       colorA: profile.colorA,
       colorB: profile.colorB,
-      icon: hasUrl ? Icons.USER : (iconVal as Icons),
+      icon: hasUrl ? UserIcons.USER_GROUP : (iconVal as UserIcons),
       avatarTab: hasUrl ? "character" : "icon",
       imageUrl: hasUrl ? iconVal : null,
     });
@@ -684,7 +686,7 @@ export function ProfileSelector() {
             Who&apos;s watching?
           </h1>
           <p className="text-white/20 text-lg font-bold uppercase tracking-widest mb-16">
-            P-Stream Excellence
+            P-Stream Lives on
           </p>
 
           {/* Profiles Grid */}

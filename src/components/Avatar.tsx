@@ -111,7 +111,7 @@ export function UserAvatar(props: {
       />
       {props.withName && bufferSeed ? (
         <span className="hidden md:inline-block">
-          {currentProfile.name || deviceName.length >= 20
+          {(currentProfile.name || deviceName).length >= 20
             ? `${(currentProfile.name || deviceName).slice(0, 20 - 1)}…`
             : currentProfile.name || deviceName}
         </span>

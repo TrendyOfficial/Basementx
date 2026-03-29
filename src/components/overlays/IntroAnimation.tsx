@@ -80,10 +80,7 @@ export function IntroAnimation() {
             : "translate-x-0",
         )}
         style={{
-          // OLD UI: background: "linear-gradient(to right, #0a0a0f 80%, #12121a)",
-          backgroundColor: "var(--colors-background-main)",
-          backgroundImage:
-            "linear-gradient(to right, var(--colors-background-main) 80%, rgba(var(--colors-type-logo), 0.05))",
+          background: "linear-gradient(to right, #0a0a0f 80%, #12121a)",
         }}
       />
       {/* Right Curtain */}
@@ -95,10 +92,7 @@ export function IntroAnimation() {
             : "translate-x-0",
         )}
         style={{
-          // OLD UI: background: "linear-gradient(to left, #0a0a0f 80%, #12121a)",
-          backgroundColor: "var(--colors-background-main)",
-          backgroundImage:
-            "linear-gradient(to left, var(--colors-background-main) 80%, rgba(var(--colors-type-logo), 0.05))",
+          background: "linear-gradient(to left, #0a0a0f 80%, #12121a)",
         }}
       />
 
@@ -119,7 +113,7 @@ export function IntroAnimation() {
             left: "50%",
             transform: "translate(-50%, -50%)",
             background:
-              "radial-gradient(circle, rgba(var(--colors-type-logo), 0.45) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(139,92,246, 0.45) 0%, transparent 70%)",
             filter: "blur(24px)",
           }}
         />
@@ -129,16 +123,11 @@ export function IntroAnimation() {
           <div
             className="w-28 h-28 md:w-36 md:h-36 rounded-3xl flex items-center justify-center"
             style={{
-              /* OLD UI:
-              background: "linear-gradient(135deg, rgba(139,92,246,0.25), rgba(99,102,241,0.15))",
-              boxShadow: "0 0 60px rgba(139,92,246,0.4), inset 0 0 30px rgba(255,255,255,0.04)",
-              border: "1px solid rgba(139,92,246,0.3)",
-              */
               background:
-                "linear-gradient(135deg, rgba(var(--colors-type-logo), 0.25), rgba(var(--colors-type-logo), 0.15))",
+                "linear-gradient(135deg, rgba(139,92,246, 0.25), rgba(99,102,241, 0.15))",
               boxShadow:
-                "0 0 60px rgba(var(--colors-type-logo), 0.4), inset 0 0 30px rgba(255,255,255,0.04)",
-              border: "1px solid rgba(var(--colors-type-logo), 0.3)",
+                "0 0 60px rgba(139,92,246, 0.4), inset 0 0 30px rgba(255,255,255, 0.04)",
+              border: "1px solid rgba(139,92,246, 0.3)",
             }}
           >
             <Icon
@@ -163,7 +152,7 @@ export function IntroAnimation() {
 
         {/* Tagline */}
         <p className="animate-tagline-fade text-type-secondary text-xs md:text-sm tracking-[0.35em] uppercase mt-2">
-          Stream Together
+          Free Movies & TV Shows
         </p>
       </div>
     </div>
