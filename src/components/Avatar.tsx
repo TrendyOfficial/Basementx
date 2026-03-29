@@ -16,6 +16,10 @@ export interface AvatarProps {
   bottom?: React.ReactNode;
 }
 
+export function isUrl(s: string) {
+  return s.startsWith("http") || s.startsWith("data:");
+}
+
 export function Avatar(props: AvatarProps) {
   return (
     <div className="relative inline-block">
@@ -28,7 +32,7 @@ export function Avatar(props: AvatarProps) {
           background: `linear-gradient(to bottom right, ${props.profile.colorA}, ${props.profile.colorB})`,
         }}
       >
-        {props.profile.icon && props.profile.icon.startsWith("http") ? (
+        {props.profile.icon && isUrl(props.profile.icon) ? (
           <img
             src={props.profile.icon}
             alt=""
@@ -51,10 +55,6 @@ export function Avatar(props: AvatarProps) {
       ) : null}
     </div>
   );
-}
-
-export function isUrl(s: string) {
-  return s.startsWith("http") || s.startsWith("data:");
 }
 
 export function UserAvatar(props: {

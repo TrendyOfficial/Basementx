@@ -211,8 +211,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const revivalModal = useModal("revival-announcement");
   const account = useAuthStore((s) => s.account);
-  const { activeProfileId, profiles, setForceShowProfileSelector } =
-    useProfileStore();
+  const { activeProfileId, setForceShowProfileSelector } = useProfileStore();
   const seed = account?.seed;
   const bufferSeed = useMemo(
     () => (seed ? base64ToBuffer(seed) : null),
@@ -265,11 +264,14 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             <div className="flex flex-col">
               {/* Identity Header */}
               <DropdownLink
-                className="text-white hover:bg-white/5 !m-0 !p-4"
+                className="relative !m-0 !p-4 self-stretch text-white hover:bg-white/5"
                 href="/settings"
               >
+                <div className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                  PROFILE
+                </div>
                 <UserAvatar />
-                <span className="font-bold truncate text-[17px]">
+                <span className="truncate font-bold text-[17px]">
                   {account.nickname || "Main Account"}
                 </span>
               </DropdownLink>
@@ -277,33 +279,22 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               {/* Sub-profile Switcher */}
               {activeProfileId && activeProfileId !== "main" && (
                 <div
-                  className="mx-3 mb-3 flex cursor-pointer items-center justify-center gap-3 rounded-2xl border border-white/5 bg-white/[0.03] p-2.5 transition-colors hover:bg-white/5 group"
+                  className="mx-3 mb-3 flex cursor-pointer items-center justify-center gap-4 rounded-2xl border border-white/5 bg-white/[0.03] p-3 transition-colors hover:bg-white/5 group"
                   onClick={() => setForceShowProfileSelector(true)}
                 >
-                  <div className="flex items-center gap-2">
-                    <UserAvatar
-                      onlyMain
-                      sizeClass="w-[18px] h-[18px] rounded-md"
-                      iconClass="text-[8px]"
-                    />
-                    <Icon
-                      icon={Icons.SWITCH}
-                      className="text-[10px] text-white/20 transition-colors group-hover:text-white/40"
-                    />
-                    <UserAvatar
-                      sizeClass="w-4 h-4 rounded-md"
-                      iconClass="text-[8px]"
-                    />
-                    <span className="max-w-[100px] truncate text-[10px] font-black uppercase tracking-widest text-white/40 transition-colors group-hover:text-white/60">
-                      {(() => {
-                        const userProfiles = profiles[account.userId] || [];
-                        return (
-                          userProfiles.find((p) => p.id === activeProfileId)
-                            ?.name || "Sub"
-                        );
-                      })()}
-                    </span>
-                  </div>
+                  <UserAvatar
+                    onlyMain
+                    sizeClass="w-[22px] h-[22px] rounded-md"
+                    iconClass="text-[8px]"
+                  />
+                  <Icon
+                    icon={Icons.SWITCH}
+                    className="text-[10px] text-white/20 transition-colors group-hover:text-white/40"
+                  />
+                  <UserAvatar
+                    sizeClass="w-[22px] h-[22px] rounded-md"
+                    iconClass="text-[8px]"
+                  />
                 </div>
               )}
             </div>
@@ -348,9 +339,9 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               revivalModal.show();
               setOpen(false);
             }}
-            icon={Icons.SKULL}
+            icon={Icons.PSTREAM}
           >
-            Basement Revival
+            P-stream Revival
           </DropdownLink>
           {!enableLowPerformanceMode && (
             <DropdownLink href="/discover" icon={Icons.RISING_STAR}>

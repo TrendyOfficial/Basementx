@@ -602,6 +602,7 @@ export function ProfileSelector() {
     addProfile,
     updateProfile,
   } = useProfileStore();
+  const { setAccountNickname, setAccountProfile } = useAuthStore();
 
   const [editState, setEditState] = useState<EditingState | null>(null);
 
@@ -632,7 +633,7 @@ export function ProfileSelector() {
 
   const handleEditClick = (e: React.MouseEvent, profile: UserProfile) => {
     e.stopPropagation();
-    if (profile.id === "main") return;
+    e.stopPropagation();
     const iconVal = profile.icon;
     const hasUrl = isUrl(iconVal);
     setEditState({
@@ -656,7 +657,14 @@ export function ProfileSelector() {
       colorB: editState.colorB,
     };
 
-    if (editState.profileId === null) {
+    if (editState.profileId === "main") {
+      setAccountNickname(data.name);
+      setAccountProfile({
+        icon: data.icon,
+        colorA: data.colorA,
+        colorB: data.colorB,
+      });
+    } else if (editState.profileId === null) {
       addProfile(account.userId, { id: generateId(), ...data });
     } else {
       updateProfile(account.userId, editState.profileId, data);
