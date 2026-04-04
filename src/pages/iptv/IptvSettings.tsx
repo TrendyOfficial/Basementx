@@ -155,17 +155,11 @@ export function IptvSettings() {
                    className="px-6 py-2 rounded-lg bg-purple-600 font-bold hover:bg-purple-500 focus:ring-4 focus:ring-white outline-none"
                  >
                    Save
-                  <button
-                    type="button"
-                    onClick={handlePinSubmit}
-                    className="px-6 py-2 rounded-lg bg-purple-600 font-bold hover:bg-purple-500 focus:ring-4 focus:ring-white outline-none"
-                  >
-                    Save
-                  </button>
-                  {pinError && (
-                    <span className="text-red-500 text-sm">{pinError}</span>
-                  )}
-                </div>
+                 </button>
+                 {pinError && (
+                   <span className="text-red-500 text-sm">{pinError}</span>
+                 )}
+               </div>
               )}
           </div>
 
