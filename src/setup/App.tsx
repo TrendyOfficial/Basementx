@@ -67,6 +67,26 @@ const GamepadSetupPage = lazyWithPreload(() =>
 );
 const PlayerView = lazyWithPreload(() => import("@/pages/PlayerView"));
 const SettingsPage = lazyWithPreload(() => import("@/pages/Settings"));
+const IboDashboard = lazy(() =>
+  import("@/pages/iptv/IboDashboard").then((m) => ({
+    default: m.IboDashboard,
+  })),
+);
+const CategoryExplorer = lazy(() =>
+  import("@/pages/iptv/CategoryExplorer").then((m) => ({
+    default: m.CategoryExplorer,
+  })),
+);
+const IptvPlayerView = lazy(() =>
+  import("@/pages/iptv/IptvPlayerView").then((m) => ({
+    default: m.IptvPlayerView,
+  })),
+);
+const IptvSettings = lazy(() =>
+  import("@/pages/iptv/IptvSettings").then((m) => ({
+    default: m.IptvSettings,
+  })),
+);
 
 PlayerView.preload();
 SettingsPage.preload();
@@ -262,6 +282,41 @@ function App() {
           />
           {/* admin routes */}
           <Route path="/admin" element={<AdminPage />} />
+
+          {/* IPTV routes */}
+          <Route
+            path="/iptv"
+            element={
+              <Suspense fallback={null}>
+                <IboDashboard />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/iptv/settings"
+            element={
+              <Suspense fallback={null}>
+                <IptvSettings />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/iptv/:type"
+            element={
+              <Suspense fallback={null}>
+                <CategoryExplorer />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/iptv/player/:index"
+            element={
+              <Suspense fallback={null}>
+                <IptvPlayerView />
+              </Suspense>
+            }
+          />
+
           {/* other */}
           <Route path="/dev" element={<DeveloperPage />} />
           <Route path="/dev/video" element={<VideoTesterView />} />

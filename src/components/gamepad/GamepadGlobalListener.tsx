@@ -90,24 +90,75 @@ export function GamepadGlobalListener() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Browser lock: prevent arrow keys from reaching the browser chrome when gamepad is active
+  // Emulate TV Remote D-Pad using PC Keyboard Arrow Keys
   useEffect(() => {
-    if (!enableGamepadControls) return;
-
     const handleKeyDown = (e: KeyboardEvent) => {
-      const navKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "];
+      // Don't intercept if user is typing in an input
       if (
-        navKeys.includes(e.key) &&
-        document.body.classList.contains("gamepad-active")
+        document.activeElement?.tagName === "INPUT" ||
+        document.activeElement?.tagName === "TEXTAREA"
       ) {
+        return;
+      }
+
+      const navKeys = [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "Enter",
+        "Escape",
+        "Backspace",
+      ];
+
+      if (navKeys.includes(e.key)) {
+        // Mark as gamepad/TV active to show focus rings
+        document.body.classList.add("gamepad-active");
+        if (!usePreferencesStore.getState().isGamepadActive) {
+          usePreferencesStore.getState().setGamepadActive(true);
+        }
+
+        // Don't intercept if we're in the player (it has its own listener)
+        if (window.location.pathname.startsWith("/media/")) return;
+
         // Prevent the browser from scrolling the page or moving focus to browser chrome
         e.preventDefault();
+
+        switch (e.key) {
+          case "ArrowUp":
+            navigateSpatial("up");
+            break;
+          case "ArrowDown":
+            navigateSpatial("down");
+            break;
+          case "ArrowLeft":
+            navigateSpatial("left");
+            break;
+          case "ArrowRight":
+            navigateSpatial("right");
+            break;
+          case "Enter":
+            (document.activeElement as HTMLElement)?.click();
+            break;
+          case "Escape":
+          case "Backspace":
+            {
+              const topModal = useOverlayStack.getState().getTopModal();
+              if (topModal) {
+                useOverlayStack.getState().hideModal(topModal);
+              } else {
+                window.history.back();
+              }
+            }
+            break;
+        }
       }
     };
+
     window.addEventListener("keydown", handleKeyDown, { capture: true });
     return () =>
       window.removeEventListener("keydown", handleKeyDown, { capture: true });
-  }, [enableGamepadControls]);
+  }, [navigateSpatial]);
 
   return null;
 }
