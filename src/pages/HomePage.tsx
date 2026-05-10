@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import { To, useNavigate } from "react-router-dom";
 
 import { WideContainer } from "@/components/layout/WideContainer";
 import { DetailsModal } from "@/components/overlays/detailsModal";
@@ -24,7 +23,6 @@ import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePreferencesStore } from "@/stores/preferences";
 import { MediaItem } from "@/utils/mediaTypes";
 
-import { Button } from "./About";
 import { AdsPart } from "./parts/home/AdsPart";
 
 function useSearch(search: string) {
@@ -49,23 +47,20 @@ function useSearch(search: string) {
   };
 }
 
-// What the sigma?
-
 export function HomePage() {
   const { t } = useTranslation();
   const { t: randomT } = useRandomTranslation();
   const emptyText = randomT(`home.search.empty`);
-  const navigate = useNavigate();
   const [showBg, setShowBg] = useState<boolean>(false);
+  const [discoverMode, setDiscoverMode] = useState(true);
   const searchParams = useSearchQuery();
   const [search] = searchParams;
   const s = useSearch(search);
+
   const [showBookmarks, setShowBookmarks] = useState(false);
   const [showWatching, setShowWatching] = useState(false);
   const [detailsData, setDetailsData] = useState<any>();
   const { showModal } = useOverlayStack();
-  const enableDiscover = usePreferencesStore((state) => state.enableDiscover);
-  const enableFeatured = usePreferencesStore((state) => state.enableFeatured);
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const enableCarouselView = usePreferencesStore(
     (state) => state.enableCarouselView,
@@ -73,11 +68,6 @@ export function HomePage() {
   const enableLowPerformanceMode = usePreferencesStore(
     (state) => state.enableLowPerformanceMode,
   );
-
-  const handleClick = (path: To) => {
-    window.scrollTo(0, 0);
-    navigate(path);
-  };
 
   const handleShowDetails = async (media: MediaItem | FeaturedMedia) => {
     setDetailsData({
@@ -87,60 +77,39 @@ export function HomePage() {
     showModal("details");
   };
 
-  return (
-    <HomeLayout showBg={showBg}>
-      <div className="mb-2">
-        <Helmet>
-          <style type="text/css">{`
-            html, body {
-              scrollbar-gutter: stable;
-            }
-          `}</style>
-          <title>{t("global.name")}</title>
-        </Helmet>
+  const renderSearch = () => {
+    if (!search) return null;
 
-        {/* Page Header */}
-        {enableFeatured ? (
-          <FeaturedCarousel
-            forcedCategory="movies"
-            onShowDetails={handleShowDetails}
-            searching={s.searching}
-            shorter
-          >
-            <HeroPart
-              searchParams={searchParams}
-              setIsSticky={setShowBg}
-              isInFeatured
-            />
-          </FeaturedCarousel>
+    return (
+      <WideContainer ultraWide classNames="basement-search-results">
+        {s.loading ? (
+          <SearchLoadingPart />
         ) : (
-          <HeroPart
-            searchParams={searchParams}
-            setIsSticky={setShowBg}
-            showTitle
-          />
+          s.searching && (
+            <SearchListPart
+              searchQuery={search}
+              onShowDetails={handleShowDetails}
+            />
+          )
         )}
+      </WideContainer>
+    );
+  };
+
+  const renderClassicHome = () => (
+    <>
+      <div className="mb-2">
+        <HeroPart
+          searchParams={searchParams}
+          setIsSticky={setShowBg}
+          showTitle
+        />
 
         {conf().SHOW_AD ? <AdsPart /> : null}
       </div>
 
-      {/* Search */}
-      {search && (
-        <WideContainer>
-          {s.loading ? (
-            <SearchLoadingPart />
-          ) : (
-            s.searching && (
-              <SearchListPart
-                searchQuery={search}
-                onShowDetails={handleShowDetails}
-              />
-            )
-          )}
-        </WideContainer>
-      )}
+      {renderSearch()}
 
-      {/* User Content */}
       {!search &&
         (enableCarouselView ? (
           <WideContainer ultraWide classNames="!px-3 md:!px-9">
@@ -168,45 +137,51 @@ export function HomePage() {
           </WideContainer>
         ))}
 
-      {/* Under user content */}
-      <WideContainer ultraWide classNames="!px-3 md:!px-9">
-        {/* Empty text */}
-        {!(showBookmarks || showWatching) &&
-        (!enableDiscover || enableLowPerformanceMode) ? (
-          <div className="flex flex-col translate-y-[-30px] items-center justify-center pt-20">
-            <p className="text-[18.5px] pb-3">{emptyText}</p>
-          </div>
-        ) : null}
+      {!search && !(showBookmarks || showWatching) ? (
+        <div className="flex flex-col translate-y-[-30px] items-center justify-center pt-20">
+          <p className="text-[18.5px] pb-3">{emptyText}</p>
+        </div>
+      ) : null}
+    </>
+  );
 
-        {/* Discover Spacing */}
-        {enableDiscover &&
-          (enableFeatured ? (
-            <div className="pb-4" />
-          ) : showBookmarks || showWatching ? (
-            <div className="pb-10" />
-          ) : (
-            <div className="pb-20" />
-          ))}
-        {/* there... perfect. */}
+  const renderDiscoverHome = () =>
+    search ? (
+      <div className="basement-search-spacer">{renderSearch()}</div>
+    ) : (
+      <>
+        <FeaturedCarousel
+          forcedCategory="movies"
+          onShowDetails={handleShowDetails}
+          shorter
+        />
 
-        {/* Discover section or discover button */}
-        {enableDiscover && !search && !enableLowPerformanceMode ? (
-          <DiscoverContent />
-        ) : (
-          <div className="flex flex-col justify-center items-center h-40 space-y-4">
-            <div className="flex flex-col items-center justify-center">
-              {!search && !enableLowPerformanceMode && (
-                <Button
-                  className="px-py p-[0.35em] mt-3 rounded-xl text-type-dimmed box-content text-[18px] bg-largeCard-background justify-center items-center"
-                  onClick={() => handleClick("/discover")}
-                >
-                  {t("home.search.discover")}
-                </Button>
-              )}
-            </div>
-          </div>
-        )}
-      </WideContainer>
+        <WideContainer ultraWide classNames="basement-discover-shell">
+          {!enableLowPerformanceMode ? <DiscoverContent /> : null}
+        </WideContainer>
+      </>
+    );
+
+  return (
+    <HomeLayout
+      showBg={showBg || discoverMode}
+      discoverEnabled={discoverMode}
+      onDiscoverToggle={setDiscoverMode}
+    >
+      <Helmet>
+        <style type="text/css">{`
+          html, body {
+            scrollbar-gutter: stable;
+          }
+        `}</style>
+        <title>{t("global.name")}</title>
+      </Helmet>
+
+      <div className="basement-app-surface">
+        {discoverMode && !enableLowPerformanceMode
+          ? renderDiscoverHome()
+          : renderClassicHome()}
+      </div>
 
       {detailsData && <DetailsModal id="details" data={detailsData} />}
     </HomeLayout>

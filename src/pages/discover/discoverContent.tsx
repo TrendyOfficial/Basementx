@@ -17,12 +17,24 @@ import { LazyTabContent } from "./components/LazyTabContent";
 import { MediaCarousel } from "./components/MediaCarousel";
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
 
+const STREAMING_PLATFORMS = [
+  { name: "Netflix", src: "/platforms/netflix.png" },
+  { name: "Disney+", src: "/platforms/disney.png" },
+  { name: "Prime Video", src: "/platforms/prime.png" },
+  { name: "Apple TV", src: "/platforms/appletv.png" },
+  { name: "Hulu", src: "/platforms/hulu.png" },
+  { name: "Crunchyroll", src: "/platforms/crunchyroll.png" },
+  { name: "HBO Max", src: "/platforms/max.png" },
+  { name: "Paramount", src: "/platforms/paramount.png" },
+];
+
 export function DiscoverContent() {
   const { selectedCategory, setSelectedCategory } = useDiscoverStore();
   const [detailsData, setDetailsData] = useState<any>();
   const navigate = useNavigate();
   const detailsModal = useModal("discover-details");
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [showPlatforms, setShowPlatforms] = useState(false);
   const progressItems = useProgressStore((state) => state.items);
 
   const isMoviesTab = selectedCategory === "movies";
@@ -193,50 +205,24 @@ export function DiscoverContent() {
       <DiscoverNavigation
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
+        showPlatforms={showPlatforms}
+        setShowPlatforms={setShowPlatforms}
       />
 
-      {/* Streaming Platforms Row */}
-      <div className="flex justify-center items-center gap-8 mt-8 mb-6 flex-wrap">
-        <img
-          src="/platforms/netflix.png"
-          alt="Netflix"
-          className="h-10 transition-transform hover:scale-110 cursor-pointer"
-        />
-        <img
-          src="/platforms/disney.png"
-          alt="Disney+"
-          className="h-10 transition-transform hover:scale-110 cursor-pointer"
-        />
-        <img
-          src="/platforms/prime.png"
-          alt="Prime Video"
-          className="h-10 transition-transform hover:scale-110 cursor-pointer"
-        />
-        <img
-          src="/platforms/appletv.png"
-          alt="Apple TV"
-          className="h-10 transition-transform hover:scale-110 cursor-pointer"
-        />
-        <img
-          src="/platforms/hulu.png"
-          alt="Hulu"
-          className="h-10 transition-transform hover:scale-110 cursor-pointer"
-        />
-        <img
-          src="/platforms/crunchyroll.png"
-          alt="Crunchyroll"
-          className="h-10 transition-transform hover:scale-110 cursor-pointer"
-        />
-        <img
-          src="/platforms/max.png"
-          alt="HBO Max"
-          className="h-10 transition-transform hover:scale-110 cursor-pointer"
-        />
-        <img
-          src="/platforms/paramount.png"
-          alt="Paramount"
-          className="h-10 transition-transform hover:scale-110 cursor-pointer"
-        />
+      {/* Streaming Platforms Row (Expandable) */}
+      <div className={`platform-filter-shell ${showPlatforms ? "open" : ""}`}>
+        <div className="platform-filter-panel">
+          {STREAMING_PLATFORMS.map((platform) => (
+            <button
+              key={platform.name}
+              type="button"
+              className="platform-filter-item"
+              aria-label={platform.name}
+            >
+              <img src={platform.src} alt="" className="platform-filter-logo" />
+            </button>
+          ))}
+        </div>
       </div>
 
       <WideContainer ultraWide classNames="!px-0">

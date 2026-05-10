@@ -8,7 +8,7 @@ function decode(query: string | null | undefined) {
 export function useSearchQuery(): [
   string,
   (inp: string, force?: boolean) => void,
-  () => void,
+  (newSearch?: string) => void,
 ] {
   const navigate = useNavigate();
   const params = useParams<{ query: string }>();

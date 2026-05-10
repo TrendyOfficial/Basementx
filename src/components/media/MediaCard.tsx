@@ -81,7 +81,7 @@ function MediaCardContent({
 
   return (
     <Flare.Base
-      className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
+      className={`artifact-card group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
         canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
       } ${closable ? "jiggle" : ""}`}
       tabIndex={canLink ? 0 : -1}
@@ -96,7 +96,7 @@ function MediaCardContent({
         })}
       />
       <Flare.Child
-        className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
+        className={`artifact-card-inner pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${
           canLink ? "group-hover:scale-95" : "opacity-60"
         }`}
       >

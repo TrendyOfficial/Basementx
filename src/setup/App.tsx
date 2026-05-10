@@ -18,6 +18,7 @@ import { AdminPage } from "@/pages/admin/AdminPage";
 import { AllBookmarks } from "@/pages/bookmarks/AllBookmarks";
 import VideoTesterView from "@/pages/developer/VideoTesterView";
 import { DiscoverMore } from "@/pages/discover/AllMovieLists";
+import { BrowseMediaPage } from "@/pages/discover/BrowseMediaPage";
 import { Discover } from "@/pages/discover/Discover";
 import { MoreContent } from "@/pages/discover/MoreContent";
 import MaintenancePage from "@/pages/errors/MaintenancePage";
@@ -148,6 +149,11 @@ function App() {
           />
           <Route path="/browse/:query?" element={<HomePage />} />
           <Route path="/" element={<HomePage />} />
+          <Route
+            path="/movies"
+            element={<BrowseMediaPage mediaType="movie" />}
+          />
+          <Route path="/tvshows" element={<BrowseMediaPage mediaType="tv" />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/about" element={<AboutPage />} />

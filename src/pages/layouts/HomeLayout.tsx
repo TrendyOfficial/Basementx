@@ -7,6 +7,8 @@ import { usePreferencesStore } from "@/stores/preferences";
 export function HomeLayout(props: {
   showBg: boolean;
   children: React.ReactNode;
+  discoverEnabled?: boolean;
+  onDiscoverToggle?: (enabled: boolean) => void;
 }) {
   const enableFeatured = usePreferencesStore((state) => state.enableFeatured);
   const [clearBackground, setClearBackground] = useState(false);
@@ -30,6 +32,8 @@ export function HomeLayout(props: {
         bg={enableFeatured ? true : props.showBg}
         clearBackground={clearBackground}
         noLightbar={enableFeatured}
+        discoverEnabled={props.discoverEnabled}
+        onDiscoverToggle={props.onDiscoverToggle}
       />
       {props.children}
     </FooterView>
