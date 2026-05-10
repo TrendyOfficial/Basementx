@@ -42,6 +42,7 @@ export function DiscoverContent() {
   const isEditorPicksTab = selectedCategory === "editorpicks";
 
   const handleCategoryChange = (category: string) => {
+    setActiveProvider(null);
     setSelectedCategory(category as "movies" | "tvshows" | "editorpicks");
   };
 
@@ -54,13 +55,48 @@ export function DiscoverContent() {
   };
 
   const movieProgressItems = Object.entries(progressItems || {}).filter(
-    ([_, item]) => item.type === "movie",
+    ([_, item]) => item.type === "movie"
   );
   const tvProgressItems = Object.entries(progressItems || {}).filter(
-    ([_, item]) => item.type === "show",
+    ([_, item]) => item.type === "show"
   );
 
   const renderMoviesContent = () => {
+    if (activeProvider) {
+      return (
+        <>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <img
+                src={providerMap[activeProvider.key].img}
+                alt={providerMap[activeProvider.key].name}
+                className="h-8 rounded-md"
+              />
+              <h3 className="text-lg font-semibold">
+                {t("discover.providerResults", { provider: activeProvider.name })}
+              </h3>
+            </div>
+            <Button theme="plain" onClick={clearProviderFilter}>
+              {t("discover.clearFilter") || "Clear"}
+            </Button>
+          </div>
+          <MediaCarousel
+            content={{
+              type: "provider",
+              providerId: activeProvider.providerId,
+              providerKey: activeProvider.key,
+              providerName: activeProvider.name,
+            }}
+            isTVShow={false}
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            showProviders
+            moreContent
+          />
+        </>
+      );
+    }
+    // fallback: default content
     return (
       <>
         {movieProgressItems.length > 0 && (
@@ -73,7 +109,6 @@ export function DiscoverContent() {
             showRecommendations
           />
         )}
-
         <MediaCarousel
           content={{ type: "latest", fallback: "nowPlaying" }}
           isTVShow={false}
@@ -81,7 +116,6 @@ export function DiscoverContent() {
           onShowDetails={handleShowDetails}
           moreContent
         />
-
         <MediaCarousel
           content={{ type: "latest4k", fallback: "popular" }}
           isTVShow={false}
@@ -89,7 +123,6 @@ export function DiscoverContent() {
           onShowDetails={handleShowDetails}
           moreContent
         />
-
         <MediaCarousel
           content={{ type: "topRated" }}
           isTVShow={false}
@@ -97,7 +130,6 @@ export function DiscoverContent() {
           onShowDetails={handleShowDetails}
           moreContent
         />
-
         <MediaCarousel
           content={{ type: "provider" }}
           isTVShow={false}
@@ -106,7 +138,6 @@ export function DiscoverContent() {
           showProviders
           moreContent
         />
-
         <MediaCarousel
           content={{ type: "genre" }}
           isTVShow={false}
@@ -120,6 +151,40 @@ export function DiscoverContent() {
   };
 
   const renderTVShowsContent = () => {
+    if (activeProvider) {
+      return (
+        <>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <img
+                src={providerMap[activeProvider.key].img}
+                alt={providerMap[activeProvider.key].name}
+                className="h-8 rounded-md"
+              />
+              <h3 className="text-lg font-semibold">
+                {t("discover.providerResults", { provider: activeProvider.name })}
+              </h3>
+            </div>
+            <Button theme="plain" onClick={clearProviderFilter}>
+              {t("discover.clearFilter") || "Clear"}
+            </Button>
+          </div>
+          <MediaCarousel
+            content={{
+              type: "provider",
+              providerId: activeProvider.providerId,
+              providerKey: activeProvider.key,
+              providerName: activeProvider.name,
+            }}
+            isTVShow
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            showProviders
+            moreContent
+          />
+        </>
+      );
+    }
     return (
       <>
         {tvProgressItems.length > 0 && (
@@ -132,7 +197,6 @@ export function DiscoverContent() {
             showRecommendations
           />
         )}
-
         <MediaCarousel
           content={{ type: "latesttv", fallback: "onTheAir" }}
           isTVShow
@@ -140,7 +204,6 @@ export function DiscoverContent() {
           onShowDetails={handleShowDetails}
           moreContent
         />
-
         <MediaCarousel
           content={{ type: "topRated" }}
           isTVShow
@@ -148,7 +211,6 @@ export function DiscoverContent() {
           onShowDetails={handleShowDetails}
           moreContent
         />
-
         <MediaCarousel
           content={{ type: "popular" }}
           isTVShow
@@ -156,7 +218,6 @@ export function DiscoverContent() {
           onShowDetails={handleShowDetails}
           moreContent
         />
-
         <MediaCarousel
           content={{ type: "provider" }}
           isTVShow
@@ -165,7 +226,6 @@ export function DiscoverContent() {
           showProviders
           moreContent
         />
-
         <MediaCarousel
           content={{ type: "genre" }}
           isTVShow
@@ -242,7 +302,7 @@ export function DiscoverContent() {
       <div
         className={classNames(
           "flex justify-center mt-8 mb-12",
-          isMoviesTab ? "block" : "hidden",
+          isMoviesTab ? "block" : "hidden"
         )}
       >
         <Button theme="purple" onClick={() => navigate("/discover/all")}>
