@@ -268,8 +268,8 @@ async function getRealDebridKeyStatus(realDebridKey: string | null) {
 
 export function RealDebridSetup() {
   const { t } = useTranslation();
-  const realDebridKey = usePreferencesStore((s) => s.realDebridKey);
-  const setRealDebridKey = usePreferencesStore((s) => s.setRealDebridKey);
+  const realDebridKey = usePreferencesStore((s) => s.debridToken);
+  const setRealDebridKey = usePreferencesStore((s) => s.setdebridToken);
 
   // Initialize isExpanded based on whether realDebridKey has a value
   const [isExpanded, setIsExpanded] = useState(
@@ -312,7 +312,7 @@ export function RealDebridSetup() {
     }
   };
 
-  if (conf().ALLOW_REAL_DEBRID_KEY) {
+  if (conf().ALLOW_DEBRID_KEY) {
     return (
       <div className="mt-6">
         <SettingsCard>

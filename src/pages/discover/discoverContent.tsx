@@ -92,17 +92,17 @@ export function DiscoverContent() {
                 {t("discover.providerResults", { provider: activeProvider.name })}
               </h3>
             </div>
-            <Button theme="plain" onClick={clearProviderFilter}>
+            <Button theme="secondary" onClick={clearProviderFilter}>
               {t("discover.clearFilter") || "Clear"}
             </Button>
           </div>
           <MediaCarousel
             content={{
               type: "provider",
-              providerId: activeProvider.providerId,
-              providerKey: activeProvider.key,
-              providerName: activeProvider.name,
             }}
+            providerId={activeProvider.providerId}
+            providerKey={activeProvider.key}
+            providerName={activeProvider.name}
             isTVShow={false}
             carouselRefs={carouselRefs}
             onShowDetails={handleShowDetails}
@@ -216,17 +216,17 @@ export function DiscoverContent() {
                 {t("discover.providerResults", { provider: activeProvider.name })}
               </h3>
             </div>
-            <Button theme="plain" onClick={clearProviderFilter}>
+            <Button theme="secondary" onClick={clearProviderFilter}>
               {t("discover.clearFilter") || "Clear"}
             </Button>
           </div>
           <MediaCarousel
             content={{
               type: "provider",
-              providerId: activeProvider.providerId,
-              providerKey: activeProvider.key,
-              providerName: activeProvider.name,
             }}
+            providerId={activeProvider.providerId}
+            providerKey={activeProvider.key}
+            providerName={activeProvider.name}
             isTVShow
             carouselRefs={carouselRefs}
             onShowDetails={handleShowDetails}

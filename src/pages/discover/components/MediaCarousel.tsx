@@ -38,6 +38,9 @@ interface MediaCarouselProps {
   showProviders?: boolean;
   showGenres?: boolean;
   showRecommendations?: boolean;
+  providerId?: string;
+  providerKey?: string;
+  providerName?: string;
 }
 
 function MoreCard({ link }: { link: string }) {
@@ -82,6 +85,9 @@ export function MediaCarousel({
   showProviders = false,
   showGenres = false,
   showRecommendations = false,
+  providerId: initialProviderId,
+  providerKey: initialProviderKey,
+  providerName: initialProviderName,
 }: MediaCarouselProps) {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowSize();
@@ -90,8 +96,8 @@ export function MediaCarousel({
   const browser = !!window.chrome;
 
   // State for selected options
-  const [selectedProviderId, setSelectedProviderId] = useState<string>("");
-  const [selectedProviderName, setSelectedProviderName] = useState<string>("");
+  const [selectedProviderId, setSelectedProviderId] = useState<string>(initialProviderId || "");
+  const [selectedProviderName, setSelectedProviderName] = useState<string>(initialProviderName || "");
   const [selectedGenreId, setSelectedGenreId] = useState<string>("");
   const [selectedGenreName, setSelectedGenreName] = useState<string>("");
   const [selectedRecommendationId, setSelectedRecommendationId] =
