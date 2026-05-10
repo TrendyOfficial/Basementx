@@ -185,10 +185,6 @@ export function Navigation(props: NavigationProps) {
       </div>
 
       <div
-        //
-        className="top-content fixed pointer-events-none left-0 right-0 z-[60] top-0 min-h-[150px]"
-        style={{ top: `${bannerHeight}px` }}
-
         id="mw-header"
         className="top-content fixed pointer-events-none left-0 right-0 z-[500] top-2 min-h-[150px]"
         style={{
@@ -354,18 +350,10 @@ export function Navigation(props: NavigationProps) {
                   {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
                 </LinksDropdown>
               </div>
-
-            </a>
-          </div>
-          <div className="flex items-center space-x-3 pointer-events-auto">
-            <LinksDropdown>
-              {loggedIn ? <UserAvatar withName onlyMain /> : <NoUserAvatar />}
-            </LinksDropdown>
-
+            </div>
           </div>
         </div>
       </div>
-    </div >
     </>
   );
 }

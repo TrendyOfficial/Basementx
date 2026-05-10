@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
@@ -12,6 +13,12 @@ import {
   ModalCard,
   useModal,
 } from "@/components/overlays/Modal";
+import {
+  StatusCircle,
+  StatusCircleProps,
+} from "@/components/player/internals/StatusCircle";
+import { MwLink } from "@/components/text/Link";
+import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Divider } from "@/components/utils/Divider";
 import { Ol } from "@/components/utils/Ol";
 import {
@@ -35,6 +42,9 @@ import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProxyUrls } from "@/utils/proxyUrls";
+
+import { Toggle } from "@/components/buttons/Toggle";
+import { SettingsCard } from "@/components/layout/SettingsCard";
 
 //
 import {
@@ -369,6 +379,7 @@ export function RealDebridSetup() {
         </SettingsCard>
       </div>
     );
+  }
   return null;
 }
 
