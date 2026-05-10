@@ -118,8 +118,9 @@ export const useIptvStore = create<IptvState>()(
       setTheme: (theme) => set({ theme }),
 
       fetchVirtualPlaylist: async () => {
-        const { generateArabicVODPlaylist } =
-          await import("./virtualProviders");
+        const { generateArabicVODPlaylist } = await import(
+          "./virtualProviders"
+        );
         const playlist = await generateArabicVODPlaylist();
         set({ virtualPlaylist: playlist });
       },

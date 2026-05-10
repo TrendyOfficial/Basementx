@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@/components/buttons/Button";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
@@ -166,7 +165,6 @@ export function HomePage() {
 
       {renderSearch()}
 
-
       {!search &&
         (enableCarouselView ? (
           <WideContainer ultraWide classNames="!px-3 md:!px-9">
@@ -196,7 +194,6 @@ export function HomePage() {
 
       {/* User Content */}
       {!search && renderHomeSections()}
-
 
       {!search && !(showBookmarks || showWatching) ? (
         <div className="flex flex-col translate-y-[-30px] items-center justify-center pt-20">
@@ -243,7 +240,6 @@ export function HomePage() {
           ? renderDiscoverHome()
           : renderClassicHome()}
       </div>
-
     </HomeLayout>
   );
 }

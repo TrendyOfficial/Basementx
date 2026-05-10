@@ -72,6 +72,7 @@ export function IptvPlayerView() {
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Channel not found</h1>
           <button
+            type="button"
             onClick={() => navigate(-1)}
             className="px-6 py-2 bg-white text-black rounded-xl font-bold"
           >
@@ -99,6 +100,7 @@ export function IptvPlayerView() {
             <h2 className="text-2xl font-bold mb-2">Playback Error</h2>
             <p className="text-white/60 mb-8">{error}</p>
             <button
+              type="button"
               onClick={() => navigate(-1)}
               className="px-6 py-2 bg-white text-black rounded-xl font-bold"
             >

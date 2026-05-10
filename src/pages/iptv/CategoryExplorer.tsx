@@ -136,7 +136,8 @@ export function CategoryExplorer() {
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {displayedChannels.map((channel, i) => (
               <button
-                key={channel.url + i}
+                // eslint-disable-next-line react/no-array-index-key
+                key={`${channel.url}-${channel.name}-${i}`}
                 type="button"
                 onClick={() => {
                   if (

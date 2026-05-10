@@ -151,6 +151,8 @@ export function GamepadGlobalListener() {
               }
             }
             break;
+          default:
+            break;
         }
       }
     };

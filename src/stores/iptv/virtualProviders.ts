@@ -88,7 +88,7 @@ export async function generateArabicVODPlaylist(): Promise<IptvPlaylist> {
   allChannels.push(...arabicZaman);
 
   // 4. Egyptian Movies (By Year)
-  for (let year = currentYear + 1; year >= 2018; year--) {
+  for (let year = currentYear + 1; year >= 2018; year -= 1) {
     const egy = await fetchMovies(`Egyptian Movies ${year} - أفلام مصري`, {
       with_original_language: "ar",
       with_origin_country: "EG",
@@ -99,7 +99,7 @@ export async function generateArabicVODPlaylist(): Promise<IptvPlaylist> {
   }
 
   // 5. English Movies (By Year)
-  for (let year = currentYear + 1; year >= 2015; year--) {
+  for (let year = currentYear + 1; year >= 2015; year -= 1) {
     const eng = await fetchMovies(`English Movies ${year} - أفلام أجنبي`, {
       with_original_language: "en",
       primary_release_year: year,

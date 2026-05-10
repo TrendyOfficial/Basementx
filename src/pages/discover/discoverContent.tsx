@@ -18,14 +18,44 @@ import { PersonalRecommendationsCarousel } from "./components/PersonalRecommenda
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
 
 const STREAMING_PLATFORMS = [
-  { name: "Netflix", src: "/platforms/netflix.png", providerId: "8", key: "netflix" },
-  { name: "Disney+", src: "/platforms/disney.png", providerId: "337", key: "disney" },
-  { name: "Prime Video", src: "/platforms/prime.png", providerId: "9", key: "amazon" },
-  { name: "Apple TV", src: "/platforms/appletv.png", providerId: "350", key: "apple" },
+  {
+    name: "Netflix",
+    src: "/platforms/netflix.png",
+    providerId: "8",
+    key: "netflix",
+  },
+  {
+    name: "Disney+",
+    src: "/platforms/disney.png",
+    providerId: "337",
+    key: "disney",
+  },
+  {
+    name: "Prime Video",
+    src: "/platforms/prime.png",
+    providerId: "9",
+    key: "amazon",
+  },
+  {
+    name: "Apple TV",
+    src: "/platforms/appletv.png",
+    providerId: "350",
+    key: "apple",
+  },
   { name: "Hulu", src: "/platforms/hulu.png", providerId: "15", key: "hulu" },
-  { name: "Crunchyroll", src: "/platforms/crunchyroll.png", providerId: "283", key: "crunchyroll" },
+  {
+    name: "Crunchyroll",
+    src: "/platforms/crunchyroll.png",
+    providerId: "283",
+    key: "crunchyroll",
+  },
   { name: "HBO Max", src: "/platforms/max.png", providerId: "384", key: "hbo" },
-  { name: "Paramount", src: "/platforms/paramount.png", providerId: "531", key: "paramount" },
+  {
+    name: "Paramount",
+    src: "/platforms/paramount.png",
+    providerId: "531",
+    key: "paramount",
+  },
 ];
 
 const providerMap: { [key: string]: { name: string; img: string } } = {
@@ -71,10 +101,10 @@ export function DiscoverContent() {
   const clearProviderFilter = () => setActiveProvider(null);
 
   const movieProgressItems = Object.entries(progressItems || {}).filter(
-    ([_, item]) => item.type === "movie"
+    ([_, item]) => item.type === "movie",
   );
   const tvProgressItems = Object.entries(progressItems || {}).filter(
-    ([_, item]) => item.type === "show"
+    ([_, item]) => item.type === "show",
   );
 
   const renderMoviesContent = () => {
@@ -89,7 +119,9 @@ export function DiscoverContent() {
                 className="h-8 rounded-md"
               />
               <h3 className="text-lg font-semibold">
-                {t("discover.providerResults", { provider: activeProvider.name })}
+                {t("discover.providerResults", {
+                  provider: activeProvider.name,
+                })}
               </h3>
             </div>
             <Button theme="secondary" onClick={clearProviderFilter}>
@@ -120,7 +152,7 @@ export function DiscoverContent() {
         isTVShow={false}
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
-      />
+      />,
     );
 
     if (movieProgressItems.length > 0) {
@@ -134,7 +166,7 @@ export function DiscoverContent() {
           moreContent
           showRecommendations
           priority={carousels.length < 2}
-        />
+        />,
       );
     }
 
@@ -147,7 +179,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     carousels.push(
@@ -159,7 +191,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     carousels.push(
@@ -171,7 +203,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     carousels.push(
@@ -183,7 +215,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
-      />
+      />,
     );
 
     carousels.push(
@@ -195,7 +227,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showGenres
         moreContent
-      />
+      />,
     );
 
     return carousels;
@@ -213,7 +245,9 @@ export function DiscoverContent() {
                 className="h-8 rounded-md"
               />
               <h3 className="text-lg font-semibold">
-                {t("discover.providerResults", { provider: activeProvider.name })}
+                {t("discover.providerResults", {
+                  provider: activeProvider.name,
+                })}
               </h3>
             </div>
             <Button theme="secondary" onClick={clearProviderFilter}>
@@ -244,7 +278,7 @@ export function DiscoverContent() {
         isTVShow
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
-      />
+      />,
     );
 
     if (tvProgressItems.length > 0) {
@@ -258,7 +292,7 @@ export function DiscoverContent() {
           moreContent
           showRecommendations
           priority={carousels.length < 2}
-        />
+        />,
       );
     }
 
@@ -271,7 +305,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     carousels.push(
@@ -283,7 +317,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     carousels.push(
@@ -295,7 +329,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     carousels.push(
@@ -307,7 +341,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
-      />
+      />,
     );
 
     carousels.push(
@@ -319,7 +353,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showGenres
         moreContent
-      />
+      />,
     );
 
     return carousels;
@@ -390,7 +424,7 @@ export function DiscoverContent() {
       <div
         className={classNames(
           "flex justify-center mt-8 mb-12",
-          isMoviesTab ? "block" : "hidden"
+          isMoviesTab ? "block" : "hidden",
         )}
       >
         <Button theme="purple" onClick={() => navigate("/discover/all")}>

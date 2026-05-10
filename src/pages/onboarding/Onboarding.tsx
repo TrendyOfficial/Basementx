@@ -3,7 +3,9 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { Button } from "@/components/buttons/Button";
+import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
+import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Stepper } from "@/components/layout/Stepper";
 import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { VerticalLine } from "@/components/layout/VerticalLine";
@@ -43,10 +45,8 @@ import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
-import { Toggle } from "@/components/buttons/Toggle";
-import { SettingsCard } from "@/components/layout/SettingsCard";
-
 //
+import { DebridEdit, FebboxSetup } from "../parts/settings/ConnectionsPart";
 import {
   Status,
   testFebboxKey,
@@ -382,9 +382,6 @@ export function RealDebridSetup() {
   }
   return null;
 }
-
-import { DebridEdit, FebboxSetup } from "../parts/settings/ConnectionsPart";
-
 
 function Item(props: { title: string; children: React.ReactNode }) {
   return (

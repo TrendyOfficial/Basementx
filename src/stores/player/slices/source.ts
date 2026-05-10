@@ -435,8 +435,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     });
 
     try {
-      const { scrapeExternalSubtitles } =
-        await import("@/utils/externalSubtitles");
+      const { scrapeExternalSubtitles } = await import(
+        "@/utils/externalSubtitles"
+      );
       const externalCaptions = await scrapeExternalSubtitles(store.meta);
 
       if (externalCaptions.length > 0) {
