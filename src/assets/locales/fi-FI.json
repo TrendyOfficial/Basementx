@@ -20,11 +20,7 @@
       "title": "Entä tietoni ja muut asiat?"
     },
     "q5": {
-      //
-      "body": "Basementilla on Discord-palvelin, jonka löydät tämän sivun yläosasta!",
-=======
       "body": "Basementilla on Fluxer-palvelin, jonka löydät tämän sivun yläosasta!",
-      //
       "title": "Miten voin saada lisätietoa?"
     }
   },
@@ -281,7 +277,7 @@
           "description": "Asenna selaimen laajennus ja saa pääsy parhaisiin lähteisiin."
         }
       },
-      "title": "Aloitetaan asennus elokuva-webin kanssa",
+      "title": "Aloitetaan asennus Basementin kanssa",
       "moreInfo": {
         "explainer": {
           "extension": "1. Laajennus",

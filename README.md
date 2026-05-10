@@ -61,12 +61,6 @@ git commit -m "Update p-stream instance (merge upstream/production)"
 git push  # Push to YOUR repository
 ```
 
-//
-
-## Contact Me / Discord (P-stream)
-[Discord](https://discord.gg/7z6znYgrTG)
-=======
 ## Contact Me / Discord
 
 [Discord](https://discord.gg/rVa8jzGR)
-//

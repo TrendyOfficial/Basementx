@@ -1269,7 +1269,7 @@ body::before {
     width: min(64vw, 15rem);
   }
 
-  =======.cast-button-container {
+  .cast-button-container {
     position: relative;
     width: 40px;
     height: 40px;
@@ -1309,5 +1309,5 @@ body::before {
   /* For images that are already cached/loaded, show them immediately */
   img[complete]:not(.no-fade):not([src=""]) {
     opacity: 1;
-    >>>>>>>ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
   }
+}

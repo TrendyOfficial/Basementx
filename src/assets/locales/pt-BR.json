@@ -1,1113 +1,741 @@
 {
-  //
   "about": {
     "description": "Basement é uma aplicação web que busca na internet por streams. A equipe visa uma abordagem principalmente minimalista para consumir conteúdo.",
     "faqTitle": "Perguntas comuns",
     "q1": {
       "body": "Basement não hospeda nenhum conteúdo. Quando você clica em algo para assistir, a internet é pesquisada pela mídia selecionada (Na tela de carregamento e na aba 'fontes de vídeo' você pode ver qual fonte está usando). A mídia nunca é carregada pelo Basement, tudo é através deste mecanismo de busca.",
-      "title": "De onde vem o conteúdo?"
+      "title": "De onde vem o conteúdo?",
+      "section": "general"
     },
     "q2": {
       "body": "Não é possível solicitar um filme ou série, o Basement não gerencia nenhum conteúdo. Todo o conteúdo é visualizado através de fontes na internet.",
-      "title": "Onde posso solicitar um filme ou série?"
+      "title": "Onde posso solicitar um filme ou série?",
+      "section": "searching"
     },
     "q3": {
       "body": "Nossos resultados de pesquisa são alimentados pelo The Movie Database (TMDB) e são exibidos independentemente de nossas fontes terem ou não o conteúdo.",
-      "title": "Os resultados da pesquisa mostram o filme ou série, por que não consigo reproduzi-lo?"
+      "title": "Os resultados da pesquisa mostram o filme ou série, por que não consigo reproduzi-lo?",
+      "section": "searching"
     },
     "title": "Sobre o Basement",
     "q4": {
       "body": "Todos os dados estão sincronizados com o backend da comunidade, qualquer pessoa pode usá-los também.",
-      "title": "E quanto aos meus dados e tudo mais?"
+      "title": "E quanto aos meus dados e tudo mais?",
+      "section": "general"
     },
     "q5": {
-      "body": "O Basement tem um servidor no Discord que pode ser encontrado no topo desta página!",
-      "title": "Como posso saber mais?"
+      "body": "O Basement tem um servidor no Fluxer que pode ser encontrado no topo desta página!",
+      "title": "Como posso saber mais?",
+      "section": "general"
+    },
+    "searchPlaceholder": "Pesquisar FAQ...",
+    "sections": {
+      "general": "Geral",
+      "searching": "Pesquisa e disponibilidade de conteúdo",
+      "playback": "Problemas de reprodução",
+      "connections": "Conexões",
+      "language": "Configurações de idioma e legenda"
+    },
+    "help": "Não encontrou uma resposta? <0>Obtenha suporte aqui.</0>",
+    "q6": {
+      "title": "Existe um aplicativo do Basement?",
+      "section": "general",
+      "body": "Ainda não, mas você pode instalá-lo como um PWA (Progressive Web App). No iOS, use Safari → Compartilhar → Adicionar à Tela de Início. No Android, use Chrome → 3 pontos → Adicionar à Tela de Início. Existe um APK experimental disponível através do nosso Fluxer, mas não é recomendado."
+    },
+    "q7": {
+      "title": "Como faço para criar uma conta?",
+      "body": "Toque em \"Sincronizar com a nuvem\" no menu suspenso ou vá em configurações para criar e sincronizar uma conta da comunidade.",
+      "section": "general"
+    },
+    "q9": {
+      "section": "searching",
+      "body": "Não — como não hospedamos conteúdo, não podemos adicionar ou alterar o que está disponível. A lista de conteúdo é baseada no que é acessível publicamente através do mecanismo de busca.",
+      "title": "Esta mídia está indisponível / Posso solicitar mídia?"
+    },
+    "q10": {
+      "title": "Não consigo encontrar o filme/série que estava procurando!",
+      "section": "searching",
+      "body": "O TMDB alimenta nossa pesquisa. Se os resultados não forem precisos, tente tocar no ícone 🔎 para opções de pesquisa avançada."
+    },
+    "q11": {
+      "title": "Por que estou vendo uma tela preta?",
+      "body": "Provavelmente um arquivo de vídeo corrompido ou quebrado. Tente mudar de fonte.",
+      "section": "playback"
+    },
+    "q12": {
+      "title": "O episódio que estou assistindo não é o correto.",
+      "section": "playback",
+      "body": "Mude para uma fonte diferente. Não temos controle sobre o conteúdo ou a precisão dos episódios."
+    },
+    "q13": {
+      "title": "A qualidade do vídeo não é a que eu esperava.",
+      "body": "Tente mudar de fonte. A qualidade varia dependendo do provedor; a FED API geralmente oferece mais opções.",
+      "section": "playback"
+    },
+    "q14": {
+      "title": "A qualidade 4K não está disponível.",
+      "body": "Se o 4K não aparecer, provavelmente não está disponível nessa fonte.",
+      "section": "playback"
+    },
+    "q15": {
+      "title": "Por que não há som?",
+      "section": "playback",
+      "body": "Certifique-se de que seu dispositivo não está no mudo e tente mudar para outra fonte. Problemas de som podem ser específicos da fonte."
+    },
+    "q16": {
+      "title": "O vídeo parece ter cores anormais ou está desbotado.",
+      "body": "Pode ser um arquivo corrompido ou vídeo HDR. Certifique-se de que seu dispositivo suporta HDR, ou tente mudar de fonte.",
+      "section": "playback"
+    },
+    "q17": {
+      "title": "Estou tendo falhas visuais.",
+      "section": "playback",
+      "body": "Falhas visuais geralmente são causadas por arquivos de baixa qualidade enviados. Tente mudar de fonte."
+    },
+    "q18": {
+      "title": "A fonte está carregando devagar.",
+      "body": "A velocidade depende do site de hospedagem. Mude para outra fonte para melhor desempenho.",
+      "section": "playback"
+    },
+    "q19": {
+      "title": "Como faço para mudar de fonte?",
+      "body": "Enquanto assiste, toque no ícone ⚙️, então selecione outra fonte em \"Fontes de vídeo\".",
+      "section": "playback"
+    },
+    "q20": {
+      "title": "O que é FED API?",
+      "body": "FED API é o nosso raspador privado que busca fluxos diretamente do Febbox. Cada conta gratuita do Febbox vem com 100GB/mês de largura de banda ilimitada, e usamos seu token de interface de usuário para raspar o conteúdo como se você mesmo estivesse assistindo. A configuração é mais fácil em um PC, mas há instruções para dispositivos móveis no nosso Fluxer.",
+      "section": "connections"
+    },
+    "q21": {
+      "title": "A FED API funciona em todos os dispositivos?",
+      "body": "Sim. Uma vez configurado, seu token funciona em todos os dispositivos onde você estiver logado.",
+      "section": "connections"
+    },
+    "q22": {
+      "title": "Por que eu preciso da extensão ou do proxy personalizado?",
+      "section": "connections",
+      "body": "Algumas fontes bloqueiam raspadores. A extensão atua como um proxy local e contorna esses bloqueios usando seu endereço IP, cabeçalhos e cookies."
+    },
+    "q23": {
+      "title": "O que é a extensão? É segura?",
+      "section": "connections",
+      "body": "É uma ferramenta de proxy local usada para acessar fluxos que restringem raspadores. Ela imita sua sessão de navegação. Além disso, é totalmente de código aberto e está em nosso GitHub."
+    },
+    "q24": {
+      "section": "connections",
+      "title": "Meu token Febbox falhou durante a configuração. O que devo fazer?",
+      "body": "Seu ISP pode estar bloqueando a FED API. Configure um DNS personalizado como 1.1.1.1 ou NextDNS. Você também pode tentar mudar a região no painel de controle."
+    },
+    "q25": {
+      "title": "Como faço para mudar o idioma?",
+      "body": "Preferimos o inglês, mas algumas fontes oferecem outros idiomas. Tente mudar de fonte. Na FED API, apenas o navegador Safari suporta a troca de áudio em arquivos MP4.",
+      "section": "language"
+    },
+    "q26": {
+      "title": "Minhas legendas não estão sincronizadas.",
+      "body": "Use a opção \"Personalizar\" nas configurações de legenda ou pressione [ e ] no teclado para ajustar. Você também pode enviar seu próprio arquivo de legenda.",
+      "section": "language"
     }
-=======
-  "about": {
-      "description": "Basement é uma aplicação web que busca na internet por streams. A equipe visa uma abordagem principalmente minimalista para consumir conteúdo.",
-      "faqTitle": "Perguntas comuns",
-      "q1": {
-        "body": "Basement não hospeda nenhum conteúdo. Quando você clica em algo para assistir, a internet é pesquisada pela mídia selecionada (Na tela de carregamento e na aba 'fontes de vídeo' você pode ver qual fonte está usando). A mídia nunca é carregada pelo Basement, tudo é através deste mecanismo de busca.",
-        "title": "De onde vem o conteúdo?"
-        //
+  },
+  "actions": {
+    "copied": "Copiado",
+    "copy": "Copiar"
+  },
+  "auth": {
+    "createAccount": "Ainda não tem uma conta? <0>Crie uma conta.</0>",
+    "deviceNameLabel": "Nome do dispositivo",
+    "deviceNamePlaceholder": "Telefone pessoal",
+    "generate": {
+      "description": "Sua frase de acesso funciona como seu nome de usuário e senha. Certifique-se de mantê-la segura, pois você precisará inseri-la para entrar na sua conta",
+      "next": "Eu salvei minha frase de acesso",
+      "passphraseFrameLabel": "Frase de acesso",
+      "title": "Sua frase de acesso"
+    },
+    "hasAccount": "Já tem uma conta? <0>Entre aqui.</0>",
+    "login": {
+      "description": "Por favor, insira sua frase de acesso para entrar na sua conta",
+      "deviceLengthError": "Por favor, insira um nome para o dispositivo",
+      "passphraseLabel": "Frase de acesso de 12 palavras",
+      "passphrasePlaceholder": "Frase de acesso",
+      "submit": "Entrar",
+      "title": "Entrar na sua conta",
+      "validationError": "Frase de acesso incorreta ou incompleta"
+    },
+    "register": {
+      "information": {
+        "color1": "Cor do perfil um",
+        "color2": "Cor do perfil dois",
+        "header": "Digite um nome para o seu dispositivo e escolha cores e um ícone de usuário de sua preferência",
+        "icon": "Ícone do usuário",
+        "next": "Próximo",
+        "title": "Informações da conta"
+      }
+    },
+    "trust": {
+      "failed": {
+        "text": "Você o configurou corretamente?",
+        "title": "Falha ao alcançar o servidor"
       },
-      "q2": {
-        "body": "Não é possível solicitar um filme ou série, o Basement não gerencia nenhum conteúdo. Todo o conteúdo é visualizado através de fontes na internet.",
-        "title": "Onde posso solicitar um filme ou série?"
+      "host": "Você está se conectando a <0>{{hostname}}</0> - por favor, confirme se confia nele antes de criar uma conta",
+      "no": "Voltar",
+      "noHost": "O servidor não foi configurado, portanto você não pode criar uma conta",
+      "noHostTitle": "Servidor não configurado!",
+      "title": "Você confia neste servidor?",
+      "yes": "Eu confio neste servidor"
+    },
+    "verify": {
+      "description": "Por favor, insira sua frase de acesso anterior para confirmar que você a salvou e para criar sua conta",
+      "invalidData": "Dados não são válidos",
+      "noMatch": "Frase de acesso não corresponde",
+      "passphraseLabel": "Sua frase de acesso de 12 palavras",
+      "recaptchaFailed": "Falha na validação do ReCaptcha",
+      "register": "Criar conta",
+      "title": "Confirme sua frase de acesso"
+    }
+  },
+  "errors": {
+    "badge": "Quebrou",
+    "details": "Detalhes do erro",
+    "reloadPage": "Recarregar a página",
+    "showError": "Mostrar detalhes do erro",
+    "title": "Encontramos um erro!"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "Aviso legal",
+      "disclaimerText": "Basement não hospeda nenhum arquivo, apenas fornece links para serviços de terceiros. Questões legais devem ser tratadas com os hosts de arquivos e provedores. Basement não é responsável por quaisquer arquivos de mídia exibidos pelos provedores de vídeo."
+    },
+    "links": {
+      "fluxer": "Fluxer",
+      "legal": "Legal / DMCA",
+      "github": "GitHub",
+      "twitter": "Twitter",
+      "funding": "Nos ajude"
+    },
+    "tagline": "Assista seus programas e filmes favoritos com este aplicativo de streaming de código aberto."
+  },
+  "global": {
+    "name": "Basement",
+    "pages": {
+      "about": "Sobre",
+      "legal": "Legal / DMCA",
+      "login": "Entrar",
+      "onboarding": "Configuração",
+      "pagetitle": "{{title}} - Basement",
+      "register": "Registrar",
+      "settings": "Configurações",
+      "discover": "Descubra",
+      "support": "Ajuda",
+      "migration": "Migrar conta",
+      "jip": "Jip"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "sectionTitle": "Favoritos"
+    },
+    "continueWatching": {
+      "sectionTitle": "Continue assistindo"
+    },
+    "mediaList": {
+      "stopEditing": "Parar de editar"
+    },
+    "search": {
+      "allResults": "Isso é tudo que temos!",
+      "failed": "Falha ao encontrar mídia, tente novamente!",
+      "loading": "Carregando...",
+      "noResults": "Não conseguimos encontrar nada!",
+      "placeholder": {
+        "default": "O que você quer assistir?",
+        "extra": [
+          "O que você gostaria de explorar?",
+          "O que está na sua lista para assistir?",
+          "Qual o seu filme favorito?",
+          "Qual a sua série favorita?",
+          "O que tem na sua watchlist hoje?",
+          "Como foi o teu dia?",
+          "Foi mal, o site nunca funciona...",
+          "A Basement não é a melhor?",
+          ">ᴗ<"
+        ]
       },
-      "q3": {
-        "body": "Nossos resultados de pesquisa são alimentados pelo The Movie Database (TMDB) e são exibidos independentemente de nossas fontes terem ou não o conteúdo.",
-        "title": "Os resultados da pesquisa mostram o filme ou série, por que não consigo reproduzi-lo?"
+      "sectionTitle": "Resultados da pesquisa",
+      "empty": {
+        "extra": [
+          "Não há nada aqui :(",
+          "Tão vazio...",
+          "Que vazio.",
+          "Oi usuário novo :3"
+        ],
+        "default": "Bem vindo(a), encontre mídias para assistir aqui!"
       },
-      "title": "Sobre o Basement",
-      "q4": {
-        "body": "Todos os dados estão sincronizados com o backend da comunidade, qualquer pessoa pode usá-los também.",
-        "title": "E quanto aos meus dados e tudo mais?"
+      "discoverMore": "Descubra mais",
+      "discover": "Descobrir"
+    },
+    "titles": {
+      "day": {
+        "default": "O que você gostaria de assistir esta tarde?",
+        "extra": [
+          "Se sentindo aventureiro? Jurassic Park pode ser a escolha perfeita."
+        ]
       },
-      //
-      "footer": {
-        "legal": {
-          "disclaimer": "Aviso legal",
-          "disclaimerText": "Basement não hospeda nenhum arquivo, apenas fornece links para serviços de terceiros. Questões legais devem ser tratadas com os hosts de arquivos e provedores. Basement não é responsável por quaisquer arquivos de mídia exibidos pelos provedores de vídeo."
-        },
-        "links": {
-          "discord": "Discord",
-          "legal": "Legal / DMCA",
-          "github": "GitHub",
-          "twitter": "Twitter",
-          "funding": "Nos ajude"
-        },
-        "tagline": "Assista seus programas e filmes favoritos com este aplicativo de streaming de código aberto."
+      "morning": {
+        "default": "O que você gostaria de assistir esta manhã?",
+        "extra": [
+          "Ouvi dizer que Antes do Amanhecer é bom"
+        ]
       },
-      "global": {
-        "name": "Basement",
-        "pages": {
-          "about": "Sobre",
-          "legal": "Legal / DMCA",
-          "login": "Entrar",
-          "onboarding": "Configuração",
-          "pagetitle": "{{title}} - Basement",
-          "register": "Registrar",
-          "settings": "Configurações",
-          "discover": "Descubra",
-          "support": "Ajuda",
-          "migration": "Migrar conta",
-          "jip": "Jip"
-        }
+      "night": {
+        "default": "O que você gostaria de assistir esta noite?",
+        "extra": [
+          "Cansado? Ouvi dizer que O Exorcista é bom."
+        ]
       },
-      "home": {
-        "bookmarks": {
-          "sectionTitle": "Favoritos"
-        },
-        "continueWatching": {
-          "sectionTitle": "Continue assistindo"
-        },
-        "mediaList": {
-          "stopEditing": "Parar de editar"
-        },
-        "search": {
-          "allResults": "Isso é tudo que temos!",
-          "failed": "Falha ao encontrar mídia, tente novamente!",
-          "loading": "Carregando...",
-          "noResults": "Não conseguimos encontrar nada!",
-          "placeholder": {
-            "default": "O que você quer assistir?",
-            "extra": [
-              "O que você gostaria de explorar?",
-              "O que está na sua lista para assistir?",
-              "Qual o seu filme favorito?",
-              "Qual a sua série favorita?",
-              "O que tem na sua watchlist hoje?",
-              "Como foi o teu dia?",
-              "Foi mal, o site nunca funciona...",
-              "A Basement não é a melhor?",
-              ">ᴗ<"
-            ]
-          },
-          "sectionTitle": "Resultados da pesquisa",
-          "empty": {
-            "extra": [
-              "Não há nada aqui :(",
-              "Tão vazio...",
-              "Que vazio.",
-              "Oi usuário novo :3"
-            ],
-            "default": "Bem vindo(a), encontre mídias para assistir aqui!"
-          },
-          "discoverMore": "Descubra mais",
-          "discover": "Descobrir"
-        },
-        "titles": {
-          "day": {
-            "default": "O que você gostaria de assistir esta tarde?",
-            "extra": [
-              "Se sentindo aventureiro? Jurassic Park pode ser a escolha perfeita."
-            ]
-          },
-          "morning": {
-            "default": "O que você gostaria de assistir esta manhã?",
-            "extra": [
-              "Ouvi dizer que Antes do Amanhecer é bom"
-            ]
-          },
-          "night": {
-            "default": "O que você gostaria de assistir esta noite?",
-            "extra": [
-              "Cansado? Ouvi dizer que O Exorcista é bom."
-            ]
-          },
-          "69": {
-            "default": "Que tal algo picante?",
-            "extra": [
-              "Feliz dia 69 😘!"
-            ]
-          },
-          "420": {
-            "default": "O que você gostaria de assistir neste 4/20?",
-            "extra": [
-              "Feliz 4/20 🥳!"
-            ]
-          }
-        },
-        "mediaCard": {
-          "moreInfo": "Mais informação",
-          "copyLink": "Copiar link",
-          "close": "Fechar"
-        }
-=======
-    "q5": {
-          "body": "O Basement tem um servidor no Fluxer que pode ser encontrado no topo desta página!",
-          "title": "Como posso saber mais?"
-        }
+      "69": {
+        "default": "Que tal algo picante?",
+        "extra": [
+          "Feliz dia 69 😘!"
+        ]
       },
-      "actions": {
-        "copied": "Copiado",
-        "copy": "Copiar"
+      "420": {
+        "default": "O que você gostaria de assistir neste 4/20?",
+        "extra": [
+          "Feliz 4/20 🥳!"
+        ]
+      }
+    },
+    "mediaCard": {
+      "moreInfo": "Mais informação",
+      "copyLink": "Copiar link",
+      "close": "Fechar"
+    }
+  },
+  "media": {
+    "episodeDisplay": "T{{season}} E{{episode}}",
+    "types": {
+      "movie": "Filme",
+      "show": "Série"
+    },
+    "unreleased": "Não lançado",
+    "episodeShort": "E",
+    "seasonShort": "S"
+  },
+  "navigation": {
+    "banner": {
+      "offline": "Verifique sua conexão com a internet"
+    },
+    "menu": {
+      "about": "Sobre nós",
+      "logout": "Sair",
+      "register": "Sincronizar com a nuvem",
+      "settings": "Configurações",
+      "support": "Suporte",
+      "discover": "Descobrir"
+    }
+  },
+  "notFound": {
+    "badge": "Não encontrado",
+    "goHome": "Voltar para o início",
+    "message": "Procuramos em todos os lugares: debaixo das lixeiras, no armário, atrás do proxy, mas no final não conseguimos encontrar a página que você está procurando.",
+    "title": "Não conseguimos encontrar essa página",
+    "reloadButton": "Tentar novamente"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "Cancelar",
+      "confirm": "Usar configuração padrão",
+      "description": "A configuração padrão não possui os melhores streams e pode ser insuportavelmente lenta.",
+      "title": "Você tem certeza?"
+    },
+    "extension": {
+      "back": "Voltar",
+      "explainer": "Usando a extensão de navegador, você pode obter os melhores streams que temos a oferecer. Com apenas uma simples instalação.",
+      "explainerIos": "Infelizmente, a extensão de navegador não é suportado no iOS. Pressione <bold>Voltar</bold> para escolher outra opção.",
+      "extensionHelp": "Se você instalou a extensão mas ela não foi detectada, <bold>abra a extensão através do menu de extensões do seu navegador</bold> e siga as instruções na tela.",
+      "linkChrome": "Instalar extensão do Chrome",
+      "linkFirefox": "Instalar extensão do Firefox",
+      "notDetecting": "Instalou no Chrome, mas o site não está detectando? Tente recarregar a página!",
+      "notDetectingAction": "Recarregar página",
+      "status": {
+        "disallowed": "A extensão não está ativada para esta página",
+        "disallowedAction": "Ativar extensão",
+        "failed": "Falha ao solicitar status",
+        "loading": "Aguardando que você instale a extensão",
+        "outdated": "A versão da extensão é muito antiga",
+        "success": "A extensão está funcionado como esperado!"
       },
-      "auth": {
-        "createAccount": "Ainda não tem uma conta? <0>Crie uma conta.</0>",
-        "deviceNameLabel": "Nome do dispositivo",
-        "deviceNamePlaceholder": "Telefone pessoal",
-        "generate": {
-          "description": "Sua frase de acesso funciona como seu nome de usuário e senha. Certifique-se de mantê-la segura, pois você precisará inseri-la para entrar na sua conta",
-          "next": "Eu salvei minha frase de acesso",
-          "passphraseFrameLabel": "Frase de acesso",
-          "title": "Sua frase de acesso"
-        },
-        "hasAccount": "Já tem uma conta? <0>Entre aqui.</0>",
-        "login": {
-          "description": "Por favor, insira sua frase de acesso para entrar na sua conta",
-          "deviceLengthError": "Por favor, insira um nome para o dispositivo",
-          "passphraseLabel": "Frase de acesso de 12 palavras",
-          "passphrasePlaceholder": "Frase de acesso",
-          "submit": "Entrar",
-          "title": "Entrar na sua conta",
-          "validationError": "Frase de acesso incorreta ou incompleta"
-        },
-        "register": {
-          "information": {
-            "color1": "Cor do perfil um",
-            "color2": "Cor do perfil dois",
-            "header": "Digite um nome para o seu dispositivo e escolha cores e um ícone de usuário de sua preferência",
-            "icon": "Ícone do usuário",
-            "next": "Próximo",
-            "title": "Informações da conta"
-          }
-          //
-        },
-        "trust": {
-          "failed": {
-            "text": "Você o configurou corretamente?",
-            "title": "Falha ao alcançar o servidor"
-          },
-          "host": "Você está se conectando a <0>{{hostname}}</0> - por favor, confirme se confia nele antes de criar uma conta",
-          "no": "Voltar",
-          "noHost": "O servidor não foi configurado, portanto você não pode criar uma conta",
-          "noHostTitle": "Servidor não configurado!",
-          "title": "Você confia neste servidor?",
-          "yes": "Eu confio neste servidor"
-        },
-        "verify": {
-          "description": "Por favor, insira sua frase de acesso anterior para confirmar que você a salvou e para criar sua conta",
-          "invalidData": "Dados não são válidos",
-          "noMatch": "Frase de acesso não corresponde",
-          "passphraseLabel": "Sua frase de acesso de 12 palavras",
-          "recaptchaFailed": "Falha na validação do ReCaptcha",
-          "register": "Criar conta",
-          "title": "Confirme sua frase de acesso"
-        }
+      "submit": "Continuar",
+      "title": "Vamos começar com uma extensão"
+    },
+    "proxy": {
+      "back": "Voltar",
+      "explainer": "Com o método proxy, você pode obter streams de ótima qualidade criando um proxy de autoatendimento.",
+      "input": {
+        "errorConnection": "Não foi possível conectar ao proxy",
+        "errorInvalidUrl": "Não é uma URL válida",
+        "errorNotProxy": "Esperava um proxy, mas recebi um site",
+        "label": "URL do Proxy",
+        "placeholder": "https://"
       },
-      "errors": {
-        "badge": "Quebrou",
-        "details": "Detalhes do erro",
-        "reloadPage": "Recarregar a página",
-        "showError": "Mostrar detalhes do erro",
-        "title": "Encontramos um erro!"
+      "link": "Aprenda como criar um proxy",
+      "submit": "Enviar proxy",
+      "title": "Vamos preparar um novo proxy"
+    },
+    "start": {
+      "explainer": "Para obter os melhores streams possíveis, você precisará escolher qual método de streaming deseja usar.",
+      "options": {
+        "default": {
+          "text": "Eu não quero streams de boa qualidade, <0 /> <1>use a configuração padrão</1>"
+        },
+        "extension": {
+          "action": "Instalar extensão",
+          "description": "Instale a extensão para navegador e tenha acesso a fontes adicionais! Lembre-se de ativá-la para este site.",
+          "quality": "Melhor qualidade",
+          "title": "Extensão de navegador"
+        },
+        "proxy": {
+          "action": "Configurar proxy",
+          "description": "Configure um proxy gratuito em apenas 5 minutos! Melhora a confiabilidade do carregamento!",
+          "quality": "Boa qualidade",
+          "title": "Proxy personalizado"
+        },
+        "or": "ou"
       },
-      "footer": {
-        "legal": {
-          "disclaimer": "Aviso legal",
-          "disclaimerText": "Basement não hospeda nenhum arquivo, apenas fornece links para serviços de terceiros. Questões legais devem ser tratadas com os hosts de arquivos e provedores. Basement não é responsável por quaisquer arquivos de mídia exibidos pelos provedores de vídeo."
+      "title": "Vamos juntos configurar o Basement"
+    }
+  },
+  "player": {
+    "back": {
+      "default": "Voltar para o início",
+      "short": "Voltar"
+    },
+    "casting": {
+      "enabled": "Transmitindo para o dispositivo..."
+    },
+    "menus": {
+      "downloads": {
+        "copyHlsPlaylist": "Copiar link da playlist HLS",
+        "disclaimer": "Os downloads são feitos diretamente do provedor. Basement não tem controle sobre como os downloads são fornecidos.",
+        "downloadSubtitle": "Baixar legenda atual",
+        "downloadVideo": "Baixar vídeo",
+        "hlsDisclaimer": "Os downloads são feitos diretamente do provedor. Basement não tem controle sobre como os downloads são fornecidos.<br /><br />Por favor, note que você está baixando uma playlist HLS, <bold>isso é destinado para usuários familiarizados com streaming multimídia avançado.</bold>. Experimente outras fontes para formatos diferentes.",
+        "onAndroid": {
+          "1": "Para baixar no Android, clique no botão de download e, na nova página, <bold>toque e segure</bold> no vídeo, depois selecione <bold>salvar</bold>.",
+          "shortTitle": "Baixar / Android",
+          "title": "Baixando no Android"
         },
-        "links": {
-          "fluxer": "Fluxer",
-          "legal": "Legal / DMCA",
-          "github": "GitHub",
-          "twitter": "Twitter",
-          "funding": "Nos ajude"
+        "onIos": {
+          "1": "Para baixar no iOS, clique no botão de download e, na nova página, clique em <bold><ios_share /></bold>, depois em <bold>Salvar em Arquivos <ios_files /></bold>.",
+          "shortTitle": "Baixar / iOS",
+          "title": "Baixando no iOS"
         },
-        "tagline": "Assista seus programas e filmes favoritos com este aplicativo de streaming de código aberto."
+        "onPc": {
+          "1": "No PC, clique no botão de download e, na nova página, clique com o botão direito do mouse no vídeo e selecione <bold>Salvar vídeo como</bold>",
+          "shortTitle": "Baixar / PC",
+          "title": "Baixando no PC"
+        },
+        "title": "Baixar"
       },
-      "global": {
-        "name": "Basement",
-        "pages": {
-          "about": "Sobre",
-          "legal": "Legal / DMCA",
-          "login": "Entrar",
-          "onboarding": "Configuração",
-          "pagetitle": "{{title}} - Basement",
-          "register": "Registrar",
-          "settings": "Configurações",
-          "discover": "Descubra",
-          "support": "Ajuda",
-          "migration": "Migrar conta",
-          "jip": "Jip"
-        }
+      "episodes": {
+        "button": "Episódios",
+        "emptyState": "Não há episódios nesta temporada, volte mais tarde!",
+        "episodeBadge": "E{{episode}}",
+        "loadingError": "Erro ao carregar temporada",
+        "loadingList": "Carregando...",
+        "loadingTitle": "Carregando...",
+        "unairedEpisodes": "Um ou mais episódios nesta temporada foram desabilitados porque ainda não foram ao ar.",
+        "seasons": "Temporadas"
       },
-      "home": {
-        "bookmarks": {
-          "sectionTitle": "Favoritos"
-        },
-        "continueWatching": {
-          "sectionTitle": "Continue assistindo"
-        },
-        "mediaList": {
-          "stopEditing": "Parar de editar"
-        },
-        "search": {
-          "allResults": "Isso é tudo que temos!",
-          "failed": "Falha ao encontrar mídia, tente novamente!",
-          "loading": "Carregando...",
-          "noResults": "Não conseguimos encontrar nada!",
-          "placeholder": {
-            "default": "O que você quer assistir?",
-            "extra": [
-              "O que você gostaria de explorar?",
-              "O que está na sua lista para assistir?",
-              "Qual o seu filme favorito?",
-              "Qual a sua série favorita?",
-              "O que tem na sua watchlist hoje?",
-              "Como foi o teu dia?",
-              "Foi mal, o site nunca funciona...",
-              "A Basement não é a melhor?",
-              ">ᴗ<"
-            ]
-          },
-          "sectionTitle": "Resultados da pesquisa",
-          "empty": {
-            "extra": [
-              "Não há nada aqui :(",
-              "Tão vazio...",
-              "Que vazio.",
-              "Oi usuário novo :3"
-            ],
-            "default": "Bem vindo(a), encontre mídias para assistir aqui!"
-          },
-          "discoverMore": "Descubra mais",
-          "discover": "Descobrir"
-        },
-        "titles": {
-          "day": {
-            "default": "O que você gostaria de assistir esta tarde?",
-            "extra": [
-              "Se sentindo aventureiro? Jurassic Park pode ser a escolha perfeita."
-            ]
-          },
-          "morning": {
-            "default": "O que você gostaria de assistir esta manhã?",
-            "extra": [
-              "Ouvi dizer que Antes do Amanhecer é bom"
-            ]
-          },
-          "night": {
-            "default": "O que você gostaria de assistir esta noite?",
-            "extra": [
-              "Cansado? Ouvi dizer que O Exorcista é bom."
-            ]
-          },
-          "69": {
-            "default": "Que tal algo picante?",
-            "extra": [
-              "Feliz dia 69 😘!"
-            ]
-          },
-          "420": {
-            "default": "O que você gostaria de assistir neste 4/20?",
-            "extra": [
-              "Feliz 4/20 🥳!"
-            ]
-          }
-        },
-        "mediaCard": {
-          "moreInfo": "Mais informação",
-          "copyLink": "Copiar link",
-          "close": "Fechar"
-        }
+      "playback": {
+        "speedLabel": "Velocidade de reprodução",
+        "title": "Configurações de reprodução"
       },
-      "media": {
-        "episodeDisplay": "T{{season}} E{{episode}}",
-        "types": {
-          "movie": "Filme",
-          "show": "Série"
-        },
-        "unreleased": "Não lançado",
-        "episodeShort": "E",
-        "seasonShort": "S"
+      "quality": {
+        "automaticLabel": "Qualidade automática",
+        "hint": "Você pode tentar <0>trocar de fonte</0> para obter diferentes opções de qualidade.",
+        "iosNoQuality": "Devido a limitações definidas pela Apple, a seleção de qualidade não está disponível no iOS para esta fonte. Você pode tentar <0>trocar para outra fonte</0> para obter diferentes opções de qualidade.",
+        "title": "Qualidade"
       },
-      "navigation": {
-        "banner": {
-          "offline": "Verifique sua conexão com a internet"
+      "settings": {
+        "audioItem": "Áudio",
+        "downloadItem": "Baixar",
+        "enableSubtitles": "Ativar Legendas",
+        "experienceSection": "Experiência de visualização",
+        "playbackItem": "Configurações de reprodução",
+        "qualityItem": "Qualidade",
+        "sourceItem": "Fonte",
+        "subtitleItem": "Legendas",
+        "videoSection": "Configurações de vídeo"
+      },
+      "sources": {
+        "failed": {
+          "text": "Houve um erro ao tentar encontrar vídeos, por favor, tente uma fonte diferente.",
+          "title": "Falha ao raspar"
         },
-        "menu": {
-          "about": "Sobre nós",
-          "logout": "Sair",
-          "register": "Sincronizar com a nuvem",
-          "settings": "Configurações",
-          "support": "Suporte",
-          "discover": "Descobrir",
-          "development": "Desenvolvimento"
-        }
+        "noEmbeds": {
+          "text": "Não conseguimos encontrar nenhum incorporado, por favor, tente uma fonte diferente.",
+          "title": "Nenhum incorporado encontrado"
+        },
+        "noStream": {
+          "text": "Esta fonte não tem transmissões para este filme ou série.",
+          "title": "Sem transmissão"
+        },
+        "title": "Fontes",
+        "unknownOption": "Desconhecido"
+      },
+      "subtitles": {
+        "customChoice": "Solte ou faça upload do arquivo",
+        "customizeLabel": "Personalizar",
+        "dropSubtitleFile": "Solte o arquivo da legenda aqui",
+        "offChoice": "Desativadas",
+        "settings": {
+          "backlink": "Legendas personalizadas",
+          "delay": "Atraso da legenda",
+          "fixCapitals": "Corrigir letras maiúsculas"
+        },
+        "title": "Legendas",
+        "unknownLanguage": "Desconhecido"
+      }
+    },
+    "metadata": {
+      "api": {
+        "text": "Não foi possível carregar os metadados da API. Por favor, verifique sua conexão com a internet.",
+        "title": "Falha ao carregar os metadados da API"
+      },
+      "legal": {
+        "badge": "Removido",
+        "text": "Esta mídia não está mais disponível devido a um aviso de remoção ou reivindicação de direitos autorais.",
+        "title": "A mídia foi removida"
+      },
+      "extensionPermission": {
+        "badge": "Permissão Pendente",
+        "button": "Usar extensão",
+        "text": "Você possui a extensão de navegador, mas nós precisamos de sua permissão para começar a usá-la.",
+        "title": "Configure a extensão"
+      },
+      "failed": {
+        "badge": "Falhou",
+        "homeButton": "Ir para o início",
+        "text": "Não foi possível carregar os metadados da mídia do TMDB. Por favor, verifique se o TMDB está fora do ar ou bloqueado na sua conexão de internet.",
+        "title": "Falha ao carregar metadados"
       },
       "notFound": {
         "badge": "Não encontrado",
-        "goHome": "Voltar para o início",
-        "message": "Procuramos em todos os lugares: debaixo das lixeiras, no armário, atrás do proxy, mas no final não conseguimos encontrar a página que você está procurando.",
-        "title": "Não conseguimos encontrar essa página",
-        "reloadButton": "Tentar novamente"
+        "homeButton": "Voltar para o início",
+        "text": "Não conseguimos encontrar a mídia que você solicitou. Ou ela foi removida ou você alterou o URL.",
+        "title": "Não conseguimos encontrar essa mídia."
+      }
+    },
+    "nextEpisode": {
+      "next": "Próximo episódio",
+      "replay": "REPETIR",
+      "nextSeason": "Próxima temporada"
+    },
+    "playbackError": {
+      "badge": "Erro de reprodução",
+      "errors": {
+        "errorAborted": "Proses pemuatan media dibatalkan oleh permintaan penguna.",
+        "errorDecode": "Meskipun anteriormente media diputuskan dapat digunakan, terjadi masalah saat mencoba memutar berkas media, yang mengakibatkan terjadinya eror.",
+        "errorGenericMedia": "Terjadi masalah yang tidak diketahui pada media.",
+        "errorNetwork": "Terjadi kesalahan pada jaringan yang menyebabkan media gagal dimuat, meskipun anteriormente berhasil.",
+        "errorNotSupported": "Berkas media atau objek penyedia media tidak didukung."
       },
-      "onboarding": {
-        "defaultConfirm": {
-          "cancel": "Cancelar",
-          "confirm": "Usar configuração padrão",
-          "description": "A configuração padrão não possui os melhores streams e pode ser insuportavelmente lenta.",
-          "title": "Você tem certeza?"
+      "homeButton": "Voltar para o início",
+      "text": "Ocorreu um erro ao tentar reproduzir a mídia. Por favor, tente novamente.",
+      "title": "Falha ao reproduzir vídeo!"
+    },
+    "scraping": {
+      "extensionFailure": {
+        "badge": "Extensão desativada",
+        "enableExtension": "Ativar extensão",
+        "homeButton": "Ir para o início",
+        "text": "Você instalou a extensão Basement. Para começar a usá-la, você precisa ativar a extensão neste site.",
+        "title": "Por favor, ative a extensão"
+      },
+      "items": {
+        "failure": "Ocorreu um erro",
+        "notFound": "Não tem o vídeo",
+        "pending": "Verificando vídeos..."
+      },
+      "notFound": {
+        "badge": "Não encontrado",
+        "detailsButton": "Mostrar detalhes",
+        "homeButton": "Ir para o início",
+        "text": "Procuramos em nossos provedores e não conseguimos encontrar a mídia que você está procurando! Não hospedamos a mídia e não temos controle sobre o que está disponível. Por favor, clique em 'Mostrar detalhes' abaixo para mais informações.",
+        "title": "Não conseguimos encontrar isso"
+      }
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "{{timeLeft}} restantes • Terminar às {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    },
+    "turnstile": {
+      "description": "Por favor, confirme que você é um humano completando o Captcha à direita. Isso é para manter Basement seguro!",
+      "error": "Falha ao verificar sua humanidade. Por favor, tente novamente.",
+      "title": "Precisamos verificar se você é humano.",
+      "verifyingHumanity": "Verificando sua humanidade..."
+    }
+  },
+  "screens": {
+    "legal": {
+      "title": "Legal / DMCA"
+    },
+    "loadingApp": "Memuat aplikasi",
+    "loadingUser": "Memuat profil anda",
+    "loadingUserError": {
+      "logout": "Sair",
+      "reset": "Resetar servidor personalizado",
+      "text": "Falha ao carregar seu perfil",
+      "textWithReset": "Falha ao carregar seu perfil do servidor personalizado escolhido, deseja voltar para o servidor padrão?"
+    },
+    "migration": {
+      "failed": "Falha ao migrar seus dados.",
+      "inProgress": "Por favor aguarde, estamos migrando seus dados. Isso não deve demorar muito."
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "deviceNameLabel": "Nome do dispositivo",
+        "deviceNamePlaceholder": "Telefone pessoal",
+        "editProfile": "Editar",
+        "logoutButton": "Sair"
+      },
+      "actions": {
+        "delete": {
+          "button": "Excluir conta",
+          "confirmButton": "Excluir conta",
+          "confirmDescription": "Você tem certeza de que deseja excluir sua conta? Todos os seus dados serão perdidos!",
+          "confirmTitle": "Você tem certeza?",
+          "text": "Esta ação é irreversível. Todos os dados serão excluídos e nada poderá ser recuperado.",
+          "title": "Excluir conta"
         },
-        "extension": {
-          "back": "Voltar",
-          "explainer": "Usando a extensão de navegador, você pode obter os melhores streams que temos a oferecer. Com apenas uma simples instalação.",
-          "explainerIos": "Infelizmente, a extensão de navegador não é suportado no iOS. Pressione <bold>Voltar</bold> para escolher outra opção.",
-          "extensionHelp": "Se você instalou a extensão mas ela não foi detectada, <bold>abra a extensão através do menu de extensões do seu navegador</bold> e siga as instruções na tela.",
-          "linkChrome": "Instalar extensão do Chrome",
-          "linkFirefox": "Instalar extensão do Firefox",
-          "notDetecting": "Instalou no Chrome, mas o site não está detectando? Tente recarregar a página!",
-          "notDetectingAction": "Recarregar página",
-          "status": {
-            "disallowed": "A extensão não está ativada para esta página",
-            "disallowedAction": "Ativar extensão",
-            "failed": "Falha ao solicitar status",
-            "loading": "Aguardando que você instale a extensão",
-            "outdated": "A versão da extensão é muito antiga",
-            "success": "A extensão está funcionado como esperado!"
-          },
-          "submit": "Continuar",
-          "title": "Vamos começar com uma extensão"
-        },
-        "proxy": {
-          "back": "Voltar",
-          "explainer": "Com o método proxy, você pode obter streams de ótima qualidade criando um proxy de autoatendimento.",
-          "input": {
-            "errorConnection": "Não foi possível conectar ao proxy",
-            "errorInvalidUrl": "Não é uma URL válida",
-            "errorNotProxy": "Esperava um proxy, mas recebi um site",
-            "label": "URL do Proxy",
-            "placeholder": "https://"
-          },
-          "link": "Aprenda como criar um proxy",
-          "submit": "Enviar proxy",
-          "title": "Vamos preparar um novo proxy"
-        },
-        "start": {
-          "explainer": "Para obter os melhores streams possíveis, você precisará escolher qual método de streaming deseja usar.",
-          "options": {
-            "default": {
-              "text": "Eu não quero streams de boa qualidade, <0 /> <1>use a configuração padrão</1>"
-            },
-            "extension": {
-              "action": "Instalar extensão",
-              "description": "Instale a extensão para navegador e tenha acesso a fontes adicionais! Lembre-se de ativá-la para este site.",
-              "quality": "Melhor qualidade",
-              "title": "Extensão de navegador"
-            },
-            "proxy": {
-              "action": "Configurar proxy",
-              "description": "Configure um proxy gratuito em apenas 5 minutos! Melhora a confiabilidade do carregamento!",
-              "quality": "Boa qualidade",
-              "title": "Proxy personalizado"
-            },
-            //
-            "start": {
-              "explainer": "Para obter os melhores streams possíveis, você precisará escolher qual método de streaming deseja usar.",
-              "options": {
-                "default": {
-                  "text": "Eu não quero streams de boa qualidade, <0 /> <1>use a configuração padrão</1>"
-                },
-                "extension": {
-                  "action": "Instalar extensão",
-                  "description": "Instale a extensão para navegador e tenha acesso a fontes adicionais! Lembre-se de ativá-la para este site.",
-                  "quality": "Melhor qualidade",
-                  "title": "Extensão de navegador"
-                },
-                "proxy": {
-                  "action": "Configurar proxy",
-                  "description": "Configure um proxy gratuito em apenas 5 minutos! Melhora a confiabilidade do carregamento!",
-                  "quality": "Boa qualidade",
-                  "title": "Proxy personalizado"
-                },
-                "or": "ou"
-              },
-              "title": "Vamos juntos configurar o Basement",
-              "moreInfo": {
-                "explainer": {
-                  "intro": "O Basement não hospeda vídeos. Ele depende de sites de terceiros para o conteúdo, então você precisa escolher como ele se conecta a esses sites.",
-                  "proxyDescription": "O proxy extrai mídia de outros sites. Ele contorna as restrições do navegador (como o CORS) para permitir a extração.",
-                  "extension": "1. Extenção",
-                  "fedapi": {
-                    "fedapiDescription": "Use sua própria conta Febbox GRÁTIS para ter acesso à API FED (Privada), a melhor fonte com qualidade 4K, Dolby Atmos, opção para pular a introdução e os tempos de carregamento mais rápidos! Opção altamente recomendada!",
-                    "fedapi": "Adicional: Token da API FED (Privado)"
-                  },
-                  "options": "Suas opções:",
-                  "extensionDescription": "A extensão te dá acesso ao maior número de fontes. Ela atua como um proxy local e consegue lidar com sites que precisam de cookies ou cabeçalhos especiais para carregar.",
-                  "proxy": "2. Proxy",
-                  "default": "3. Configuração padrão",
-                  "defaultDescription": "Usa o proxy embutido do Basement. É a opção mais fácil, mas pode ser mais lento devido à largura de banda compartilhada.",
-                  "outro": "Se tiver mais dúvidas sobre como isto funciona, sinta-se à vontade para perguntar no servidor do <0>Basement Discord</0>!"
-                },
-                "button": "Mais informação",
-                "title": "Entendendo a configuração",
-                "recommended": {
-                  "title": "Sem certeza do quê escolher?",
-                  "subtitle": "Configurações recomendadas:",
-                  "desktop": {
-                    "title": "Desktop:",
-                    "description": "Extensão + API FED (Privada)"
-                  },
-                  "iOS": {
-                    "title": "iOS:",
-                    "description": "Proxy Personalizado + API FED (Privada)"
-                  },
-                  "android": {
-                    "title": "Android:",
-                    "description": "Extensão + API FED (Privada)"
-                  }
-                }
-              }
-=======
-        "or": "ou"
-            },
-            "title": "Vamos juntos configurar o Basement",
-            "moreInfo": {
-              "explainer": {
-                "intro": "O Basement não hospeda vídeos. Ele depende de sites de terceiros para o conteúdo, então você precisa escolher como ele se conecta a esses sites.",
-                "proxyDescription": "O proxy extrai mídia de outros sites. Ele contorna as restrições do navegador (como o CORS) para permitir a extração.",
-                "extension": "1. Extenção",
-                "fedapi": {
-                  "fedapiDescription": "Use sua própria conta Febbox GRÁTIS para ter acesso à API FED (Privada), a melhor fonte com qualidade 4K, Dolby Atmos, opção para pular a introdução e os tempos de carregamento mais rápidos! Opção altamente recomendada!",
-                  "fedapi": "Adicional: Token da API FED (Privado)"
-                },
-                "options": "Suas opções:",
-                "extensionDescription": "A extensão te dá acesso ao maior número de fontes. Ela atua como um proxy local e consegue lidar com sites que precisam de cookies ou cabeçalhos especiais para carregar.",
-                "proxy": "2. Proxy",
-                "default": "3. Configuração padrão",
-                "defaultDescription": "Usa o proxy embutido do Basement. É a opção mais fácil, mas pode ser mais lento devido à largura de banda compartilhada.",
-                "outro": "Se tiver mais dúvidas sobre como isto funciona, sinta-se à vontade para perguntar no servidor do <0>Basement Fluxer</0>!"
-              },
-              "button": "Mais informação",
-              "title": "Entendendo a configuração",
-              "recommended": {
-                "title": "Sem certeza do quê escolher?",
-                "subtitle": "Configurações recomendadas:",
-                "desktop": {
-                  "title": "Desktop:",
-                  "description": "Extensão + API FED (Privada)"
-                },
-                "iOS": {
-                  "title": "iOS:",
-                  "description": "Proxy Personalizado + API FED (Privada)"
-                },
-                "android": {
-                  "title": "Android:",
-                  "description": "Extensão + API FED (Privada)"
-                }
-                //
-              }
-            }
-          }
-        },
-        "overlays": {
-          "close": "Fechar"
-        },
-        "player": {
-          "back": {
-            "default": "Voltar para o início",
-            "short": "Voltar"
-          },
-          "casting": {
-            "enabled": "Transmitindo para o dispositivo..."
-          },
-          "menus": {
-            "downloads": {
-              "copyHlsPlaylist": "Copiar link da playlist HLS",
-              "disclaimer": "Os downloads são feitos diretamente do provedor. Basement não tem controle sobre como os downloads são fornecidos.",
-              "downloadSubtitle": "Baixar legenda atual",
-              "downloadVideo": "Baixar vídeo",
-              "hlsDisclaimer": "Os downloads são feitos diretamente do provedor. Basement não tem controle sobre como os downloads são fornecidos.<br /><br />Por favor, note que você está baixando uma playlist HLS, <bold>isso é destinado para usuários familiarizados com streaming multimídia avançado.</bold>. Experimente outras fontes para formatos diferentes.",
-              "onAndroid": {
-                "1": "Para baixar no Android, clique no botão de download e, na nova página, <bold>toque e segure</bold> no vídeo, depois selecione <bold>salvar</bold>.",
-                "shortTitle": "Baixar / Android",
-                "title": "Baixando no Android"
-              },
-              "onIos": {
-                "1": "Para baixar no iOS, clique no botão de download e, na nova página, clique em <bold><ios_share /></bold>, depois em <bold>Salvar em Arquivos <ios_files /></bold>.",
-                "shortTitle": "Baixar / iOS",
-                "title": "Baixando no iOS"
-              },
-              //
-              "menus": {
-                "downloads": {
-                  "copyHlsPlaylist": "Copiar link da playlist HLS",
-                  "disclaimer": "Os downloads são feitos diretamente do provedor. Basement não tem controle sobre como os downloads são fornecidos.",
-                  "downloadSubtitle": "Baixar legenda atual",
-                  "downloadVideo": "Baixar vídeo",
-                  "hlsDisclaimer": "Os downloads são feitos diretamente do provedor. Basement não tem controle sobre como os downloads são fornecidos.<br /><br />Por favor, note que você está baixando uma playlist HLS, <bold>isso é destinado para usuários familiarizados com streaming multimídia avançado.</bold>. Experimente outras fontes para formatos diferentes.",
-                  "onAndroid": {
-                    "1": "Para baixar no Android, clique no botão de download e, na nova página, <bold>toque e segure</bold> no vídeo, depois selecione <bold>salvar</bold>.",
-                    "shortTitle": "Baixar / Android",
-                    "title": "Baixando no Android"
-                  },
-                  "onIos": {
-                    "1": "Para baixar no iOS, clique no botão de download e, na nova página, clique em <bold><ios_share /></bold>, depois em <bold>Salvar em Arquivos <ios_files /></bold>.",
-                    "shortTitle": "Baixar / iOS",
-                    "title": "Baixando no iOS"
-                  },
-                  "onPc": {
-                    "1": "No PC, clique no botão de download e, na nova página, clique com o botão direito do mouse no vídeo e selecione <bold>Salvar vídeo como</bold>",
-                    "shortTitle": "Baixar / PC",
-                    "title": "Baixando no PC"
-                  },
-                  "title": "Baixar",
-                  "button": "Tentar download",
-                  "hlsDownloader": "Ou, acesse o site <0>hls downloader website</0> e cole a URL da playlist abaixo."
-                },
-                "episodes": {
-                  "button": "Episódios",
-                  "emptyState": "Não há episódios nesta temporada, volte mais tarde!",
-                  "episodeBadge": "E{{episode}}",
-                  "loadingError": "Erro ao carregar temporada",
-                  "loadingList": "Carregando...",
-                  "loadingTitle": "Carregando...",
-                  "unairedEpisodes": "Um ou mais episódios nesta temporada foram desabilitados porque ainda não foram ao ar.",
-                  "showMore": "Mais",
-                  "showLess": "Menos",
-                  "seasons": "Temporadas"
-                },
-                "playback": {
-                  "speedLabel": "Velocidade de reprodução",
-                  "title": "Configurações de reprodução",
-                  "disabled": "Desativado no modo Watch Party"
-                },
-                "quality": {
-                  "automaticLabel": "Qualidade automática",
-                  "hint": "Você pode tentar <0>trocar de fonte</0> para obter diferentes opções de qualidade.",
-                  "iosNoQuality": "Devido a limitações definidas pela Apple, a seleção de qualidade não está disponível no iOS para esta fonte. Você pode tentar <0>trocar para outra fonte</0> para obter diferentes opções de qualidade.",
-                  "title": "Qualidade",
-                  "auto": "Automático"
-                },
-                "settings": {
-                  "audioItem": "Áudio",
-                  "downloadItem": "Baixar",
-                  "enableSubtitles": "Ativar Legendas",
-                  "experienceSection": "Experiência de visualização",
-                  "playbackItem": "Configurações de reprodução",
-                  "qualityItem": "Qualidade",
-                  "sourceItem": "Fonte",
-                  "subtitleItem": "Legendas",
-                  "videoSection": "Configurações de vídeo"
-                },
-                "sources": {
-                  "failed": {
-                    "text": "Houve um erro ao tentar encontrar vídeos, por favor, tente uma fonte diferente.",
-                    "title": "Falha ao raspar"
-                  },
-                  "noEmbeds": {
-                    "text": "Não conseguimos encontrar nenhum incorporado, por favor, tente uma fonte diferente.",
-                    "title": "Nenhum incorporado encontrado"
-                  },
-                  "noStream": {
-                    "text": "Esta fonte não tem transmissões para este filme ou série.",
-                    "title": "Sem transmissão"
-                  },
-                  "title": "Fontes",
-                  "unknownOption": "Desconhecido",
-                  "editOrder": "Editar ordem"
-                },
-                "subtitles": {
-                  "customChoice": "Solte ou faça upload do arquivo",
-                  "customizeLabel": "Personalizar",
-                  "dropSubtitleFile": "Solte o arquivo da legenda aqui",
-                  "offChoice": "Desativadas",
-                  "settings": {
-                    "backlink": "Legendas personalizadas",
-                    "delay": "Atraso da legenda",
-                    "fixCapitals": "Corrigir letras maiúsculas"
-                  },
-                  "title": "Legendas",
-                  "unknownLanguage": "Desconhecido",
-                  "onChoice": "Ativado",
-                  "SourceChoice": "Fonte das legendas",
-                  "OpenSubtitlesChoice": "OpenSubtitles"
-                }
-=======
-        "onPc": {
-                  "1": "No PC, clique no botão de download e, na nova página, clique com o botão direito do mouse no vídeo e selecione <bold>Salvar vídeo como</bold>",
-                  "shortTitle": "Baixar / PC",
-                  "title": "Baixando no PC"
-                  //
-                },
-                "title": "Baixar",
-                "button": "Tentar download",
-                "hlsDownloader": "Ou, acesse o site <0>hls downloader website</0> e cole a URL da playlist abaixo."
-              },
-              "episodes": {
-                "button": "Episódios",
-                "emptyState": "Não há episódios nesta temporada, volte mais tarde!",
-                "episodeBadge": "E{{episode}}",
-                "loadingError": "Erro ao carregar temporada",
-                "loadingList": "Carregando...",
-                "loadingTitle": "Carregando...",
-                "unairedEpisodes": "Um ou mais episódios nesta temporada foram desabilitados porque ainda não foram ao ar.",
-                "showMore": "Mais",
-                "showLess": "Menos",
-                "seasons": "Temporadas"
-              },
-              "playback": {
-                "speedLabel": "Velocidade de reprodução",
-                "title": "Configurações de reprodução",
-                "disabled": "Desativado no modo Watch Party"
-              },
-              "quality": {
-                "automaticLabel": "Qualidade automática",
-                "hint": "Você pode tentar <0>trocar de fonte</0> para obter diferentes opções de qualidade.",
-                "iosNoQuality": "Devido a limitações definidas pela Apple, a seleção de qualidade não está disponível no iOS para esta fonte. Você pode tentar <0>trocar para outra fonte</0> para obter diferentes opções de qualidade.",
-                "title": "Qualidade",
-                "auto": "Automático"
-              },
-              "settings": {
-                "audioItem": "Áudio",
-                "downloadItem": "Baixar",
-                "enableSubtitles": "Ativar Legendas",
-                "experienceSection": "Experiência de visualização",
-                "playbackItem": "Configurações de reprodução",
-                "qualityItem": "Qualidade",
-                "sourceItem": "Fonte",
-                "subtitleItem": "Legendas",
-                "videoSection": "Configurações de vídeo"
-              },
-              "sources": {
-                "failed": {
-                  "text": "Houve um erro ao tentar encontrar vídeos, por favor, tente uma fonte diferente.",
-                  "title": "Falha ao raspar"
-                },
-                "noEmbeds": {
-                  "text": "Não conseguimos encontrar nenhum incorporado, por favor, tente uma fonte diferente.",
-                  "title": "Nenhum incorporado encontrado"
-                },
-                "noStream": {
-                  "text": "Esta fonte não tem transmissões para este filme ou série.",
-                  "title": "Sem transmissão"
-                },
-                //
-                "scraping": {
-                  "extensionFailure": {
-                    "badge": "Extensão desativada",
-                    "enableExtension": "Ativar extensão",
-                    "homeButton": "Ir para o início",
-                    "text": "Você instalou a extensão Basement. Para começar a usá-la, você precisa ativar a extensão neste site.",
-                    "title": "Por favor, ative a extensão"
-                  },
-                  "items": {
-                    "failure": "Ocorreu um erro",
-                    "notFound": "Não tem o vídeo",
-                    "pending": "Verificando vídeos..."
-                  },
-                  "notFound": {
-                    "badge": "Não encontrado",
-                    "detailsButton": "Mostrar detalhes",
-                    "homeButton": "Ir para o início",
-                    "text": "Procuramos em nossos provedores e não conseguimos encontrar a mídia que você está procurando! Não hospedamos a mídia e não temos controle sobre o que está disponível. Por favor, clique em 'Mostrar detalhes' abaixo para mais informações.",
-                    "title": "Não conseguimos encontrar isso"
-                  }
-                },
-                "time": {
-                  "regular": "{{timeWatched}} / {{duration}}",
-                  "remaining": "{{timeLeft}} restantes • Terminar às {{timeFinished, datetime}}",
-                  "shortRegular": "{{timeWatched}}",
-                  "shortRemaining": "-{{timeLeft}}"
-                },
-                "turnstile": {
-                  "description": "Por favor, confirme que você é um humano completando o Captcha à direita. Isso é para manter Basement seguro!",
-                  "error": "Falha ao verificar sua humanidade. Por favor, tente novamente.",
-                  "title": "Precisamos verificar se você é humano.",
-                  "verifyingHumanity": "Verificando sua humanidade..."
-                }
-=======
-        "title": "Fontes",
-                "unknownOption": "Desconhecido",
-                "editOrder": "Editar ordem"
-              },
-              "subtitles": {
-                "customChoice": "Solte ou faça upload do arquivo",
-                "customizeLabel": "Personalizar",
-                "dropSubtitleFile": "Solte o arquivo da legenda aqui",
-                "offChoice": "Desativadas",
-                "settings": {
-                  "backlink": "Legendas personalizadas",
-                  "delay": "Atraso da legenda",
-                  "fixCapitals": "Corrigir letras maiúsculas"
-                },
-                "title": "Legendas",
-                "unknownLanguage": "Desconhecido",
-                "onChoice": "Ativado",
-                "SourceChoice": "Fonte das legendas",
-                "OpenSubtitlesChoice": "OpenSubtitles"
-              }
-              //
-            },
-            "metadata": {
-              "api": {
-                "text": "Não foi possível carregar os metadados da API. Por favor, verifique sua conexão com a internet.",
-                "title": "Falha ao carregar os metadados da API"
-              },
-              "legal": {
-                "badge": "Removido",
-                "text": "Esta mídia não está mais disponível devido a um aviso de remoção ou reivindicação de direitos autorais.",
-                "title": "A mídia foi removida"
-              },
-              "extensionPermission": {
-                "badge": "Permissão Pendente",
-                "button": "Usar extensão",
-                "text": "Você possui a extensão de navegador, mas nós precisamos de sua permissão para começar a usá-la.",
-                "title": "Configure a extensão"
-              },
-              "failed": {
-                "badge": "Falhou",
-                "homeButton": "Ir para o início",
-                "text": "Não foi possível carregar os metadados da mídia do TMDB. Por favor, verifique se o TMDB está fora do ar ou bloqueado na sua conexão de internet.",
-                "title": "Falha ao carregar metadados"
-              },
-              "notFound": {
-                "badge": "Não encontrado",
-                "homeButton": "Voltar para o início",
-                "text": "Não conseguimos encontrar a mídia que você solicitou. Ou ela foi removida ou você alterou o URL.",
-                "title": "Não conseguimos encontrar essa mídia."
-              }
-            },
-            "nextEpisode": {
-              "next": "Próximo episódio"
-            },
-            "playbackError": {
-              "badge": "Erro de reprodução",
-              "errors": {
-                "errorAborted": "A busca pela mídia foi abortada a pedido do usuário.",
-                "errorDecode": "Apesar de ter sido previamente determinado como utilizável, ocorreu um erro ao tentar decodificar o recurso de mídia, resultando em um erro.",
-                "errorGenericMedia": "Ocorreu um erro desconhecido de mídia.",
-                "errorNetwork": "Ocorreu algum tipo de erro de rede que impediu a mídia de ser buscada com sucesso, apesar de ter sido previamente disponível.",
-                "errorNotSupported": "A mídia ou objeto do provedor de mídia não é suportado."
-              },
-              "homeButton": "Ir para o início",
-              "text": "Houve um erro ao tentar reproduzir a mídia. Por favor, tente novamente.",
-              "title": "Falha ao reproduzir o vídeo!"
-            },
-            "scraping": {
-              "extensionFailure": {
-                "badge": "Extensão desativada",
-                "enableExtension": "Ativar extensão",
-                "homeButton": "Ir para o início",
-                "text": "Você instalou a extensão Basement. Para começar a usá-la, você precisa ativar a extensão neste site.",
-                "title": "Por favor, ative a extensão"
-              },
-              "items": {
-                "failure": "Ocorreu um erro",
-                "notFound": "Não tem o vídeo",
-                "pending": "Verificando vídeos..."
-              },
-              "notFound": {
-                "badge": "Não encontrado",
-                "detailsButton": "Mostrar detalhes",
-                "homeButton": "Ir para o início",
-                "text": "Procuramos em nossos provedores e não conseguimos encontrar a mídia que você está procurando! Não hospedamos a mídia e não temos controle sobre o que está disponível. Por favor, clique em 'Mostrar detalhes' abaixo para mais informações.",
-                "title": "Não conseguimos encontrar isso"
-              }
-            },
-            "time": {
-              "regular": "{{timeWatched}} / {{duration}}",
-              "remaining": "{{timeLeft}} restantes • Terminar às {{timeFinished, datetime}}",
-              "shortRegular": "{{timeWatched}}",
-              "shortRemaining": "-{{timeLeft}}"
-            },
-            "turnstile": {
-              "description": "Por favor, confirme que você é um humano completando o Captcha à direita. Isso é para manter Basement seguro!",
-              "error": "Falha ao verificar sua humanidade. Por favor, tente novamente.",
-              "title": "Precisamos verificar se você é humano.",
-              "verifyingHumanity": "Verificando sua humanidade..."
-            }
-          },
-          "screens": {
-            "legal": {
-              "title": "Legal / DMCA"
-            },
-            "loadingApp": "Carregando aplicativo",
-            "loadingUser": "Carregando seu perfil",
-            "loadingUserError": {
-              "logout": "Sair",
-              "reset": "Redefinir servidor personalizado",
-              "text": "Falha ao carregar seu perfil",
-              "textWithReset": "Falha ao carregar seu perfil do seu servidor personalizado, deseja redefinir para o servidor padrão?"
-            },
-            "migration": {
-              "failed": "Falha ao migrar seus dados.",
-              "inProgress": "Por favor, aguarde, estamos migrando seus dados. Isso não deve demorar muito."
-            }
-          },
-          "settings": {
-            "account": {
-              "accountDetails": {
-                "deviceNameLabel": "Nome do dispositivo",
-                "deviceNamePlaceholder": "Telefone pessoal",
-                "editProfile": "Editar",
-                "logoutButton": "Sair"
-              },
-              "actions": {
-                "delete": {
-                  "button": "Excluir conta",
-                  "confirmButton": "Excluir conta",
-                  "confirmDescription": "Você tem certeza de que deseja excluir sua conta? Todos os seus dados serão perdidos!",
-                  "confirmTitle": "Você tem certeza?",
-                  "text": "Esta ação é irreversível. Todos os dados serão excluídos e nada poderá ser recuperado.",
-                  "title": "Excluir conta"
-                },
-                "title": "Ações",
-                "logoutAllDevices": {
-                  "title": "Encerrar todas as sessões",
-                  "text": "Isso irá desconectar você de todos os dispositivos vinculados à sua conta.",
-                  "button": "Sair de todos os dispositivos"
-                }
-              },
-              "devices": {
-                "deviceNameLabel": "Nome do dispositivo",
-                "failed": "Falha ao carregar sessões",
-                "removeDevice": "Remover",
-                "title": "Dispositivos"
-              },
-              "profile": {
-                "finish": "Finalizar edição",
-                "firstColor": "Cor do perfil um",
-                "secondColor": "Cor do perfil dois",
-                "title": "Editar foto de perfil",
-                "userIcon": "Ícone do usuário"
-              },
-              "register": {
-                "cta": "Começar",
-                "text": "Compartilhe seu progresso de visualização entre dispositivos e mantenha-os sincronizados.",
-                "title": "Sincronizar com a nuvem"
-              },
-              "title": "Conta"
-            },
-            "appearance": {
-              "activeTheme": "Ativo",
-              "themes": {
-                "blue": "Azul",
-                "default": "Padrão",
-                "gray": "Cinza",
-                "red": "Vermelho",
-                "teal": "Verde-azulado"
-              },
-              "title": "Aparência"
-            },
-            "connections": {
-              "server": {
-                "description": "Se você deseja se conectar a um backend personalizado para armazenar seus dados, ative isso e forneça a URL. <0>Instruções.</0>",
-                "label": "Servidor personalizado",
-                "urlLabel": "URL do servidor personalizado"
-              },
-              "setup": {
-                "doSetup": "Configurar",
-                "errorStatus": {
-                  "description": "Parece que um ou mais itens nesta configuração necessitam sua atenção.",
-                  "title": "Algo necessita de sua atenção"
-                },
-                "itemError": "Há algo errado com esta configuração. Realize uma nova configuração para corrigir.",
-                "items": {
-                  "default": "Configuração padrão",
-                  "extension": "Extensão",
-                  "proxy": "Proxy personalizado"
-                },
-                "redoSetup": "Refazer configuração",
-                "successStatus": {
-                  "description": "Tudo está pronto para você começar a assistir sua mídia favorita.",
-                  "title": "Está tudo pronto!"
-                },
-                "unsetStatus": {
-                  "description": "Por favor, clique no botão à direita para iniciar a configuração.",
-                  "title": "Você não realizou a configuração"
-                }
-              },
-              "title": "Conexões",
-              "workers": {
-                "addButton": "Adicionar novo worker",
-                "description": "Para fazer o aplicativo funcionar, todo o tráfego é roteado através de proxies. Ative isso se você quiser trazer seus próprios workers. <0>Instruções.</0>",
-                "emptyState": "Ainda não há workers, adicione um abaixo",
-                "label": "Usar proxy workers personalizados",
-                "urlLabel": "URLs dos workers",
-                "urlPlaceholder": "https://"
-              }
-            },
-            "preferences": {
-              "language": "Idioma do aplicativo",
-              "languageDescription": "Idioma aplicado para todo o aplicativo.",
-              "thumbnail": "Gerar miniaturas",
-              "thumbnailDescription": "Na maior parte do tempo, os vídeos não possuem miniaturas. Você pode ativar esta configuração para gerá-las dinamicamente, mas elas podem tornar seu vídeo mais lento.",
-              "thumbnailLabel": "Gerar miniaturas",
-              "title": "Preferências"
-            },
-            "reset": "Redefinir",
-            "save": "Salvar",
-            "sidebar": {
-              "info": {
-                "appVersion": "Versão do aplicativo",
-                "backendUrl": "URL do backend",
-                "backendVersion": "Versão do backend",
-                "hostname": "Nome do host",
-                "insecure": "Inseguro",
-                "notLoggedIn": "Você não está logado",
-                "secure": "Seguro",
-                "title": "Informações do aplicativo",
-                "unknownVersion": "Desconhecido",
-                "userId": "ID do usuário"
-              }
-            },
-            "subtitles": {
-              "backgroundBlurLabel": "Desfoque de fundo",
-              "backgroundLabel": "Opacidade do fundo",
-              "colorLabel": "Cor",
-              "previewQuote": "Eu não devo ter medo. Medo é o assassino da mente.",
-              "textSizeLabel": "Tamanho do texto",
-              "title": "Legendas"
-            },
-            "unsaved": "Você tem alterações não salvas"
-          },
-          "migration": {
-            "start": {
-              "explainer": "Se você deseja migrar ou fazer backup de seus dados, pode fazê-lo usando as opções abaixo. Isso permitirá que você mantenha seus dados ao trocar de servidores de backend.",
-              "options": {
-                "download": {
-                  "description": "Isto baixará seus dados para o seu dispositivo. Você pode então enviá-lo para o novo servidor ou apenas guardá-lo por segurança.",
-                  "title": "Baixar dados",
-                  "quality": "Mais técnico",
-                  "action": "Baixar dados"
-                },
-                "upload": {
-                  "description": "Faça o upload do seu arquivo de dados exportado anteriormente para restaurar seus favoritos e seu progresso nesta conta.",
-                  "title": "Upar dados",
-                  "quality": "Restaurar backup",
-                  "action": "Upar dados"
-                },
-                "or": "ou",
-                "direct": {
-                  "description": "Esta opção irá migrar seus dados para o novo servidor. Esta é a opção mais rápida. <br /><br />Esta opção permitirá que sua senha continue a mesma!",
-                  "title": "Migração direta",
-                  "quality": "Fácil e rápido",
-                  "action": "Transferir dados"
-                }
-              },
-              "title": "Migrar seus dados"
-            },
-            "download": {
-              "description": "Isto baixará seus dados para o seu dispositivo. Você pode então enviá-lo para o novo servidor ou apenas guardá-lo por segurança.",
-              "title": "Baixar dados",
-              "items": {
-                "description": "Download inclui:",
-                "bookmarks": "Mídias salvas",
-                "progress": "Progresso"
-              },
-              "status": {
-                "error": "Falha ao baixar seus dados. 😿",
-                "success": "Seus dados foram baixados com sucesso! 🎉"
-              },
-              "button": {
-                "download": "Baixar dados",
-                "home": "Página inicial",
-                "login": "Continuar com login"
-              }
-            },
-            //
-            "downtimeNotice": {
-              "message": "O Basement está enfrentando problemas com alguns provedores novamente. Se você não consegue encontrar ou reproduzir um programa, por favor, mude a fonte. É esperado que este erro persista durante os horários abaixo.",
-              "badge": "Problemas",
-              "goHome": "Ir para página inicial",
-              "title": "Problema com provedores"
-            }
-=======
-    "upload": {
-              "status": {
-                "error": "Falha ao upar seus dados. 😿",
-                "processing": "Processando dados...",
-                "success": "Seus dados foram upados com sucesso! 🎉"
-              },
-              "button": {
-                "success": "Importação completa",
-                "import": "Importar dados",
-                "processing": "Processando...",
-                "home": "Ir para o início"
-              },
-              "title": "Upar dados",
-              "file": {
-                "description": "Selecione o arquivo que você quer enviar",
-                "select": "Selecionar arquivo",
-                "change": "Mudar arquivo",
-                "name": "Nome do arquivo"
-              },
-              "dataPreview": "Preview:",
-              "items": {
-                "bookmarks": "Mídia salva",
-                "progress": "Progresso"
-              },
-              "exportedOn": "Exportado em"
-            },
-            "loginRequired": "Você precisa estar logado para migrar seus dados! Por favor, volte e faça o login para continuar.",
-            "direct": {
-              "title": "Migração direta",
-              "description": "Insira a URL do backend de destino para migrar os dados da sua conta atual para um novo backend. Isto mantém sua passphrase inalterada!",
-              "backendLabel": "URL de destino do backend",
-              "recaptchaLabel": "Chave ReCaptcha (Opcional)",
-              "toggleLable": "Precisa de ReCaptcha?",
-              "status": {
-                "error": "Falha ao migrar seus dados. 😿",
-                "success": "Seus dados foram migrados com sucesso! 🎉"
-              },
-              "button": {
-                "migrate": "Migrar",
-                "processing": "Processando...",
-                "home": "Página inicial",
-                "login": "Continuar com login"
-              }
-            },
-            "back": "Voltar"
-          },
-          "details": {
-            "imdb": "Ver no IMDb",
-            "language": "Idioma:",
-            "votes": "votos",
-            "tmdb": "Ver no TMDB",
-            "episodes": "Episódios",
-            "seasons": "Temporada(s)",
-            "season": "Temporada",
-            "episode": "Episódio",
-            "airs": "Lançamento",
-            "endsAt": "Termina em {{time}}",
-            "trailer": "Trailer",
-            "runtime": "Tempo de execução:",
-            "rating": "Rating:",
-            "resume": "Continuar",
-            "play": "Play",
-            "releaseDate": "Data de lançamento:"
-          },
-          "downtimeNotice": {
-            "message": "O Basement está enfrentando problemas com alguns provedores novamente. Se você não consegue encontrar ou reproduzir um programa, por favor, mude a fonte. É esperado que este erro persista durante os horários abaixo.",
-            "badge": "Problemas",
-            "goHome": "Ir para página inicial",
-            "title": "Problema com provedores"
-          }
-          //
+        "title": "Ações",
+        "logoutAllDevices": {
+          "title": "Encerrar todas as sessões",
+          "text": "Isso desconectará você de todos os dispositivos conectados à sua conta.",
+          "button": "Sair de todos os dispositivos"
         }
+      },
+      "devices": {
+        "deviceNameLabel": "Nome do dispositivo",
+        "failed": "Falha ao carregar sessões",
+        "removeDevice": "Remover",
+        "title": "Dispositivos"
+      },
+      "profile": {
+        "finish": "Concluir edição",
+        "firstColor": "Primeira cor do perfil",
+        "secondColor": "Segunda cor do perfil",
+        "title": "Editar foto de perfil",
+        "userIcon": "Ícone do usuário"
+      },
+      "register": {
+        "cta": "Começar",
+        "text": "Compartilhe e sincronize seu progresso entre dispositivos.",
+        "title": "Sincronizar com a nuvem"
+      },
+      "title": "Conta",
+      "admin": {
+        "title": "Painel de Administração",
+        "text": "Use ferramentas projetadas para testar o estado do Basement.",
+        "button": "Ver"
+      }
+    },
+    "appearance": {
+      "activeTheme": "Ativo",
+      "themes": {
+        "blue": "Azul",
+        "default": "Padrão",
+        "gray": "Cinza",
+        "red": "Vermelho",
+        "teal": "Ciano",
+        "classic": "Clássico",
+        "green": "Verde",
+        "mocha": "Mocha",
+        "pink": "Rosa"
+      },
+      "title": "Aparência"
+    },
+    "connections": {
+      "server": {
+        "description": "Se você quiser se conectar a um backend personalizado para armazenar seus dados, ative isso e forneça a URL. <0>Instruções.</0>",
+        "label": "Servidor personalizado",
+        "urlLabel": "URL do servidor personalizado"
+      },
+      "setup": {
+        "doSetup": "Fazer configuração",
+        "errorStatus": {
+          "description": "Parece que um ou mais itens nesta configuração precisam de sua atenção.",
+          "title": "Algo precisa de atenção 😱"
+        },
+        "itemError": "Algo está errado com esta configuração, passe pela configuração novamente para corrigir.",
+        "items": {
+          "default": "Configuração padrão",
+          "extension": "Extensão",
+          "proxy": "Proxy personalizado"
+        },
+        "redoSetup": "Refazer configuração",
+        "successStatus": {
+          "description": "Tudo está pronto para você começar a assistir sua mídia favorita. (๑>◡<๑)",
+          "title": "Tudo configurado!"
+        },
+        "unsetStatus": {
+          "description": "Por favor, clique no botão à direita para iniciar o processo de configuração.",
+          "title": "Você não passou pela configuração"
+        }
+      },
+      "title": "Conexões",
+      "workers": {
+        "addButton": "Adicionar novo worker",
+        "description": "Para o aplicativo funcionar, todo o tráfego é roteado através de um proxy. Ative isso se quiser trazer seus próprios workers. <0>Instruções.</0>",
+        "emptyState": "Nenhum worker ainda (｡•́︿•̀｡), adicione um abaixo",
+        "label": "Usar workers de proxy personalizados",
+        "urlLabel": "URLs dos workers",
+        "urlPlaceholder": "https://"
+      }
+    },
+    "preferences": {
+      "language": "Idioma do aplicativo",
+      "languageDescription": "Idioma aplicado a todo o aplicativo.",
+      "thumbnail": "Gerar miniaturas",
+      "thumbnailDescription": "Na maioria das vezes, os vídeos não têm miniaturas. Você pode ativar essa configuração para gerá-las dinamicamente, mas elas podem tornar seu vídeo lento.",
+      "thumbnailLabel": "Gerar miniaturas",
+      "title": "Preferências",
+      "sourceOrderDescription": "Arraste e solte para reordenar as fontes. Isso determina a ordem em que as fontes são verificadas para a mídia que você deseja assistir. Se uma fonte estiver acinzentada, significa que não está disponível no seu dispositivo.",
+      "autoplay": "Reprodução automática",
+      "autoplayDescription": "Reproduz automaticamente o próximo episódio de uma série quando o atual termina. Pode ser ativado por usuários com a extensão, proxy personalizado ou configuração padrão se permitido pelo host.",
+      "autoplayLabel": "Reprodução automática",
+      "sourceOrder": "Ordem das fontes"
+    },
+    "reset": "Resetar",
+    "save": "Salvar",
+    "sidebar": {
+      "info": {
+        "appVersion": "Versão do aplicativo",
+        "backendUrl": "URL do Backend",
+        "backendVersion": "Versão do Backend",
+        "hostname": "Hostname",
+        "insecure": "Inseguro",
+        "notLoggedIn": "Não logado",
+        "secure": "Seguro",
+        "title": "Estatísticas do aplicativo (para nerds) 🤓",
+        "unknownVersion": "Versão desconhecida",
+        "userId": "ID do usuário"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurLabel": "Desfoque de fundo",
+      "backgroundLabel": "Opacidade do fundo",
+      "colorLabel": "Cor",
+      "previewQuote": "Não devo temer. O medo é o assassino da mente.",
+      "textSizeLabel": "Tamanho do texto",
+      "title": "Legendas",
+      "textBoldLabel": "Texto em negrito"
+    },
+    "unsaved": "Você tem alterações não salvas... ฅ^•ﻌ•^ฅ"
+  }
+}

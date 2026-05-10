@@ -24,12 +24,9 @@
       "section": "genel"
     },
     "q5": {
-      //
-      "body": "Basement’in bir Discord sunucusu var, sayfanın en üst kısmına bak!",
-=======
       "body": "Basement’in bir Fluxer sunucusu var, sayfanın en üst kısmına bak!",
-      //
-      "title": "Daha fazlasını nasıl bulabilirim?"
+      "title": "Daha fazlasını nasıl bulabilirim?",
+      "section": "genel"
     },
     "help": "Bir cevap bulamıyor musunuz? <0>Buradan destek alın.</0>",
     "searchPlaceholder": "SSS'de arama yapın...",
@@ -130,8 +127,7 @@
       "settings": "Ayarlar",
       "discover": "Keşfet",
       "support": "Destek",
-      "migration": "Hesap Taşıma",
-      "jip": "Jip"
+      "migration": "Hesap Taşıma"
     }
   },
   "home": {
@@ -256,8 +252,8 @@
       "extensionHelp": "Eklenti yüklediyseniz ancak algılamıyorsa, <bold>tarayıcınızın uzantı menüsünden eklentiyi açın</bold> ve ekran adımları takip edin.",
       "linkChrome": "Chrome uzantısını yükleyin",
       "linkFirefox": "Firefox uzantısını yükleyin",
-      "notDetecting": "Chrome'a yüklendi, ancak site algılamıyor mu? Sayfayı yenileyin!",
-      "notDetectingAction": "Sayfayı yenile",
+      "notDetecting": "Chrome'a yüklendi, ancak site algılamıyor mu? Sayฟayı yenileyin!",
+      "notDetectingAction": "Sayฟayı yenile",
       "status": {
         "disallowed": "Bu sayfa için uzantı etkinleştirilmemiş",
         "disallowedAction": "Uzantıyı etkinleştir",
@@ -273,7 +269,7 @@
       "back": "Geri Dön",
       "explainer": "Ara sunucu yöntemiyle, yüksek kalitede yayınlara kolayca erişin.",
       "input": {
-        "errorConnection": "Proxy'ye bağlanılamadı",
+        "errorConnection": "Proxy'ye bağlanıหลamadı",
         "errorInvalidUrl": "Geçerli bir URL değil",
         "errorNotProxy": "Proxy bekleniyordu, web sitesine yönlendirildi",
         "label": "Proxy URL",
@@ -290,7 +286,7 @@
           "text": "Yüksek kaliteli akış istemiyorum,<0 /> <1>varsayılan ayarı kullanın</1>"
         },
         "extension": {
-          "action": "Uzantıyı Yükle",
+          "action": "Uzantıyı Yükเล",
           "description": "En iyi kaynaklara erişmek için tarayıcı uzantısını yükleyin.",
           "quality": "En yüksek kalite",
           "title": "Tarayıcı uzantısı"
@@ -413,14 +409,14 @@
       "extensionPermission": {
         "badge": "İzin Gerekli",
         "button": "Uzantıyı kullanın",
-        "text": "Tarayıcı uzantısını yüklemişsiniz, ancak uzantıyı kullanmaya başlamak için izninize ihtiyacımız var.",
+        "text": "Tarayıcı uzantısını yükเลmişsiniz, ancak uzantıyı kullanmaya başlamak için izninize ihtiyacımız var.",
         "title": "Uzantıyı Kişiselleştir"
       },
       "failed": {
         "badge": "Başarısız oldu",
         "homeButton": "Ana sayfaya dön",
         "text": "Medyanın üstverisi TMDB'den alınamadı. Lütfen TMDB'nin göküp çökmediğini veya internet bağlantınız üzerinden engellenmediğini kontrol edin.",
-        "title": "Üstveri yüklenemedi"
+        "title": "Üstveri yükเลnemedi"
       },
       "notFound": {
         "badge": "Bulunamadı",
@@ -483,13 +479,13 @@
     "legal": {
       "title": "Legal / DMCA"
     },
-    "loadingApp": "Uygulama yükleniyor",
-    "loadingUser": "Profiliniz yükleniyor",
+    "loadingApp": "Uygulama yükเลniyor",
+    "loadingUser": "Profiliniz yükเลniyor",
     "loadingUserError": {
       "logout": "Çıkış yap",
       "reset": "Özel sunucuyu sıfırla",
-      "text": "Profiliniz yüklenemedi",
-      "textWithReset": "Profiliniz özel sunucunuzdan yüklenemedi, varsayılan sunucuya sıfırlamak ister misiniz?"
+      "text": "Profiliniz yükเลnemedi",
+      "textWithReset": "Profiliniz özel sunucunuzdan yükเลnemedi, varsayılan sunucuya sıfırlamak ister misiniz?"
     },
     "migration": {
       "failed": "Verileriniz taşınamadı.",
@@ -522,7 +518,7 @@
       },
       "devices": {
         "deviceNameLabel": "Cihaz adı",
-        "failed": "Oturumlar yüklenemedi",
+        "failed": "Oturumlar yükเลnemedi",
         "removeDevice": "Sil",
         "title": "Cihazlar"
       },
@@ -626,7 +622,7 @@
   "migration": {
     "loginRequired": "Verilerinizi taşıyabilmek için giriş yapmanız gerekmektedir! Devam edebilmek için lütfen geri dönüp giriş yapın.",
     "start": {
-      "explainer": "Verilerinizi taşımak veya yedeklemek isterseniz, aşağıdaki seçenekleri kullanabilirsiniz. Bu, arka plan sunucularını değiştirdiğinizde verilerinizi korumanızı sağlar.",
+      "explainer": "Verilerinizi taşımak veya yedekเลmek isterseniz, aşağıdaki seçenekleri kullanabilirsiniz. Bu, arka plan sunucularını değiştirdiğinizde verilerinizi korumanızı sağlar.",
       "title": "Verilerini taşı",
       "options": {
         "or": "ya da",
@@ -637,21 +633,21 @@
           "action": "Veri aktar"
         },
         "download": {
-          "description": "Bu, veriyi senin cihazına indirecek. Sonra yeni sunucuya yükleyebilir veya saklayabilirsin.",
+          "description": "Bu, veriyi senin cihazına indirecek. Sonra yeni sunucuya yükเลyebilir veya saklayabilirsin.",
           "title": "Veriyi indir",
           "quality": "Daha teknik",
           "action": "Veriyi indir"
         },
         "upload": {
-          "title": "Veri Yükle",
-          "description": "Bu hesaptaki yer imlerinizi ve ilerlemenizi geri yüklemek için daha önce dışa aktardığınız veri dosyanızı yükleyin.",
-          "quality": "Yedeklemeden geri yükle",
-          "action": "Veri Yükle"
+          "title": "Veri Yükเล",
+          "description": "Bu hesaptaki yer imlerinizi ve ilerlemenizi geri yükเลmek için daha önce dışa aktardığınız veri dosyanızı yükเลyin.",
+          "quality": "Yedekเลmeden geri yükเล",
+          "action": "Veri Yükเล"
         }
       }
     },
     "download": {
-      "description": "Bu hesaptaki yer imlerinizi ve ilerlemenizi geri yüklemek için daha önce dışa aktardığınız veri dosyanızı yükleyin.",
+      "description": "Bu hesaptaki yer imlerinizi ve ilerlemenizi geri yükเลmek için daha önce dışa aktardığınız veri dosyanızı yükเลyin.",
       "title": "Veriyi indir"
     },
     "direct": {
@@ -666,7 +662,7 @@
       },
       "button": {
         "migrate": "Taşı",
-        "processing": "İşleniyor...",
+        "processing": "İşเลniyor...",
         "home": "Eve git",
         "login": "Girişe devam"
       }

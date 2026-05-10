@@ -13,7 +13,7 @@
       "section": "Pencarian"
     },
     "q3": {
-      "body": "Hasil pencarian aplikasi ini menggunakan API milik The Movie Database (TMDB) dan menampilkan semua hasil pencarian terlepas dari apakah sumber media tersebut dapat ditemukan di penyedia pihak ketiga atau tidak.",
+      "body": "Hasil pencarian aplikasi ini menggunakan API milik The Movie Database (TMDB) e menampilkan semua hasil pencarian terlepas dari apakah sumber media tersebut dapat ditemukan di penyedia pihak ketiga atau tidak.",
       "title": "Hasil pencarian menampilkan serial televisi atau film yang saya cari, tapi mengapa saya tidak bisa memutarnya?",
       "section": "Pencarian"
     },
@@ -28,11 +28,7 @@
     "help": "Tidak dapat mencari jawaban? <0>Dapatkan dukungan di sini.</0>",
     "searchPlaceholder": "Pencarian FAQ...",
     "q6": {
-      //
-      "body": "Belum ada. Tapi bisa kamu install sebagai PWA (Progressive Web App). Pada IOS, menggunakan safari → Share → Tambahkan ke Home Screen. APK tersedia dalam Discord dan masih experiment, tidak direkomendasikan.",
-=======
       "body": "Belum ada. Tapi bisa kamu install sebagai PWA (Progressive Web App). Pada IOS, menggunakan safari → Share → Tambahkan ke Home Screen. APK tersedia dalam Fluxer dan masih experiment, tidak direkomendasikan.",
-      //
       "title": "Apakah ada aplikasi Basement?",
       "section": "Umum"
     },
@@ -63,11 +59,7 @@
     },
     "q5": {
       "title": "Bagaimana saya bisa mengetahui lebih lanjut?",
-      //
-      "body": "Basement memiliki Discord server yang bisa diakses melalui header dihalaman ini!",
-=======
       "body": "Basement memiliki Fluxer server yang bisa diakses melalui header dihalaman ini!",
-      //
       "section": "Umum"
     },
     "q7": {
@@ -297,6 +289,7 @@
         "placeholder": "https://"
       },
       "link": "Belajar cara membuat proxy",
+      "submit": "Proxy diserahkan",
       "title": "Mari buat proxy baru"
     },
     "start": {
@@ -314,9 +307,11 @@
         "proxy": {
           "action": "Atur proxy",
           "description": "Atur proxy dalam hanya 5 menit dan dapatkan akses ke sumber terbaik.",
-          "quality": "Kualitas baik"
+          "quality": "Kualitas baik",
+          "title": "Proxy khusus"
         }
-      }
+      },
+      "title": "Ayo siapkan Basement untuk Anda"
     }
   },
   "overlays": {
@@ -348,7 +343,7 @@
           "title": "Unduh di iOS"
         },
         "onPc": {
-          "1": "Untuk mengunduh di PC, klik tombol unduh, lalu di halaman baru klik kanan video, dan pilih <bold>Save video as</bold>",
+          "1": "Untuk mengunduh di PC, klik tombol unduh, lalu di halaman baru klik kanan video, e pilih <bold>Save video as</bold>",
           "shortTitle": "Unduh / PC",
           "title": "Unduh di PC"
         },
@@ -452,7 +447,7 @@
         "badge": "Tidak ditemukan",
         "detailsButton": "Lihat detail",
         "homeButton": "Kembali",
-        "text": "Kami sudah mencari ke semua penyedia yang kami miliki dan gagal menemukan media yang anda cari! Kami tidak menyimpan berkas media dan tidak memiliki kontrol atas apa yang tersedia. Periksa tombol 'Lihat detail' dibawah ini untuk informasi lebih lanjut.",
+        "text": "Kami sudah mencari ke semua penyedia yang kami miliki e gagal menemukan media yang anda cari! Kami tidak menyimpan berkas media e tidak memiliki kontrol atas apa yang tersedia. Periksa tombol 'Lihat detail' dibawah ini untuk informasi lebih lanjut.",
         "title": "Kami tidak dapat menemukannya"
       }
     },
@@ -494,7 +489,7 @@
           "confirmButton": "Hapus akun",
           "confirmDescription": "Apakah anda yakin ingin menghapus akun anda? Seluruh data anda akan hilang!",
           "confirmTitle": "Apakah anda yakin?",
-          "text": "Tindakan ini tidak dapat dibatalkan. Seluruh data akan dihapus dan tidak dapat dipulihkan.",
+          "text": "Tindakan ini tidak dapat dibatalkan. Seluruh data akan dihapus e tidak dapat dipulihkan.",
           "title": "Hapus akun"
         },
         "title": "Tindakan",
@@ -519,7 +514,7 @@
       },
       "register": {
         "cta": "Memulai",
-        "text": "Bagikan dan sinkronkan antar perangkat progres tontonan anda.",
+        "text": "Bagikan e sinkronkan antar perangkat progres tontonan anda.",
         "title": "Sinkronkan ke Cloud"
       },
       "title": "Akun"
@@ -537,7 +532,7 @@
     },
     "connections": {
       "server": {
-        "description": "Jika anda ingin menghubungkan dengan backend khusus untuk menyimpan data, hidupkan ini dan masukkan URL-nya.",
+        "description": "Jika anda ingin menghubungkan dengan backend khusus untuk menyimpan data, hidupkan ini e masukkan URL-nya.",
         "label": "Server khusus",
         "urlLabel": "URL server khusus"
       },

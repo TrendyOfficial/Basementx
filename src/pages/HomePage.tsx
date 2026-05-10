@@ -193,10 +193,10 @@ export function HomePage() {
             </div>
           </WideContainer>
         ))}
-=======
+
       {/* User Content */}
       {!search && renderHomeSections()}
-//
+
 
       {!search && !(showBookmarks || showWatching) ? (
         <div className="flex flex-col translate-y-[-30px] items-center justify-center pt-20">

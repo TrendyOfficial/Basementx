@@ -21,11 +21,7 @@
     "q5": {
       "section": "geral",
       "title": "Como posso saber mais?",
-      //
-      "body": "O Basement tem um servidor no Discord, que podes encontrar no topo desta página!"
-=======
       "body": "O Basement tem um servidor no Fluxer, que podes encontrar no topo desta página!"
-      //
     },
     "q25": {
       "section": "linguagem",
@@ -38,17 +34,13 @@
       "section": "pesquisa"
     },
     "q6": {
-      //
-      "body": "Ainda não, mas podes instalá-lo como uma PWA (Progressive Web App). No iOS, usa o Safari → Partilhar → Adicionar ao Ecrã Principal. No Android, usa o Chrome → 3 pontos → Adicionar ao Ecrã Principal. Há um APK experimental disponível no nosso Discord, mas não é recomendado.",
-=======
       "body": "Ainda não, mas podes instalá-lo como uma PWA (Progressive Web App). No iOS, usa o Safari → Partilhar → Adicionar ao Ecrã Principal. No Android, usa o Chrome → 3 pontos → Adicionar ao Ecrã Principal. Há um APK experimental disponível no nosso Fluxer, mas não é recomendado.",
-      //
       "title": "Existe alguma app do Basement?",
       "section": "geral"
     },
     "q12": {
       "body": "Muda para uma fonte diferente. Nós não controlamos qualquer conteudo nem a precisão dos episódios.",
-      "title": "O episódio que estou a assistor é o incorreto.",
+      "title": "O episódio que estou a assistir é o incorreto.",
       "section": "reprodução"
     },
     "q13": {
@@ -83,7 +75,7 @@
     },
     "q23": {
       "body": "É uma ferramenta de proxy local usada para aceder a streams que restringem os scrapers. Ela imita a tua sessão de navegação. É também completamente open source e está disponível no nosso GitHub.",
-      "title": "O que é a extensão? É segura?",
+      "title": "O que é a extensão? é segura?",
       "section": "conexões"
     },
     "help": "Não encontra uma resposta? <0>Obtenha suporte aqui.</0>",
@@ -173,7 +165,7 @@
     "register": {
       "information": {
         "color1": "Cor de perfil um",
-        "color2": "Cor de perfil dois",
+        "color2": "Cor de perfil dos",
         "header": "Introduz um nome para o teu dispositivo e escolhe cores e um ícone de utilizador à tua escolha",
         "icon": "Ícone de utilizador",
         "next": "Próximo",
@@ -250,7 +242,7 @@
     },
     "search": {
       "allResults": "É tudo o que temos!",
-      "failed": "Falha ao encontrar mídia, tente novamente!",
+      "failed": "Falha ao encontrar média, tente novamente!",
       "loading": "A carregar...",
       "noResults": "Não conseguimos encontrar nada!",
       "placeholder": {
@@ -260,7 +252,7 @@
           "Devemos apagar o teu histórico do browser?",
           "O que queres ver em streaming?",
           "Basement é o melhor site de sempre!",
-          "O qu está na tua lista para ver hoje?",
+          "O que está na tua lista para ver hoje?",
           "Como foi o teu dia?",
           "Foi erro meu, o site nunca funciona como deve ser...",
           "O Basement não é simplesmente o melhor?",
