@@ -11,7 +11,18 @@ import {
 
 import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
 import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
+import { GamepadGlobalListener } from "@/components/gamepad/GamepadGlobalListener";
+import { DetailsModal } from "@/components/overlays/detailsModal";
+import { GamepadControlsModal } from "@/components/overlays/GamepadControlsModal";
+import { IntroAnimation } from "@/components/overlays/IntroAnimation";
+import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
+import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
+import { MediaControllerMenuModal } from "@/components/overlays/MediaControllerMenu";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
+import { ProfileSelector } from "@/components/overlays/ProfileSelector";
+import { SupportInfoModal } from "@/components/overlays/SupportInfoModal";
+import { TraktAuthHandler } from "@/components/TraktAuthHandler";
+import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
 import { useOnlineListener } from "@/hooks/usePing";
 import { AboutPage } from "@/pages/About";
 import { AdminPage } from "@/pages/admin/AdminPage";
@@ -34,19 +45,53 @@ import { MigrationUploadPage } from "@/pages/migration/MigrationUpload";
 import { OnboardingPage } from "@/pages/onboarding/Onboarding";
 import { OnboardingExtensionPage } from "@/pages/onboarding/OnboardingExtension";
 import { OnboardingProxyPage } from "@/pages/onboarding/OnboardingProxy";
+import { PasPage } from "@/pages/Pas";
 import { RegisterPage } from "@/pages/Register";
 import { SupportPage } from "@/pages/Support";
+import { WatchHistory } from "@/pages/watchHistory/WatchHistory";
 import { Layout } from "@/setup/Layout";
+import { useBookmarkStore } from "@/stores/bookmarks";
 import { useHistoryListener } from "@/stores/history";
-import { LanguageProvider } from "@/stores/language";
+import { useClearModalsOnNavigation } from "@/stores/interface/overlayStack";
+import { LanguageProvider, useLanguageStore } from "@/stores/language";
+import { usePreferencesStore } from "@/stores/preferences";
+import { useProfileStore } from "@/stores/profile";
+import { useProgressStore } from "@/stores/progress";
+import { useWatchHistoryStore } from "@/stores/watchHistory";
 
 const DeveloperPage = lazy(() => import("@/pages/DeveloperPage"));
 const TestView = lazy(() => import("@/pages/developer/TestView"));
+const GamepadSetupPage = lazyWithPreload(() =>
+  import("@/pages/GamepadSetup").then((m: { GamepadSetupPage: any }) => ({
+    default: m.GamepadSetupPage,
+  })),
+);
 const PlayerView = lazyWithPreload(() => import("@/pages/PlayerView"));
 const SettingsPage = lazyWithPreload(() => import("@/pages/Settings"));
+const IboDashboard = lazy(() =>
+  import("@/pages/iptv/IboDashboard").then((m) => ({
+    default: m.IboDashboard,
+  })),
+);
+const CategoryExplorer = lazy(() =>
+  import("@/pages/iptv/CategoryExplorer").then((m) => ({
+    default: m.CategoryExplorer,
+  })),
+);
+const IptvPlayerView = lazy(() =>
+  import("@/pages/iptv/IptvPlayerView").then((m) => ({
+    default: m.IptvPlayerView,
+  })),
+);
+const IptvSettings = lazy(() =>
+  import("@/pages/iptv/IptvSettings").then((m) => ({
+    default: m.IptvSettings,
+  })),
+);
 
 PlayerView.preload();
 SettingsPage.preload();
+GamepadSetupPage.preload();
 
 function LegacyUrlView({ children }: { children: ReactElement }) {
   const location = useLocation();
@@ -87,7 +132,7 @@ function QueryView() {
 
   useEffect(() => {
     if (query) {
-      navigate(`/browse/${query}`, { replace: true });
+      navigate(`/browse/${encodeURIComponent(query)}`, { replace: true });
     } else {
       navigate("/", { replace: true });
     }
@@ -96,11 +141,34 @@ function QueryView() {
   return null;
 }
 
+function useProfileSync() {
+  useEffect(() => {
+    const unsub = useProfileStore.subscribe((state, prevState) => {
+      if (state.activeProfileId !== prevState.activeProfileId) {
+        useBookmarkStore.getState().switchProfile(state.activeProfileId);
+        useProgressStore.getState().switchProfile(state.activeProfileId);
+        useWatchHistoryStore.getState().switchProfile(state.activeProfileId);
+        usePreferencesStore.getState().switchProfile(state.activeProfileId);
+
+        const currentLang =
+          useLanguageStore.getState().languages[
+            state.activeProfileId || "main"
+          ] || "en";
+        useLanguageStore.getState().setLanguage(currentLang);
+      }
+    });
+    return () => unsub();
+  }, []);
+}
+
 export const maintenanceTime = "March 31th 11:00 PM - 5:00 AM EST";
 
 function App() {
+  useProfileSync();
   useHistoryListener();
   useOnlineListener();
+  useGlobalKeyboardEvents();
+  useClearModalsOnNavigation();
   const maintenance = false; // Shows maintance page
   const [showDowntime, setShowDowntime] = useState(maintenance);
 
@@ -118,8 +186,20 @@ function App() {
 
   return (
     <Layout>
+      <GamepadGlobalListener />
+      <TraktAuthHandler />
       <LanguageProvider />
       <NotificationModal id="notifications" />
+      <KeyboardCommandsModal id="keyboard-commands" />
+      <KeyboardCommandsEditModal id="keyboard-commands-edit" />
+      <GamepadControlsModal id="gamepad-controls-edit" />
+      <SupportInfoModal id="support-info" />
+      <DetailsModal id="details" />
+      <DetailsModal id="discover-details" />
+      <DetailsModal id="player-details" />
+      <MediaControllerMenuModal />
+      <ProfileSelector />
+      <IntroAnimation />
       {!showDowntime && (
         <Routes>
           {/* functional routes */}
@@ -149,11 +229,15 @@ function App() {
           />
           <Route path="/browse/:query?" element={<HomePage />} />
           <Route path="/" element={<HomePage />} />
+<<<<<<< HEAD
           <Route
             path="/movies"
             element={<BrowseMediaPage mediaType="movie" />}
           />
           <Route path="/tvshows" element={<BrowseMediaPage mediaType="tv" />} />
+=======
+          <Route path="/gamepad-setup" element={<GamepadSetupPage />} />
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -179,6 +263,7 @@ function App() {
           {/* Support page */}
           <Route path="/support" element={<SupportPage />} />
           <Route path="/jip" element={<JipPage />} />
+          <Route path="/pas" element={<PasPage />} />
           {/* Discover pages */}
           <Route path="/discover" element={<Discover />} />
           <Route
@@ -193,6 +278,8 @@ function App() {
           <Route path="/discover/all" element={<DiscoverMore />} />
           {/* Bookmarks page */}
           <Route path="/bookmarks" element={<AllBookmarks />} />
+          {/* Watch History page */}
+          <Route path="/watch-history" element={<WatchHistory />} />
           {/* Settings page */}
           <Route
             path="/settings"
@@ -204,6 +291,41 @@ function App() {
           />
           {/* admin routes */}
           <Route path="/admin" element={<AdminPage />} />
+
+          {/* IPTV routes */}
+          <Route
+            path="/iptv"
+            element={
+              <Suspense fallback={null}>
+                <IboDashboard />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/iptv/settings"
+            element={
+              <Suspense fallback={null}>
+                <IptvSettings />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/iptv/:type"
+            element={
+              <Suspense fallback={null}>
+                <CategoryExplorer />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/iptv/player/:index"
+            element={
+              <Suspense fallback={null}>
+                <IptvPlayerView />
+              </Suspense>
+            }
+          />
+
           {/* other */}
           <Route path="/dev" element={<DeveloperPage />} />
           <Route path="/dev/video" element={<VideoTesterView />} />

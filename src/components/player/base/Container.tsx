@@ -1,8 +1,10 @@
 import { ReactNode, RefObject, useEffect, useRef } from "react";
 
 import { OverlayDisplay } from "@/components/overlays/OverlayDisplay";
+import { AutoSkipSegments } from "@/components/player/internals/AutoSkipSegments";
 import { SkipTracker } from "@/components/player/internals/Backend/SkipTracker";
 import { CastingInternal } from "@/components/player/internals/CastingInternal";
+import { GamepadEvents } from "@/components/player/internals/GamepadEvents";
 import { HeadUpdater } from "@/components/player/internals/HeadUpdater";
 import { KeyboardEvents } from "@/components/player/internals/KeyboardEvents";
 import { MediaSession } from "@/components/player/internals/MediaSession";
@@ -96,10 +98,12 @@ export function Container(props: PlayerProps) {
         <VideoContainer />
         <ProgressSaver />
         <KeyboardEvents />
+        <GamepadEvents />
         <MediaSession />
         <WatchPartyReporter />
         <SkipTracker />
         <WatchPartyResetter />
+        <AutoSkipSegments />
         <div className="relative h-screen overflow-hidden">
           <VideoClickTarget showingControls={props.showingControls} />
           <HeadUpdater />

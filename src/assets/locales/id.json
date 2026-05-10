@@ -28,7 +28,11 @@
     "help": "Tidak dapat mencari jawaban? <0>Dapatkan dukungan di sini.</0>",
     "searchPlaceholder": "Pencarian FAQ...",
     "q6": {
+<<<<<<< HEAD
       "body": "Belum ada. Tapi bisa kamu install sebagai PWA (Progressive Web App). Pada IOS, menggunakan safari → Share → Tambahkan ke Home Screen. APK tersedia dalam Discord dan masih experiment, tidak direkomendasikan.",
+=======
+      "body": "Belum ada. Tapi bisa kamu install sebagai PWA (Progressive Web App). Pada IOS, menggunakan safari → Share → Tambahkan ke Home Screen. APK tersedia dalam Fluxer dan masih experiment, tidak direkomendasikan.",
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
       "title": "Apakah ada aplikasi Basement?",
       "section": "Umum"
     },
@@ -59,7 +63,11 @@
     },
     "q5": {
       "title": "Bagaimana saya bisa mengetahui lebih lanjut?",
+<<<<<<< HEAD
       "body": "Basement memiliki Discord server yang bisa diakses melalui header dihalaman ini!",
+=======
+      "body": "Basement memiliki Fluxer server yang bisa diakses melalui header dihalaman ini!",
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
       "section": "Umum"
     },
     "q7": {
@@ -160,7 +168,7 @@
       "disclaimerText": "Basement tidak menyimpan berkas media apapun, aplikasi ini hanya menampilkan tautan dari pihak ketiga. Sengketa hukum harus diajukan langsung kepada penyedia pihak ketiga. Basement tidak bertanggung jawab atas berkas media yang ditampilkan oleh penyedia pihak ketiga."
     },
     "links": {
-      "discord": "Discord",
+      "fluxer": "Fluxer",
       "legal": "Legal / DMCA",
       "github": "GitHub"
     },

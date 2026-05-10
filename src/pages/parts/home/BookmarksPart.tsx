@@ -1,36 +1,34 @@
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Listbox } from "@headlessui/react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { EditButton } from "@/components/buttons/EditButton";
-import { EditButtonWithText } from "@/components/buttons/EditButtonWithText";
-import { Item } from "@/components/form/SortableList";
-import { Icons } from "@/components/Icon";
+import { Dropdown, OptionItem } from "@/components/form/Dropdown";
+import { Icon, Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
+import { FolderCard } from "@/components/media/FolderCard";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
-import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
+import { EditBookmarkModal } from "@/components/overlays/EditBookmarkModal";
+import { EditGroupModal } from "@/components/overlays/EditGroupModal";
+import { FolderModal } from "@/components/overlays/FolderModal";
 import { useModal } from "@/components/overlays/Modal";
-import { UserIcon, UserIcons } from "@/components/UserIcon";
-import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
-import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useGroupOrderStore } from "@/stores/groupOrder";
 import { useProgressStore } from "@/stores/progress";
+import { parseGroupString } from "@/utils/bookmarkModifications";
+import { SortOption } from "@/utils/mediaSorting";
 import { MediaItem } from "@/utils/mediaTypes";
 
-function parseGroupString(group: string): { icon: UserIcons; name: string } {
-  const match = group.match(/^\[([a-zA-Z0-9_]+)\](.*)$/);
-  if (match) {
-    const iconKey = match[1].toUpperCase() as keyof typeof UserIcons;
-    const icon = UserIcons[iconKey] || UserIcons.BOOKMARK;
-    const name = match[2].trim();
-    return { icon, name };
-  }
-  return { icon: UserIcons.BOOKMARK, name: group };
-}
-
-const LONG_PRESS_DURATION = 700; // 0.7 seconds
+import { getList, sortMedia } from "./utils";
 
 export function BookmarksPart({
   onItemsChange,
@@ -43,367 +41,273 @@ export function BookmarksPart({
   const progressItems = useProgressStore((s) => s.items);
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
   const groupOrder = useGroupOrderStore((s) => s.groupOrder);
-  const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
   const removeBookmark = useBookmarkStore((s) => s.removeBookmark);
   const [editing, setEditing] = useState(false);
   const [gridRef] = useAutoAnimate<HTMLDivElement>();
-  const editOrderModal = useModal("bookmark-edit-order");
-  const [tempGroupOrder, setTempGroupOrder] = useState<string[]>([]);
-  const backendUrl = useBackendUrl();
-  const account = useAuthStore((s) => s.account);
+  const editBookmarkModal = useModal("bookmark-edit");
+  const editGroupModal = useModal("bookmark-edit-group");
+  const [editingBookmarkId, setEditingBookmarkId] = useState<string | null>(
+    null,
+  );
+  const [editingGroupName, setEditingGroupName] = useState<string | null>(null);
+  const modifyBookmarks = useBookmarkStore((s) => s.modifyBookmarks);
+  const modifyBookmarksByGroup = useBookmarkStore(
+    (s) => s.modifyBookmarksByGroup,
+  );
+  const [sortBy, setSortBy] = useState<SortOption>(() => {
+    const saved = localStorage.getItem("__MW::bookmarksSort");
+    return (saved as SortOption) || "date";
+  });
+  const [activeFolderModal, setActiveFolderModal] = useState<string | null>(
+    null,
+  );
 
-  const pressTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const items = useMemo(() => {
-    let output: MediaItem[] = [];
-    Object.entries(bookmarks).forEach((entry) => {
-      output.push({
-        id: entry[0],
-        ...entry[1],
-      });
-    });
-    output = output.sort((a, b) => {
-      const bookmarkA = bookmarks[a.id];
-      const bookmarkB = bookmarks[b.id];
-      const progressA = progressItems[a.id];
-      const progressB = progressItems[b.id];
-
-      const dateA = Math.max(bookmarkA.updatedAt, progressA?.updatedAt ?? 0);
-      const dateB = Math.max(bookmarkB.updatedAt, progressB?.updatedAt ?? 0);
-
-      return dateB - dateA;
-    });
-    return output;
-  }, [bookmarks, progressItems]);
-
-  const { groupedItems, regularItems } = useMemo(() => {
-    const grouped: Record<string, MediaItem[]> = {};
-    const regular: MediaItem[] = [];
-
-    items.forEach((item) => {
-      const bookmark = bookmarks[item.id];
-      if (Array.isArray(bookmark?.group)) {
-        bookmark.group.forEach((groupName) => {
-          if (!grouped[groupName]) {
-            grouped[groupName] = [];
-          }
-          grouped[groupName].push(item);
-        });
-      } else {
-        regular.push(item);
-      }
-    });
-
-    // Sort items within each group by date
-    Object.keys(grouped).forEach((group) => {
-      grouped[group].sort((a, b) => {
-        const bookmarkA = bookmarks[a.id];
-        const bookmarkB = bookmarks[b.id];
-        const progressA = progressItems[a.id];
-        const progressB = progressItems[b.id];
-
-        const dateA = Math.max(bookmarkA.updatedAt, progressA?.updatedAt ?? 0);
-        const dateB = Math.max(bookmarkB.updatedAt, progressB?.updatedAt ?? 0);
-
-        return dateB - dateA;
-      });
-    });
-
-    return { groupedItems: grouped, regularItems: regular };
-  }, [items, bookmarks, progressItems]);
-
-  // group sorting
-  const allGroups = useMemo(() => {
-    const groups = new Set<string>();
-
-    Object.values(bookmarks).forEach((bookmark) => {
-      if (Array.isArray(bookmark.group)) {
-        bookmark.group.forEach((group) => groups.add(group));
-      }
-    });
-
-    groups.add("bookmarks");
-
-    return Array.from(groups);
-  }, [bookmarks]);
-
-  const sortableItems = useMemo(() => {
-    const currentOrder = editOrderModal.isShown ? tempGroupOrder : groupOrder;
-
-    if (currentOrder.length === 0) {
-      return allGroups.map((group) => {
-        const { name } = parseGroupString(group);
-        return {
-          id: group,
-          name: group === "bookmarks" ? t("home.bookmarks.sectionTitle") : name,
-        } as Item;
-      });
-    }
-
-    const orderMap = new Map(
-      currentOrder.map((group, index) => [group, index]),
-    );
-    const sortedGroups = allGroups.sort((groupA, groupB) => {
-      const orderA = orderMap.has(groupA)
-        ? orderMap.get(groupA)!
-        : Number.MAX_SAFE_INTEGER;
-      const orderB = orderMap.has(groupB)
-        ? orderMap.get(groupB)!
-        : Number.MAX_SAFE_INTEGER;
-      return orderA - orderB;
-    });
-
-    return sortedGroups.map((group) => {
-      const { name } = parseGroupString(group);
-      return {
-        id: group,
-        name: group === "bookmarks" ? t("home.bookmarks.sectionTitle") : name,
-      } as Item;
-    });
-  }, [allGroups, t, editOrderModal.isShown, tempGroupOrder, groupOrder]);
-
-  const sortedSections = useMemo(() => {
-    const sections: Array<{
-      type: "grouped" | "regular";
-      group?: string;
-      items: MediaItem[];
-    }> = [];
-
-    const allSections = new Map<string, MediaItem[]>();
-
-    Object.entries(groupedItems).forEach(([group, groupItems]) => {
-      allSections.set(group, groupItems);
-    });
-
-    if (regularItems.length > 0) {
-      allSections.set("bookmarks", regularItems);
-    }
-
-    if (groupOrder.length === 0) {
-      allSections.forEach((sectionItems, group) => {
-        if (group === "bookmarks") {
-          sections.push({ type: "regular", items: sectionItems });
-        } else {
-          sections.push({ type: "grouped", group, items: sectionItems });
-        }
-      });
-    } else {
-      const orderMap = new Map(
-        groupOrder.map((group, index) => [group, index]),
-      );
-
-      Array.from(allSections.entries())
-        .sort(([groupA], [groupB]) => {
-          const orderA = orderMap.has(groupA)
-            ? orderMap.get(groupA)!
-            : Number.MAX_SAFE_INTEGER;
-          const orderB = orderMap.has(groupB)
-            ? orderMap.get(groupB)!
-            : Number.MAX_SAFE_INTEGER;
-          return orderA - orderB;
-        })
-        .forEach(([group, sectionItems]) => {
-          if (group === "bookmarks") {
-            sections.push({ type: "regular", items: sectionItems });
-          } else {
-            sections.push({ type: "grouped", group, items: sectionItems });
-          }
-        });
-    }
-
-    return sections;
-  }, [groupedItems, regularItems, groupOrder]);
-  // kill me
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // require 8px movement before drag starts
+      },
+    }),
+  );
 
   useEffect(() => {
-    onItemsChange(items.length > 0);
-  }, [items, onItemsChange]);
+    localStorage.setItem("__MW::bookmarksSort", sortBy);
+  }, [sortBy]);
 
-  const handleLongPress = () => {
-    // Find the button by ID and simulate a click
-    const editButton = document.getElementById("edit-button-bookmark");
-    if (editButton) {
-      (editButton as HTMLButtonElement).click();
-    }
+  const { allGroups, rootMediaItems } = useMemo(() => {
+    const list = getList(bookmarks);
+
+    const groupSet = new Set<string>();
+    const rootItems: MediaItem[] = [];
+
+    list.forEach((b) => {
+      const bookmark = bookmarks[b.id];
+      if (bookmark?.group && bookmark.group.length > 0) {
+        // Bookmark is in at least one folder — add all its groups to the set
+        bookmark.group.forEach((g: string) => groupSet.add(g));
+      } else {
+        // No group → show in root
+        rootItems.push(b);
+      }
+    });
+
+    const unsortedGroups = Array.from(groupSet);
+    const sortedGroups = [...unsortedGroups].sort((a, b) => {
+      const idxA = groupOrder.indexOf(a);
+      const idxB = groupOrder.indexOf(b);
+      if (idxA === -1 && idxB === -1) return a.localeCompare(b);
+      if (idxA === -1) return 1;
+      if (idxB === -1) return -1;
+      return idxA - idxB;
+    });
+
+    return {
+      allGroups: sortedGroups,
+      rootMediaItems: sortMedia(rootItems, sortBy, bookmarks, progressItems),
+    };
+  }, [bookmarks, groupOrder, sortBy, progressItems]);
+
+  useEffect(() => {
+    onItemsChange(Object.keys(bookmarks).length > 0);
+  }, [bookmarks, onItemsChange]);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const bookmarkId = active.id as string;
+    const targetGroupName = over.id as string;
+
+    // Only act if the target is a known folder
+    if (!allGroups.includes(targetGroupName)) return;
+    // Don't add to a folder that bookmark is already in
+    const existingGroups = bookmarks[bookmarkId]?.group || [];
+    if (existingGroups.includes(targetGroupName)) return;
+
+    // Add the bookmark to that folder (addGroups merges without duplication)
+    modifyBookmarks([bookmarkId], { addGroups: [targetGroupName] });
   };
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    e.preventDefault(); // Prevent default touch action
-    pressTimerRef.current = setTimeout(handleLongPress, LONG_PRESS_DURATION);
+  const handleEditBookmark = (bookmarkId: string, e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    setEditingBookmarkId(bookmarkId);
+    editBookmarkModal.show();
   };
 
-  const handleTouchEnd = () => {
-    if (pressTimerRef.current) {
-      clearTimeout(pressTimerRef.current);
-      pressTimerRef.current = null;
-    }
+  const handleSaveBookmark = (bookmarkId: string, changes: any) => {
+    modifyBookmarks([bookmarkId], changes);
+    editBookmarkModal.hide();
+    setEditingBookmarkId(null);
   };
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault(); // Prevent default mouse action
-    pressTimerRef.current = setTimeout(handleLongPress, LONG_PRESS_DURATION);
+  const handleSaveGroup = (oldGroupName: string, newGroupName: string) => {
+    modifyBookmarksByGroup({ oldGroupName, newGroupName });
+    editGroupModal.hide();
+    setEditingGroupName(null);
   };
 
-  const handleMouseUp = () => {
-    if (pressTimerRef.current) {
-      clearTimeout(pressTimerRef.current);
-      pressTimerRef.current = null;
-    }
+  const handleCancelEditBookmark = () => {
+    editBookmarkModal.hide();
+    setEditingBookmarkId(null);
   };
 
-  const handleEditGroupOrder = () => {
-    // Initialize with current order or default order
-    if (groupOrder.length === 0) {
-      const defaultOrder = allGroups.map((group) => group);
-      setTempGroupOrder(defaultOrder);
-    } else {
-      setTempGroupOrder([...groupOrder]);
-    }
-    editOrderModal.show();
+  const handleCancelEditGroup = () => {
+    editGroupModal.hide();
+    setEditingGroupName(null);
   };
 
-  const handleReorderClick = () => {
-    handleEditGroupOrder();
-    // Keep editing state active by setting it to true
-    setEditing(true);
-  };
+  const sortOptions: OptionItem[] = [
+    { id: "date", name: t("home.bookmarks.sorting.options.date") },
+    { id: "title-asc", name: t("home.bookmarks.sorting.options.titleAsc") },
+    { id: "title-desc", name: t("home.bookmarks.sorting.options.titleDesc") },
+    { id: "year-asc", name: t("home.bookmarks.sorting.options.yearAsc") },
+    { id: "year-desc", name: t("home.bookmarks.sorting.options.yearDesc") },
+  ];
 
-  const handleCancelOrder = () => {
-    editOrderModal.hide();
-  };
+  const selectedSortOption =
+    sortOptions.find((opt) => opt.id === sortBy) || sortOptions[0];
 
-  const handleSaveOrderClick = () => {
-    setGroupOrder(tempGroupOrder);
-    editOrderModal.hide();
-
-    // Save to backend
-    if (backendUrl && account) {
-      useGroupOrderStore
-        .getState()
-        .saveGroupOrderToBackend(backendUrl, account);
-    }
-  };
-
-  if (items.length === 0) return null;
+  if (Object.keys(bookmarks).length === 0) return null;
 
   return (
     <div className="relative">
-      {/* Grouped Bookmarks */}
-      {sortedSections.map((section) => {
-        if (section.type === "grouped") {
-          const { icon, name } = parseGroupString(section.group || "");
-          return (
-            <div key={section.group || "bookmarks"} className="mb-6">
-              <SectionHeading
-                title={name}
-                customIcon={
-                  <span className="w-6 h-6 flex items-center justify-center">
-                    <UserIcon icon={icon} className="w-full h-full" />
-                  </span>
-                }
+      <SectionHeading
+        title={t("home.bookmarks.sectionTitle")}
+        icon={Icons.BOOKMARK}
+      >
+        <div className="flex items-center gap-2">
+          <EditButton
+            editing={editing}
+            onEdit={setEditing}
+            id="edit-button-bookmark"
+          />
+        </div>
+      </SectionHeading>
+      {editing && (
+        <div className="mb-6 -mt-4">
+          <Dropdown
+            selectedItem={selectedSortOption}
+            setSelectedItem={(item) => {
+              const newSort = item.id as SortOption;
+              setSortBy(newSort);
+              localStorage.setItem("__MW::bookmarksSort", newSort);
+            }}
+            options={sortOptions}
+            customButton={
+              <button
+                type="button"
+                className="px-2 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
               >
-                <div className="flex items-center gap-2">
-                  {editing && allGroups.length > 1 && (
-                    <EditButtonWithText
-                      editing={editing}
-                      onEdit={handleReorderClick}
-                      id="edit-group-order-button"
-                      text={t("home.bookmarks.groups.reorder.button")}
-                      secondaryText={t("home.bookmarks.groups.reorder.done")}
-                    />
-                  )}
-                  <EditButton
-                    editing={editing}
-                    onEdit={setEditing}
-                    id={`edit-button-bookmark-${section.group}`}
-                  />
-                </div>
-              </SectionHeading>
-              <MediaGrid>
-                {section.items.map((v) => (
-                  <div
-                    key={v.id}
-                    style={{ userSelect: "none" }}
-                    onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                      e.preventDefault()
+                <span>{selectedSortOption.name}</span>
+                <Icon
+                  icon={Icons.UP_DOWN_ARROW}
+                  className="text-xs text-dropdown-secondary"
+                />
+              </button>
+            }
+            side="left"
+            customMenu={
+              <Listbox.Options static className="py-1">
+                {sortOptions.map((opt) => (
+                  <Listbox.Option
+                    className={({ active }) =>
+                      `cursor-pointer min-w-60 flex gap-4 items-center relative select-none py-2 px-4 mx-1 rounded-lg ${
+                        active
+                          ? "bg-background-secondaryHover text-type-link"
+                          : "text-type-secondary"
+                      }`
                     }
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
-                    onMouseDown={handleMouseDown}
-                    onMouseUp={handleMouseUp}
+                    key={opt.id}
+                    value={opt}
                   >
-                    <WatchedMediaCard
-                      media={v}
-                      closable={editing}
-                      onClose={() => removeBookmark(v.id)}
-                      onShowDetails={onShowDetails}
-                    />
-                  </div>
+                    {({ selected }) => (
+                      <>
+                        <span
+                          className={`block ${selected ? "font-medium" : "font-normal"}`}
+                        >
+                          {opt.name}
+                        </span>
+                        {selected && (
+                          <Icon
+                            icon={Icons.CHECKMARK}
+                            className="text-xs text-type-link"
+                          />
+                        )}
+                      </>
+                    )}
+                  </Listbox.Option>
                 ))}
-              </MediaGrid>
-            </div>
-          );
-        } // regular items
-        return (
-          <div key="regular-bookmarks" className="mb-6">
-            <SectionHeading
-              title={t("home.bookmarks.sectionTitle")}
-              icon={Icons.BOOKMARK}
-            >
-              <div className="flex items-center gap-2">
-                {editing && allGroups.length > 1 && (
-                  <EditButtonWithText
-                    editing={editing}
-                    onEdit={handleReorderClick}
-                    id="edit-group-order-button"
-                    text={t("home.bookmarks.groups.reorder.button")}
-                    secondaryText={t("home.bookmarks.groups.reorder.done")}
-                  />
-                )}
-                <EditButton
-                  editing={editing}
-                  onEdit={setEditing}
-                  id="edit-button-bookmark"
+              </Listbox.Options>
+            }
+          />
+        </div>
+      )}
+
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+        <MediaGrid ref={gridRef}>
+          {/* Folder cards */}
+          {allGroups.map((group) => {
+            const { name } = parseGroupString(group);
+            return (
+              <div key={`folder-${group}`}>
+                <FolderCard
+                  groupName={group}
+                  displayName={name}
+                  editable={editing}
+                  onClick={() => {
+                    if (!editing) {
+                      setActiveFolderModal(group);
+                    }
+                  }}
+                  onEdit={() => {
+                    setEditingGroupName(group);
+                    editGroupModal.show();
+                  }}
                 />
               </div>
-            </SectionHeading>
-            <MediaGrid ref={gridRef}>
-              {section.items.map((v) => (
-                <div
-                  key={v.id}
-                  style={{ userSelect: "none" }}
-                  onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                    e.preventDefault()
-                  }
-                  onTouchStart={handleTouchStart}
-                  onTouchEnd={handleTouchEnd}
-                  onMouseDown={handleMouseDown}
-                  onMouseUp={handleMouseUp}
-                >
-                  <WatchedMediaCard
-                    media={v}
-                    closable={editing}
-                    onClose={() => removeBookmark(v.id)}
-                    onShowDetails={onShowDetails}
-                  />
-                </div>
-              ))}
-            </MediaGrid>
-          </div>
-        );
-      })}
+            );
+          })}
 
-      {/* Edit Order Modal */}
-      <EditGroupOrderModal
-        id={editOrderModal.id}
-        isShown={editOrderModal.isShown}
-        items={sortableItems}
-        onCancel={handleCancelOrder}
-        onSave={handleSaveOrderClick}
-        onItemsChange={(newItems) => {
-          const newOrder = newItems.map((item) => item.id);
-          setTempGroupOrder(newOrder);
-        }}
+          {/* Root (un-grouped) bookmarks */}
+          {rootMediaItems.map((media) => (
+            <div key={`media-${media.id}`}>
+              <WatchedMediaCard
+                key={media.id}
+                media={media}
+                onShowDetails={onShowDetails}
+                closable={editing}
+                onClose={() => removeBookmark(media.id)}
+                editable={editing}
+                onEdit={(e) => handleEditBookmark(media.id, e)}
+              />
+            </div>
+          ))}
+        </MediaGrid>
+      </DndContext>
+
+      {/* Folder modal – always rendered, visibility controlled via isShown */}
+      <FolderModal
+        isShown={!!activeFolderModal}
+        groupName={activeFolderModal ?? ""}
+        onClose={() => setActiveFolderModal(null)}
+        onShowDetails={onShowDetails}
+      />
+
+      <EditBookmarkModal
+        id="edit-bookmark"
+        isShown={editBookmarkModal.isShown}
+        bookmarkId={editingBookmarkId}
+        onCancel={handleCancelEditBookmark}
+        onSave={handleSaveBookmark}
+      />
+
+      <EditGroupModal
+        id={editGroupModal.id}
+        isShown={editGroupModal.isShown}
+        groupName={editingGroupName}
+        onCancel={handleCancelEditGroup}
+        onSave={handleSaveGroup}
       />
     </div>
   );

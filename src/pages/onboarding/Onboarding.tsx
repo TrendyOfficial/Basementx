@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
+import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { Button } from "@/components/buttons/Button";
-import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
-import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Stepper } from "@/components/layout/Stepper";
 import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { VerticalLine } from "@/components/layout/VerticalLine";
@@ -14,12 +12,6 @@ import {
   ModalCard,
   useModal,
 } from "@/components/overlays/Modal";
-import {
-  StatusCircle,
-  StatusCircleProps,
-} from "@/components/player/internals/StatusCircle";
-import { MwLink } from "@/components/text/Link";
-import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Divider } from "@/components/utils/Divider";
 import { Ol } from "@/components/utils/Ol";
 import {
@@ -44,6 +36,7 @@ import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
+<<<<<<< HEAD
 import {
   Status,
   testFebboxKey,
@@ -379,6 +372,9 @@ export function RealDebridSetup() {
   }
   return null;
 }
+=======
+import { DebridEdit, FebboxSetup } from "../parts/settings/ConnectionsPart";
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
 
 function Item(props: { title: string; children: React.ReactNode }) {
   return (
@@ -397,11 +393,7 @@ export function OnboardingPage() {
   const { t } = useTranslation();
   const noProxies = getProxyUrls().length === 0;
 
-  const isSafari =
-    typeof navigator !== "undefined" &&
-    /Safari/.test(navigator.userAgent) &&
-    !/Chrome/.test(navigator.userAgent) &&
-    !/Edg/.test(navigator.userAgent);
+  const isFebboxSetup = usePreferencesStore((s) => s.febboxKey) !== "";
 
   return (
     <MinimalPageLayout>
@@ -411,15 +403,23 @@ export function OnboardingPage() {
           <Heading1 className="!mt-0 !mb-4 !text-2xl">
             {t("onboarding.defaultConfirm.title")}
           </Heading1>
-          <Paragraph className="!mt-1 !mb-12">
+          <Paragraph className="!mt-1 !mb-0">
             {t("onboarding.defaultConfirm.description")}
           </Paragraph>
+          <Paragraph className="!mt-1 !mb-8">
+            {t("onboarding.defaultConfirm.tip")}
+          </Paragraph>
           <div className="flex flex-col-reverse gap-3 md:flex-row md:justify-between">
+            <Button
+              theme={
+                isFebboxSetup || isExtensionActiveCached() ? "purple" : "danger"
+              }
+              onClick={() => completeAndRedirect()}
+            >
+              {t("onboarding.defaultConfirm.confirm")}
+            </Button>
             <Button theme="secondary" onClick={skipModal.hide}>
               {t("onboarding.defaultConfirm.cancel")}
-            </Button>
-            <Button theme="purple" onClick={() => completeAndRedirect()}>
-              {t("onboarding.defaultConfirm.confirm")}
             </Button>
           </div>
         </ModalCard>
@@ -494,7 +494,7 @@ export function OnboardingPage() {
         <div>
           <Trans i18nKey="onboarding.start.moreInfo.explainer.outro">
             <a
-              href="https://discord.com/invite/7z6znYgrTG"
+              href="https://discord.gg/wmbWfk4SGy"
               target="_blank"
               rel="noopener noreferrer"
               className="text-type-link"
@@ -519,19 +519,24 @@ export function OnboardingPage() {
         </Paragraph>
 
         {/* Desktop Cards */}
-        <div className="hidden md:flex w-full flex-col md:flex-row gap-3 pb-6">
+        <div className="hidden md:flex w-full flex-row gap-3 pb-6">
           <Card
-            onClick={() => navigate("/onboarding/extension")}
-            className="md:w-1/3"
+            onClick={() =>
+              window.open(
+                "https://github.com/xp-technologies-dev/p-stream-desktop/releases",
+                "_blank",
+              )
+            }
+            className="w-1/3"
           >
             <CardContent
               colorClass="!text-onboarding-best"
-              title={t("onboarding.start.options.extension.title")}
-              subtitle={t("onboarding.start.options.extension.quality")}
-              description={t("onboarding.start.options.extension.description")}
+              title={t("onboarding.start.options.desktopapp.title")}
+              subtitle={t("onboarding.start.options.desktopapp.quality")}
+              description={t("onboarding.start.options.desktopapp.description")}
             >
               <Link className="!text-onboarding-best">
-                {t("onboarding.start.options.extension.action")}
+                {t("onboarding.start.options.desktopapp.action")}
               </Link>
             </CardContent>
           </Card>
@@ -543,16 +548,18 @@ export function OnboardingPage() {
             <VerticalLine />
           </div>
           <Card
-            onClick={() => navigate("/onboarding/proxy")}
-            className="md:w-1/3"
+            onClick={() => navigate("/onboarding/extension")}
+            className="w-1/3"
           >
             <CardContent
               colorClass="!text-onboarding-good"
-              title={t("onboarding.start.options.proxy.title")}
-              subtitle={t("onboarding.start.options.proxy.quality")}
-              description={t("onboarding.start.options.proxy.description")}
+              title={t("onboarding.start.options.extension.title")}
+              subtitle={t("onboarding.start.options.extension.quality")}
+              description={t("onboarding.start.options.extension.description")}
             >
-              <Link>{t("onboarding.start.options.proxy.action")}</Link>
+              <Link className="!text-onboarding-good">
+                {t("onboarding.start.options.extension.action")}
+              </Link>
             </CardContent>
           </Card>
           {noProxies ? null : (
@@ -566,11 +573,11 @@ export function OnboardingPage() {
               </div>
               <Card
                 onClick={
-                  isSafari
-                    ? () => completeAndRedirect() // Skip modal on Safari
-                    : skipModal.show // Show modal on other browsers
+                  isFebboxSetup && isExtensionActiveCached()
+                    ? () => completeAndRedirect()
+                    : skipModal.show
                 }
-                className="md:w-1/3"
+                className="w-1/3"
               >
                 <CardContent
                   colorClass="!text-onboarding-bad"
@@ -586,35 +593,40 @@ export function OnboardingPage() {
         </div>
 
         {/* Mobile Cards */}
-        <div className="md:hidden flex w-full flex-col md:flex-row gap-3 pb-6">
+        <div className="md:hidden flex w-full flex-col gap-3 pb-6">
+          {/* <Card
+            onClick={() =>
+              window.open(
+                "https://github.com/xp-technologies-dev/p-stream-desktop/releases",
+                "_blank",
+              )
+            }
+            className="w-full"
+          >
+            <MiniCardContent
+              colorClass="!text-onboarding-best"
+              title={t("onboarding.start.options.desktopapp.title")}
+              subtitle={t("onboarding.start.options.desktopapp.quality")}
+              description={t("onboarding.start.options.desktopapp.description")}
+            />
+          </Card> */}
           <Card
             onClick={() => navigate("/onboarding/extension")}
             className="md:w-1/3 md:h-full"
           >
             <MiniCardContent
-              colorClass="!text-onboarding-best"
+              colorClass="!text-onboarding-good"
               title={t("onboarding.start.options.extension.title")}
               subtitle={t("onboarding.start.options.extension.quality")}
               description={t("onboarding.start.options.extension.description")}
             />
           </Card>
-          <Card
-            onClick={() => navigate("/onboarding/proxy")}
-            className="md:w-1/3"
-          >
-            <MiniCardContent
-              colorClass="!text-onboarding-good"
-              title={t("onboarding.start.options.proxy.title")}
-              subtitle={t("onboarding.start.options.proxy.quality")}
-              description={t("onboarding.start.options.proxy.description")}
-            />
-          </Card>
           {noProxies ? null : (
             <Card
               onClick={
-                isSafari
-                  ? () => completeAndRedirect() // Skip modal on Safari
-                  : skipModal.show // Show modal on other browsers
+                isFebboxSetup && isExtensionActiveCached()
+                  ? () => completeAndRedirect()
+                  : skipModal.show
               }
               className="md:w-1/3"
             >
@@ -628,8 +640,51 @@ export function OnboardingPage() {
           )}
         </div>
 
-        {/* <RealDebridSetup /> */}
-        <FEDAPISetup />
+        {(conf().ALLOW_FEBBOX_KEY || conf().ALLOW_DEBRID_KEY) === true && (
+          <Heading3 className="text-white font-bold mb-3 mt-6">
+            {t("onboarding.start.options.addons.title")}
+          </Heading3>
+        )}
+        <div className="mt-6">
+          <FebboxSetup
+            febboxKey={usePreferencesStore((s) => s.febboxKey)}
+            setFebboxKey={usePreferencesStore((s) => s.setFebboxKey)}
+            mode="onboarding"
+          />
+        </div>
+        <div className="mt-6">
+          <div className="bg-search-background hover:bg-search-hoverBackground transition-colors rounded-xl p-5 border border-utils-divider flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <Heading3 className="text-white font-bold mb-1">
+                {t(
+                  "onboarding.start.moreInfo.explainer.proxy",
+                  "Custom Proxy Worker",
+                )}
+              </Heading3>
+              <Paragraph className="text-type-secondary mb-0">
+                {t(
+                  "onboarding.start.moreInfo.explainer.proxyDescription",
+                  "Configure a custom proxy to improve connectivity.",
+                )}
+              </Paragraph>
+            </div>
+            <Button
+              theme="purple"
+              onClick={() => navigate("/onboarding/proxy")}
+            >
+              Setup Proxy
+            </Button>
+          </div>
+        </div>
+        <div className="mt-6">
+          <DebridEdit
+            debridToken={usePreferencesStore((s) => s.debridToken)}
+            setdebridToken={usePreferencesStore((s) => s.setdebridToken)}
+            debridService={usePreferencesStore((s) => s.debridService)}
+            setdebridService={usePreferencesStore((s) => s.setdebridService)}
+            mode="onboarding"
+          />
+        </div>
       </BiggerCenterContainer>
     </MinimalPageLayout>
   );

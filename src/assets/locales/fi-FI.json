@@ -20,7 +20,11 @@
       "title": "Entä tietoni ja muut asiat?"
     },
     "q5": {
+<<<<<<< HEAD
       "body": "Basementilla on Discord-palvelin, jonka löydät tämän sivun yläosasta!",
+=======
+      "body": "Basementilla on Fluxer-palvelin, jonka löydät tämän sivun yläosasta!",
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
       "title": "Miten voin saada lisätietoa?"
     }
   },
@@ -93,7 +97,7 @@
       "disclaimerText": "Basement ei isännöi tiedostoja, se vain linkittää kolmannen osapuolen palveluihin. Lakiasioista tulee ottaa yhteyttä tiedostoisäntään ja palveluntarjoajiin. Basement ei ole vastuussa videontarjoajien näyttämistä mediatiedostoista."
     },
     "links": {
-      "discord": "Discord",
+      "fluxer": "Fluxer",
       "legal": "Legal / DMCA",
       "github": "GitHub",
       "twitter": "Twitter",

@@ -4,7 +4,6 @@ import loadVersion from "vite-plugin-package-version";
 import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
 import path from "path";
-import million from 'million/compiler';
 import { handlebars } from "./plugins/handlebars";
 import { PluginOption, loadEnv, splitVendorChunkPlugin } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
@@ -18,15 +17,14 @@ const captioningPackages = [
   "subsrt-ts",
   "parse5",
   "entities",
-  "fuse"
+  "fuse",
 ];
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   return {
-    base: env.VITE_BASE_URL || '/',
+    base: env.VITE_BASE_URL || "/",
     plugins: [
-      million.vite({ auto: true, mute: true }),
       handlebars({
         vars: {
           opensearchEnabled: env.VITE_OPENSEARCH_ENABLED === "true",
@@ -69,7 +67,12 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: "Basement",
           short_name: "Basement",
+<<<<<<< HEAD
           description: "Watch anything you want — totally free, no ads forever! (≧◡≦)",
+=======
+          description:
+            "Watch your favorite shows and movies for free with no ads ever! (っ'ヮ'c)",
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
           theme_color: "#000000",
           background_color: "#000000",
           display: "standalone",
@@ -117,38 +120,44 @@ export default defineConfig(({ mode }) => {
         },
       }),
       splitVendorChunkPlugin(),
-      visualizer() as PluginOption
+      visualizer() as PluginOption,
     ],
 
     build: {
-      sourcemap: true,
+      sourcemap: mode !== "production",
       rollupOptions: {
-        output: {},
-        manualChunks(id: string) {
-          if (id.includes("@sozialhelden+ietf-language-tags") || id.includes("country-language")) {
-            return "language-db";
-          }
-          if (id.includes("hls.js")) {
-            return "hls";
-          }
-          if (id.includes("node-forge") || id.includes("crypto-js")) {
-            return "auth";
-          }
-          if (id.includes("locales") && !id.includes("en.json")) {
-            return "locales";
-          }
-          if (id.includes("react-dom")) {
-            return "react-dom";
-          }
-          if (id.includes("Icon.tsx")) {
-            return "Icons";
-          }
-          const isCaptioningPackage = captioningPackages.some(packageName => id.includes(packageName));
-          if (isCaptioningPackage) {
-            return "caption-parsing";
-          }
-        }
-      }
+        output: {
+          manualChunks(id: string) {
+            if (
+              id.includes("@sozialhelden+ietf-language-tags") ||
+              id.includes("country-language")
+            ) {
+              return "language-db";
+            }
+            if (id.includes("hls.js")) {
+              return "hls";
+            }
+            if (id.includes("node-forge") || id.includes("crypto-js")) {
+              return "auth";
+            }
+            if (id.includes("locales") && !id.includes("en.json")) {
+              return "locales";
+            }
+            if (id.includes("react-dom")) {
+              return "react-dom";
+            }
+            if (id.includes("Icon.tsx")) {
+              return "Icons";
+            }
+            const isCaptioningPackage = captioningPackages.some((packageName) =>
+              id.includes(packageName),
+            );
+            if (isCaptioningPackage) {
+              return "caption-parsing";
+            }
+          },
+        },
+      },
     },
     css: {
       postcss: {
@@ -159,15 +168,21 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
+        "@themes": path.resolve(__dirname, "./themes"),
         "@sozialhelden/ietf-language-tags": path.resolve(
           __dirname,
-          "./node_modules/@sozialhelden/ietf-language-tags/dist/cjs"
+          "./node_modules/@sozialhelden/ietf-language-tags/dist/cjs",
         ),
       },
     },
 
     test: {
       environment: "jsdom",
+    },
+    preview: {
+      host: true,
+      port: 80,
+      allowedHosts: ["pstream.net", "pstream-test.vercel.app"],
     },
   };
 });

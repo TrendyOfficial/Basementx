@@ -9,6 +9,7 @@ import { Heading2, Heading3, Paragraph } from "@/components/utils/Text";
 import { useAuthData } from "@/hooks/auth/useAuthData";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
+import { useProfileStore } from "@/stores/profile";
 
 import { signOutAllDevices } from "./DeviceListPart";
 
@@ -18,6 +19,9 @@ export function AccountActionsPart() {
   const account = useAuthStore((s) => s.account);
   const { logout } = useAuthData();
   const deleteModal = useModal("account-delete");
+  const setForceShowProfileSelector = useProfileStore(
+    (s) => s.setForceShowProfileSelector,
+  );
 
   const [deleteResult, deleteExec] = useAsyncFn(async () => {
     if (!account || !url) return;
@@ -32,7 +36,41 @@ export function AccountActionsPart() {
     <div>
       <Heading2 border>{t("settings.account.actions.title")}</Heading2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Switch Profile Card */}
+        <SolidSettingsCard
+          paddingClass="px-6 py-8"
+          className="flex flex-col h-full"
+        >
+          <div className="flex-grow">
+            <Heading3>
+              {t(
+                "settings.account.actions.switchProfile.title",
+                "Switch Profile",
+              )}
+            </Heading3>
+            <p className="text-type-text mt-3">
+              {t(
+                "settings.account.actions.switchProfile.text",
+                "Change the active profile or add a new one.",
+              )}
+            </p>
+          </div>
+          <div className="mt-6 flex justify-center">
+            <Button
+              theme="purple"
+              onClick={() => {
+                setForceShowProfileSelector(true);
+              }}
+            >
+              {t(
+                "settings.account.actions.switchProfile.button",
+                "Switch Profile",
+              )}
+            </Button>
+          </div>
+        </SolidSettingsCard>
+
         {/* Account Migration Card */}
         <SolidSettingsCard
           paddingClass="px-6 py-8"

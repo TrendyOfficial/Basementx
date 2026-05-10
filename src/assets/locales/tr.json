@@ -24,7 +24,11 @@
       "section": "genel"
     },
     "q5": {
+<<<<<<< HEAD
       "body": "Basement’in bir Discord sunucusu var, sayfanın en üst kısmına bak!",
+=======
+      "body": "Basement’in bir Fluxer sunucusu var, sayfanın en üst kısmına bak!",
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
       "title": "Daha fazlasını nasıl bulabilirim?"
     },
     "help": "Bir cevap bulamıyor musunuz? <0>Buradan destek alın.</0>",
@@ -106,7 +110,7 @@
       "disclaimerText": "Basement herhangi bir dosya barındırmaz, yalnızca 3. parti hizmetlere bağlantı verir. Yasal meseleler, dosya barındırıcıları ve sağlayıcıları ile görüşülmelidir. Basement, video sağlayıcıları tarafından gösterilen hiçbir medya dosyasından sorumlu değildir."
     },
     "links": {
-      "discord": "Discord",
+      "fluxer": "Fluxer",
       "legal": "Legal / DMCA",
       "github": "GitHub",
       "twitter": "Twitter",

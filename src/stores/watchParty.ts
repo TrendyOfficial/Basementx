@@ -3,6 +3,15 @@ import { persist } from "zustand/middleware";
 
 import { usePlayerStore } from "@/stores/player/store";
 
+export interface WatchPartyMessage {
+  type: "system" | "chat";
+  text: string;
+  time: number;
+  author?: string;
+  authorIcon?: string;
+  authorColor?: string;
+}
+
 interface WatchPartyStore {
   // Whether the watch party feature is enabled
   enabled: boolean;
@@ -22,11 +31,26 @@ interface WatchPartyStore {
   disable(): void;
   // Set status overlay visibility
   setShowStatusOverlay(show: boolean): void;
+  // Store for local UI chat and system messages
+  messages: WatchPartyMessage[];
+  // Add a new message
+  pushMessage(msg: WatchPartyMessage): void;
+  // Controls chat visibility
+  isChatOpen: boolean;
+  setIsChatOpen(open: boolean): void;
+  // Controls red dot notification
+  hasUnreadMessages: boolean;
+  setHasUnreadMessages(hasUnread: boolean): void;
+  // Total members in room
+  userCount: number;
+  setUserCount(count: number): void;
 }
 
 // Generate a random 4-digit code
-const generateRoomCode = (): string => {
-  return Math.floor(1000 + Math.random() * 9000).toString();
+export const generateRoomCode = (): string => {
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  return (1000 + (array[0] % 9000)).toString();
 };
 
 // Helper function to reset playback rate to 1x
@@ -44,6 +68,21 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
       roomCode: null,
       isHost: false,
       showStatusOverlay: false,
+      isChatOpen: false,
+      hasUnreadMessages: false,
+      userCount: 1,
+      messages: [],
+
+      pushMessage: (msg: WatchPartyMessage) =>
+        set((state) => ({
+          messages: [...state.messages, msg],
+          hasUnreadMessages: !state.isChatOpen ? true : state.hasUnreadMessages,
+        })),
+
+      setIsChatOpen: (open: boolean) => set({ isChatOpen: open }),
+      setHasUnreadMessages: (hasUnread: boolean) =>
+        set({ hasUnreadMessages: hasUnread }),
+      setUserCount: (count: number) => set({ userCount: count }),
 
       enableAsHost: () => {
         resetPlaybackRate();
@@ -51,6 +90,7 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
           enabled: true,
           roomCode: generateRoomCode(),
           isHost: true,
+          messages: [],
         }));
       },
 
@@ -60,6 +100,7 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
           enabled: true,
           roomCode: code,
           isHost: false,
+          messages: [],
         }));
       },
 
@@ -73,6 +114,7 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
         set(() => ({
           enabled: false,
           roomCode: null,
+          messages: [],
         })),
 
       setShowStatusOverlay: (show: boolean) =>

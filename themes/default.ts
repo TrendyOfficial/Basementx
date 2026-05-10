@@ -7,7 +7,7 @@ const tokens = {
     c125: "#141414",
     c150: "#1a1a1a",
     c200: "#262626",
-    c250: "#333333"
+    c250: "#333333",
   },
   white: "#FFFFFF",
   semantic: {
@@ -52,8 +52,9 @@ const tokens = {
     c600: "#2e2e2e",
     c700: "#272727",
     c800: "#181818",
-    c900: "#0f0f0f"
+    c900: "#0f0f0f",
   },
+<<<<<<< HEAD
   cyan: {
     c50: "#AAFFFF",
     c100: "#82F8FF",
@@ -65,6 +66,19 @@ const tokens = {
     c700: "#193D4A",
     c800: "#111E34", // Lightbar glow
     c900: "#0B0F22"
+=======
+  purple: {
+    c50: "#fdf8fb",
+    c100: "#f8eef5",
+    c200: "#f0dceb",
+    c300: "#e4bed8",
+    c400: "#ae5d9c", // Pink highlight
+    c500: "#bd6ca7",
+    c600: "#9f5b8d",
+    c700: "#8e477e",
+    c800: "#753d67", // Lightbar
+    c900: "#4a2441",
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
   },
   ash: {
     c50: "#8d8d8d",
@@ -76,7 +90,7 @@ const tokens = {
     c600: "#252525",
     c700: "#1e1e1e",
     c800: "#181818",
-    c900: "#111111"
+    c900: "#111111",
   },
   shade: {
     c25: "#939393",
@@ -89,7 +103,7 @@ const tokens = {
     c600: "#202020",
     c700: "#1a1a1a",
     c800: "#151515",
-    c900: "#0e0e0e"
+    c900: "#0e0e0e",
   },
 };
 
@@ -133,15 +147,20 @@ export const defaultTheme = {
         purple: tokens.cyan.c600,
         purpleHover: tokens.cyan.c400,
         cancel: tokens.black.c100,
-        cancelHover: tokens.black.c150
+        cancelHover: tokens.black.c150,
       },
 
       background: {
         main: tokens.black.c75,
         secondary: tokens.black.c75,
         secondaryHover: tokens.black.c75,
+<<<<<<< HEAD
         accentA: tokens.cyan.c600,
         accentB: tokens.black.c100
+=======
+        accentA: tokens.purple.c600,
+        accentB: tokens.black.c100,
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
       },
 
       modal: {
@@ -157,8 +176,13 @@ export const defaultTheme = {
         secondary: tokens.ash.c100,
         danger: tokens.semantic.red.c100,
         success: tokens.semantic.green.c100,
+<<<<<<< HEAD
         link: tokens.cyan.c100,
         linkHover: tokens.cyan.c50
+=======
+        link: tokens.purple.c100,
+        linkHover: tokens.purple.c50,
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
       },
 
       search: {
@@ -178,7 +202,7 @@ export const defaultTheme = {
         barColor: tokens.ash.c200,
         barFillColor: tokens.cyan.c100,
         badge: tokens.shade.c700,
-        badgeText: tokens.ash.c100
+        badgeText: tokens.ash.c100,
       },
 
       largeCard: {
@@ -195,7 +219,7 @@ export const defaultTheme = {
         text: tokens.shade.c50,
         secondary: tokens.shade.c100,
         border: tokens.shade.c400,
-        contentBackground: tokens.black.c50
+        contentBackground: tokens.black.c50,
       },
 
       authentication: {
@@ -217,24 +241,29 @@ export const defaultTheme = {
             secondary: tokens.shade.c200,
             inactive: tokens.shade.c50,
             icon: tokens.black.c200,
+<<<<<<< HEAD
             iconActivated: tokens.cyan.c200,
             activated: tokens.cyan.c100
+=======
+            iconActivated: tokens.purple.c200,
+            activated: tokens.purple.c100,
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
           },
         },
 
         card: {
           border: tokens.shade.c700,
           background: tokens.black.c100,
-          altBackground: tokens.black.c100
+          altBackground: tokens.black.c100,
         },
 
         saveBar: {
-          background: tokens.black.c50
+          background: tokens.black.c50,
         },
       },
 
       utils: {
-        divider: tokens.ash.c300
+        divider: tokens.ash.c300,
       },
 
       onboarding: {
@@ -260,13 +289,13 @@ export const defaultTheme = {
 
       about: {
         circle: tokens.black.c100,
-        circleText: tokens.ash.c50
+        circleText: tokens.ash.c50,
       },
 
       editBadge: {
         bg: tokens.ash.c500,
         bgHover: tokens.ash.c400,
-        text: tokens.ash.c50
+        text: tokens.ash.c50,
       },
 
       progress: {
@@ -287,8 +316,13 @@ export const defaultTheme = {
           card: tokens.black.c50,
           error: tokens.semantic.red.c200,
           success: tokens.semantic.green.c200,
+<<<<<<< HEAD
           loading: tokens.cyan.c200,
           noresult: tokens.black.c200
+=======
+          loading: tokens.purple.c200,
+          noresult: tokens.black.c200,
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
         },
 
         audio: {

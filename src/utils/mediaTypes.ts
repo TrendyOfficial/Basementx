@@ -5,6 +5,7 @@ export interface MediaItem {
   release_date?: Date;
   poster?: string;
   type: "show" | "movie";
+  rating?: number;
   onHoverInfoEnter?: () => void;
   onHoverInfoLeave?: () => void;
 }

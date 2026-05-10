@@ -9,6 +9,7 @@ export interface IconPatchProps {
   transparent?: boolean;
   downsized?: boolean;
   navigation?: boolean;
+  tabIndex?: number;
 }
 
 export function IconPatch(props: IconPatchProps) {
@@ -29,6 +30,7 @@ export function IconPatch(props: IconPatchProps) {
   return (
     <div className={props.className || undefined} onClick={props.onClick}>
       <div
+        tabIndex={props.tabIndex}
         className={`flex items-center justify-center rounded-full border-2 border-transparent bg-pill-background bg-opacity-100 transition-[background-color,color,transform,border-color] duration-75 ${transparentClasses} ${navigationClasses} ${clickableClasses} ${activeClasses} ${sizeClasses}`}
       >
         <Icon icon={props.icon} />

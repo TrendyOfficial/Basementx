@@ -1,17 +1,23 @@
 import classNames from "classnames";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { base64ToBuffer, decryptData } from "@/backend/accounts/crypto";
 import { Icon, Icons } from "@/components/Icon";
 import { UserIcon } from "@/components/UserIcon";
 import { AccountProfile } from "@/pages/parts/auth/AccountCreatePart";
 import { useAuthStore } from "@/stores/auth";
+import { useProfileStore } from "@/stores/profile";
 
 export interface AvatarProps {
-  profile: AccountProfile["profile"];
+  profile: AccountProfile["profile"] & { name?: string };
   sizeClass?: string;
   iconClass?: string;
   bottom?: React.ReactNode;
+}
+
+export function isUrl(s: string) {
+  return s.startsWith("http") || s.startsWith("data:");
 }
 
 export function Avatar(props: AvatarProps) {
@@ -26,10 +32,21 @@ export function Avatar(props: AvatarProps) {
           background: `linear-gradient(to bottom right, ${props.profile.colorA}, ${props.profile.colorB})`,
         }}
       >
-        <UserIcon
-          className={props.iconClass}
-          icon={props.profile.icon as any}
-        />
+        {props.profile.icon && isUrl(props.profile.icon) ? (
+          <img
+            src={props.profile.icon}
+            alt=""
+            className={classNames(
+              props.iconClass,
+              "object-cover w-full h-full",
+            )}
+          />
+        ) : (
+          <UserIcon
+            className={props.iconClass}
+            icon={props.profile.icon as any}
+          />
+        )}
       </div>
       {props.bottom ? (
         <div className="absolute bottom-0 left-1/2 transform translate-y-1/2 -translate-x-1/2">
@@ -45,27 +62,63 @@ export function UserAvatar(props: {
   iconClass?: string;
   bottom?: React.ReactNode;
   withName?: boolean;
+  onlyMain?: boolean;
 }) {
   const auth = useAuthStore();
+  const { profiles, activeProfileId } = useProfileStore();
+  const { t } = useTranslation();
+
+  // Get active profile data
+  const currentProfile = useMemo(() => {
+    if (!auth.account) return null;
+    if (props.onlyMain || !activeProfileId || activeProfileId === "main")
+      return { ...auth.account.profile, name: auth.account.nickname };
+    const userProfiles = profiles[auth.account.userId] || [];
+    return (
+      userProfiles.find((p) => p.id === activeProfileId) || {
+        ...auth.account.profile,
+        name: auth.account.nickname,
+      }
+    );
+  }, [auth.account, profiles, activeProfileId, props.onlyMain]);
 
   const bufferSeed = useMemo(
     () =>
       auth.account && auth.account.seed
         ? base64ToBuffer(auth.account.seed)
         : null,
-    [auth],
+    [auth.account],
   );
 
   if (!auth.account || auth.account === null) return null;
 
   const deviceName = bufferSeed
-    ? decryptData(auth.account.deviceName, bufferSeed)
+    ? (() => {
+        const parts = auth.account.deviceName?.split(".");
+        if (!parts || parts.length !== 3) {
+          return (
+            auth.account.deviceName ||
+            t("settings.account.devices.unknownDevice")
+          );
+        }
+        try {
+          return decryptData(auth.account.deviceName, bufferSeed);
+        } catch (error) {
+          console.warn(
+            "Failed to decrypt device name in Avatar, using fallback:",
+            error,
+          );
+          return t("settings.account.devices.unknownDevice");
+        }
+      })()
     : "...";
+
+  if (!currentProfile) return null;
 
   return (
     <>
       <Avatar
-        profile={auth.account.profile}
+        profile={currentProfile}
         sizeClass={
           props.sizeClass ?? "w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem]"
         }
@@ -74,9 +127,9 @@ export function UserAvatar(props: {
       />
       {props.withName && bufferSeed ? (
         <span className="hidden md:inline-block">
-          {deviceName.length >= 20
-            ? `${deviceName.slice(0, 20 - 1)}…`
-            : deviceName}
+          {(currentProfile.name || deviceName).length >= 20
+            ? `${(currentProfile.name || deviceName).slice(0, 20 - 1)}…`
+            : currentProfile.name || deviceName}
         </span>
       ) : null}
     </>

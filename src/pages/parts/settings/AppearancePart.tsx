@@ -1,10 +1,21 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
+import { SortableList } from "@/components/form/SortableList";
 import { Icon, Icons } from "@/components/Icon";
+import { CustomThemeModal } from "@/components/overlays/CustomThemeModal";
+import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
+import { useModal } from "@/components/overlays/Modal";
+import { CaptionSetting } from "@/components/player/atoms/settings/CaptionSettingsView";
 import { Heading1 } from "@/components/utils/Text";
+import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import { useAuthStore } from "@/stores/auth";
+import { useBookmarkStore } from "@/stores/bookmarks";
+import { useGroupOrderStore } from "@/stores/groupOrder";
+import { SavedCustomTheme } from "@/stores/theme";
 
 const availableThemes = [
   {
@@ -48,6 +59,16 @@ const availableThemes = [
     key: "settings.appearance.themes.forest",
   },
   {
+    id: "autumn",
+    selector: "theme-autumn",
+    key: "settings.appearance.themes.autumn",
+  },
+  {
+    id: "frost",
+    selector: "theme-frost",
+    key: "settings.appearance.themes.frost",
+  },
+  {
     id: "mocha",
     selector: "theme-mocha",
     key: "settings.appearance.themes.mocha",
@@ -78,6 +99,11 @@ const availableThemes = [
     key: "settings.appearance.themes.spark",
   },
   {
+    id: "cobalt",
+    selector: "theme-cobalt",
+    key: "settings.appearance.themes.cobalt",
+  },
+  {
     id: "grape",
     selector: "theme-grape",
     key: "settings.appearance.themes.grape",
@@ -102,6 +128,11 @@ const availableThemes = [
     selector: "theme-popsicle",
     key: "settings.appearance.themes.popsicle",
   },
+  {
+    id: "christmas",
+    selector: "theme-christmas",
+    key: "settings.appearance.themes.christmas",
+  },
 ];
 
 function ThemePreview(props: {
@@ -110,6 +141,8 @@ function ThemePreview(props: {
   inUse?: boolean;
   name: string;
   onClick?: () => void;
+  onDelete?: () => void;
+  onEdit?: () => void;
 }) {
   const { t } = useTranslation();
 
@@ -184,6 +217,34 @@ function ThemePreview(props: {
       </div>
       <div className="mt-2 flex justify-between items-center">
         <span className="font-medium text-white">{props.name}</span>
+        <div className="flex gap-2">
+          {props.onEdit && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                props.onEdit?.();
+              }}
+              className="text-white/50 hover:text-white/90 transition-colors"
+            >
+              <Icon icon={Icons.EDIT} />
+            </button>
+          )}
+          {props.onDelete && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                props.onDelete?.();
+              }}
+              className="text-white/50 hover:text-white/90 transition-colors"
+            >
+              <Icon icon={Icons.X} />
+            </button>
+          )}
+        </div>
         <span
           className={classNames(
             "inline-block px-3 py-1 leading-tight text-sm transition-opacity duration-150 rounded-full bg-pill-activeBackground text-white/85",
@@ -214,20 +275,68 @@ export function AppearancePart(props: {
   enableImageLogos: boolean;
   setEnableImageLogos: (v: boolean) => void;
 
+  enablePauseOverlay: boolean;
+  setEnablePauseOverlay: (v: boolean) => void;
+
+  enablePauseOverlayHoverHide: boolean;
+  setEnablePauseOverlayHoverHide: (v: boolean) => void;
+
+  pauseOverlayInactivityTime: number;
+  setPauseOverlayInactivityTime: (v: number) => void;
+
+  timeFormat12Hour: boolean;
+  setTimeFormat12Hour: (v: boolean) => void;
+
   enableCarouselView: boolean;
   setEnableCarouselView: (v: boolean) => void;
+
+  enableMinimalCards: boolean;
+  setEnableMinimalCards: (v: boolean) => void;
 
   forceCompactEpisodeView: boolean;
   setForceCompactEpisodeView: (v: boolean) => void;
 
+  homeSectionOrder: string[];
+  setHomeSectionOrder: (v: string[]) => void;
+
   enableLowPerformanceMode: boolean;
+
+  savedCustomThemes: SavedCustomTheme[];
+  setSavedCustomThemes: (v: SavedCustomTheme[]) => void;
+  hiddenDefaultThemes: string[];
+  setHiddenDefaultThemes: (v: string[]) => void;
 }) {
   const { t } = useTranslation();
+
+  const customThemeModal = useModal("create-custom-theme");
+  const [editingTheme, setEditingTheme] = useState<any>(null);
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const activeThemeRef = useRef<HTMLDivElement>(null);
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
+
+  // Group order modal
+  const bookmarks = useBookmarkStore((s) => s.bookmarks);
+  const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
+  const editGroupOrderModal = useModal("bookmark-edit-order-settings");
+  const backendUrl = useBackendUrl();
+  const account = useAuthStore((s) => s.account);
+
+  // Check if there are groups
+  const hasGroups = useMemo(() => {
+    const groups = new Set<string>();
+
+    Object.values(bookmarks).forEach((bookmark) => {
+      if (Array.isArray(bookmark.group)) {
+        bookmark.group.forEach((group) => groups.add(group));
+      }
+    });
+
+    groups.add("bookmarks");
+
+    return groups.size > 1;
+  }, [bookmarks]);
 
   const {
     enableLowPerformanceMode,
@@ -235,6 +344,7 @@ export function AppearancePart(props: {
     setEnableFeatured,
     setEnableDetailsModal,
     setEnableImageLogos,
+    setEnablePauseOverlay,
     setForceCompactEpisodeView,
   } = props;
 
@@ -245,6 +355,7 @@ export function AppearancePart(props: {
       setEnableFeatured(false);
       setEnableDetailsModal(false);
       setEnableImageLogos(false);
+      setEnablePauseOverlay(false);
       setForceCompactEpisodeView(true);
     }
   }, [
@@ -253,6 +364,7 @@ export function AppearancePart(props: {
     setEnableFeatured,
     setEnableDetailsModal,
     setEnableImageLogos,
+    setEnablePauseOverlay,
     setForceCompactEpisodeView,
   ]);
 
@@ -296,6 +408,26 @@ export function AppearancePart(props: {
       checkScrollPosition(); // Update masks after scrolling
     }
   }, [props.active]);
+
+  const handleEditGroupOrder = () => {
+    editGroupOrderModal.show();
+  };
+
+  const handleCancelGroupOrder = () => {
+    editGroupOrderModal.hide();
+  };
+
+  const handleSaveGroupOrder = (newOrder: string[]) => {
+    setGroupOrder(newOrder);
+    editGroupOrderModal.hide();
+
+    // Save to backend
+    if (backendUrl && account) {
+      useGroupOrderStore
+        .getState()
+        .saveGroupOrderToBackend(backendUrl, account);
+    }
+  };
 
   return (
     <div className="space-y-12">
@@ -413,6 +545,115 @@ export function AppearancePart(props: {
             </div>
           </div>
 
+          {/* Pause Overlay */}
+          <div>
+            <p className="text-white font-bold mb-3">
+              {t("settings.appearance.options.pauseOverlay", "Pause Overlay")}
+            </p>
+            <div
+              onClick={() =>
+                !props.enableLowPerformanceMode &&
+                props.setEnablePauseOverlay(!props.enablePauseOverlay)
+              }
+              className={classNames(
+                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
+                props.enableLowPerformanceMode
+                  ? "cursor-not-allowed opacity-50 pointer-events-none"
+                  : "cursor-pointer opacity-100 pointer-events-auto",
+              )}
+            >
+              <Toggle enabled={props.enablePauseOverlay} />
+              <p className="flex-1 text-white font-bold">
+                {t(
+                  "settings.appearance.options.pauseOverlayLabel",
+                  "Enable Pause Overlay",
+                )}
+              </p>
+            </div>
+
+            {props.enablePauseOverlay && !props.enableLowPerformanceMode && (
+              <div className="pt-4 pl-4 border-l-8 border-dropdown-background max-w-[25rem] space-y-6">
+                <div>
+                  <p className="text-white font-bold mb-2">
+                    {t(
+                      "settings.appearance.options.pauseOverlayHoverHide",
+                      "Hide on Hover",
+                    )}
+                  </p>
+                  <p className="font-medium text-sm text-type-secondary">
+                    {t(
+                      "settings.appearance.options.pauseOverlayHoverHideDescription",
+                      "Automatically hide the overlay when you move your mouse",
+                    )}
+                  </p>
+                  <div
+                    onClick={() =>
+                      props.setEnablePauseOverlayHoverHide(
+                        !props.enablePauseOverlayHoverHide,
+                      )
+                    }
+                    className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center py-3 px-4 rounded-lg"
+                  >
+                    <Toggle enabled={props.enablePauseOverlayHoverHide} />
+                    <p className="flex-1 text-white font-bold">
+                      {t(
+                        "settings.appearance.options.pauseOverlayHoverHideLabel",
+                        "Enable hover to hide",
+                      )}
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <CaptionSetting
+                    label={t(
+                      "settings.appearance.options.pauseOverlayInactivityTime",
+                      "Inactivity Time to Show (seconds)",
+                    )}
+                    max={60}
+                    min={0}
+                    onChange={(v) => {
+                      // Adjust to nearest 5 second interval
+                      const interval = Math.round(v / 5) * 5;
+                      props.setPauseOverlayInactivityTime(interval);
+                    }}
+                    value={props.pauseOverlayInactivityTime}
+                    textTransformer={(s) => `${s}s`}
+                    controlButtons
+                  />
+                  <p className="font-medium text-sm mt-2 text-type-secondary">
+                    {t(
+                      "settings.appearance.options.pauseOverlayInactivityTimeDescription",
+                      "Set to 0 to show immediately",
+                    )}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Time Format */}
+          <div>
+            <p className="text-white font-bold mb-3">
+              {t("settings.appearance.options.timeFormat", "Time Format")}
+            </p>
+            <div
+              onClick={() => props.setTimeFormat12Hour(!props.timeFormat12Hour)}
+              className={classNames(
+                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
+                "cursor-pointer opacity-100 pointer-events-auto",
+              )}
+            >
+              <Toggle enabled={props.timeFormat12Hour} />
+              <p className="flex-1 text-white font-bold">
+                {t(
+                  "settings.appearance.options.timeFormatLabel",
+                  "Use 12-hour clock (AM/PM)",
+                )}
+              </p>
+            </div>
+          </div>
+
           {/* Carousel View */}
           <div>
             <p className="text-white font-bold mb-3">
@@ -433,6 +674,30 @@ export function AppearancePart(props: {
               <Toggle enabled={props.enableCarouselView} />
               <p className="flex-1 text-white font-bold">
                 {t("settings.appearance.options.carouselViewLabel")}
+              </p>
+            </div>
+          </div>
+
+          {/* Minimal Cards */}
+          <div>
+            <p className="text-white font-bold mb-3">
+              {t("settings.appearance.options.minimalCards")}
+            </p>
+            <p className="max-w-[25rem] font-medium">
+              {t("settings.appearance.options.minimalCardsDescription")}
+            </p>
+            <div
+              onClick={() =>
+                props.setEnableMinimalCards(!props.enableMinimalCards)
+              }
+              className={classNames(
+                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
+                "cursor-pointer opacity-100 pointer-events-auto",
+              )}
+            >
+              <Toggle enabled={props.enableMinimalCards} />
+              <p className="flex-1 text-white font-bold">
+                {t("settings.appearance.options.minimalCardsLabel")}
               </p>
             </div>
           </div>
@@ -465,6 +730,39 @@ export function AppearancePart(props: {
               </p>
             </div>
           </div>
+
+          {/* Home Section Order */}
+          <div>
+            <p className="text-white font-bold mb-3">
+              {t("settings.appearance.options.homeSectionOrder")}
+            </p>
+            <p className="max-w-[25rem] font-medium">
+              {t("settings.appearance.options.homeSectionOrderDescription")}
+            </p>
+            <div className="my-4 max-w-[25rem]">
+              <SortableList
+                items={props.homeSectionOrder.map((section) => ({
+                  id: section,
+                  name: t(`settings.appearance.sections.${section}`),
+                }))}
+                setItems={(items) => {
+                  const newOrder = items.map((item) => item.id);
+                  props.setHomeSectionOrder(newOrder);
+                }}
+              />
+            </div>
+            {hasGroups && (
+              <div className="mt-4 max-w-[25rem]">
+                <Button
+                  theme="secondary"
+                  onClick={handleEditGroupOrder}
+                  className="w-full"
+                >
+                  {t("settings.appearance.options.homeSectionOrderGroups")}
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Second Column - Themes */}
@@ -480,23 +778,157 @@ export function AppearancePart(props: {
               },
             )}
           >
-            {availableThemes.map((v) => (
+            {availableThemes
+              .filter((v) => !props.hiddenDefaultThemes.includes(v.id))
+              .map((v) => (
+                <div
+                  key={v.id}
+                  ref={props.active === v.id ? activeThemeRef : null}
+                >
+                  <ThemePreview
+                    selector={v.selector}
+                    active={props.active === v.id}
+                    inUse={props.inUse === v.id}
+                    name={t(v.key)}
+                    onClick={() => props.setTheme(v.id)}
+                    onDelete={
+                      v.id !== "default"
+                        ? () => {
+                            props.setHiddenDefaultThemes([
+                              ...props.hiddenDefaultThemes,
+                              v.id,
+                            ]);
+                            if (props.active === v.id) {
+                              props.setTheme("default");
+                            }
+                          }
+                        : undefined
+                    }
+                  />
+                </div>
+              ))}
+            {props.savedCustomThemes.map((v) => (
               <div
                 key={v.id}
                 ref={props.active === v.id ? activeThemeRef : null}
               >
-                <ThemePreview
-                  selector={v.selector}
-                  active={props.active === v.id}
-                  inUse={props.inUse === v.id}
-                  name={t(v.key)}
-                  onClick={() => props.setTheme(v.id)}
-                />
+                <div className={`theme-${v.id}`}>
+                  {/* Need to ensure dynamic class injected from ThemeStore works here too */}
+                  <ThemePreview
+                    selector={`theme-${v.id}`}
+                    active={props.active === v.id}
+                    inUse={props.inUse === v.id}
+                    name={v.name}
+                    onClick={() => props.setTheme(v.id)}
+                    onEdit={() => {
+                      setEditingTheme(v);
+                      customThemeModal.show();
+                    }}
+                    onDelete={() => {
+                      props.setSavedCustomThemes(
+                        props.savedCustomThemes.filter(
+                          (themeItem) => themeItem.id !== v.id,
+                        ),
+                      );
+                      if (props.active === v.id) {
+                        props.setTheme("default");
+                      }
+                    }}
+                  />
+                </div>
               </div>
             ))}
+
+            <div
+              className={classNames(
+                "group flex flex-col justify-center items-center h-32 relative rounded-lg border border-dashed transition-colors duration-150 p-4 text-center",
+                props.savedCustomThemes.length >= 30
+                  ? "border-opacity-10 border-white/20 opacity-50 cursor-not-allowed"
+                  : "cursor-pointer border-white/20 hover:border-white/50",
+              )}
+              onClick={() => {
+                if (props.savedCustomThemes.length >= 30) return;
+                setEditingTheme(null);
+                customThemeModal.show();
+              }}
+            >
+              <Icon
+                icon={Icons.PLUS}
+                className={classNames(
+                  "text-4xl transition-colors",
+                  props.savedCustomThemes.length >= 30
+                    ? "text-white/20"
+                    : "text-white/50 group-hover:text-white",
+                )}
+              />
+              <div className="flex flex-col items-center mt-2">
+                <span
+                  className={classNames(
+                    "font-medium transition-colors text-sm sm:text-base leading-tight",
+                    props.savedCustomThemes.length >= 30
+                      ? "text-white/50"
+                      : "text-white/70 group-hover:text-white",
+                  )}
+                >
+                  {t(
+                    "settings.appearance.themeOptions.createCustom",
+                    "Create Custom Theme",
+                  )}
+                </span>
+                {props.savedCustomThemes.length >= 30 && (
+                  <span className="text-xs text-semantic-rose-c100 font-bold mt-1">
+                    {t(
+                      "settings.appearance.themeOptions.themeLimitReached",
+                      "Theme limit reached (30 max)",
+                    )}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end mt-4">
+            <Button
+              theme="secondary"
+              onClick={() => {
+                props.setHiddenDefaultThemes([]);
+                props.setSavedCustomThemes([]);
+                props.setTheme("default");
+              }}
+              className="flex items-center gap-2"
+            >
+              <Icon icon={Icons.ARROW_LEFT} />
+              {t(
+                "settings.appearance.themeOptions.resetToDefault",
+                "Reset to Default",
+              )}
+            </Button>
           </div>
         </div>
       </div>
+
+      <EditGroupOrderModal
+        id={editGroupOrderModal.id}
+        isShown={editGroupOrderModal.isShown}
+        onCancel={handleCancelGroupOrder}
+        onSave={handleSaveGroupOrder}
+      />
+
+      <CustomThemeModal
+        id={customThemeModal.id}
+        isShown={customThemeModal.isShown}
+        onHide={customThemeModal.hide}
+        themeToEdit={editingTheme}
+        onSave={(newTheme) => {
+          const existing = props.savedCustomThemes.findIndex(
+            (themeItem) => themeItem.id === newTheme.id,
+          );
+          const copy = [...props.savedCustomThemes];
+          if (existing !== -1) copy[existing] = newTheme;
+          else copy.push(newTheme);
+          props.setSavedCustomThemes(copy);
+          props.setTheme(newTheme.id);
+        }}
+      />
     </div>
   );
 }

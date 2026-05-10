@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 
+import { Button } from "@/components/buttons/Button";
 import { WideContainer } from "@/components/layout/WideContainer";
-import { DetailsModal } from "@/components/overlays/detailsModal";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
@@ -24,6 +24,8 @@ import { usePreferencesStore } from "@/stores/preferences";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import { AdsPart } from "./parts/home/AdsPart";
+import { RevivalAnnouncementModal } from "./parts/home/RevivalAnnouncementModal";
+import { SupportBar } from "./parts/home/SupportBar";
 
 function useSearch(search: string) {
   const [searching, setSearching] = useState<boolean>(false);
@@ -59,7 +61,6 @@ export function HomePage() {
 
   const [showBookmarks, setShowBookmarks] = useState(false);
   const [showWatching, setShowWatching] = useState(false);
-  const [detailsData, setDetailsData] = useState<any>();
   const { showModal } = useOverlayStack();
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const enableCarouselView = usePreferencesStore(
@@ -68,13 +69,65 @@ export function HomePage() {
   const enableLowPerformanceMode = usePreferencesStore(
     (state) => state.enableLowPerformanceMode,
   );
+  const homeSectionOrder = usePreferencesStore(
+    (state) => state.homeSectionOrder,
+  );
 
   const handleShowDetails = async (media: MediaItem | FeaturedMedia) => {
-    setDetailsData({
+    showModal("details", {
       id: Number(media.id),
       type: media.type === "movie" ? "movie" : "show",
     });
-    showModal("details");
+  };
+
+  const renderHomeSections = () => {
+    const sections = homeSectionOrder.map((section) => {
+      switch (section) {
+        case "watching":
+          return enableCarouselView ? (
+            <WatchingCarousel
+              key="watching"
+              carouselRefs={carouselRefs}
+              onShowDetails={handleShowDetails}
+            />
+          ) : (
+            <WatchingPart
+              key="watching"
+              onItemsChange={setShowWatching}
+              onShowDetails={handleShowDetails}
+            />
+          );
+        case "bookmarks":
+          return enableCarouselView ? (
+            <BookmarksCarousel
+              key="bookmarks"
+              carouselRefs={carouselRefs}
+              onShowDetails={handleShowDetails}
+            />
+          ) : (
+            <BookmarksPart
+              key="bookmarks"
+              onItemsChange={setShowBookmarks}
+              onShowDetails={handleShowDetails}
+            />
+          );
+        default:
+          return null;
+      }
+    });
+
+    if (enableCarouselView) {
+      return (
+        <WideContainer ultraWide classNames="!px-3 md:!px-9">
+          {sections}
+        </WideContainer>
+      );
+    }
+    return (
+      <WideContainer>
+        <div className="flex flex-col gap-8">{sections}</div>
+      </WideContainer>
+    );
   };
 
   const renderSearch = () => {
@@ -105,11 +158,15 @@ export function HomePage() {
           showTitle
         />
 
+        <RevivalAnnouncementModal />
+        {conf().SHOW_SUPPORT_BAR ? <SupportBar /> : null}
+
         {conf().SHOW_AD ? <AdsPart /> : null}
       </div>
 
       {renderSearch()}
 
+<<<<<<< HEAD
       {!search &&
         (enableCarouselView ? (
           <WideContainer ultraWide classNames="!px-3 md:!px-9">
@@ -136,6 +193,10 @@ export function HomePage() {
             </div>
           </WideContainer>
         ))}
+=======
+      {/* User Content */}
+      {!search && renderHomeSections()}
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
 
       {!search && !(showBookmarks || showWatching) ? (
         <div className="flex flex-col translate-y-[-30px] items-center justify-center pt-20">
@@ -156,6 +217,7 @@ export function HomePage() {
           shorter
         />
 
+<<<<<<< HEAD
         <WideContainer ultraWide classNames="basement-discover-shell">
           {!enableLowPerformanceMode ? <DiscoverContent /> : null}
         </WideContainer>
@@ -184,6 +246,26 @@ export function HomePage() {
       </div>
 
       {detailsData && <DetailsModal id="details" data={detailsData} />}
+=======
+        {/* Discover section or discover button */}
+        {enableDiscover && !search && !enableLowPerformanceMode ? (
+          <DiscoverContent />
+        ) : (
+          <div className="flex flex-col justify-center items-center h-40 space-y-4">
+            <div className="flex flex-col items-center justify-center">
+              {!search && !enableLowPerformanceMode && (
+                <Button
+                  className="px-py p-[0.35em] mt-3 rounded-xl text-type-dimmed box-content text-[18px] bg-largeCard-background justify-center items-center"
+                  onClick={() => handleClick("/discover")}
+                >
+                  {t("home.search.discover")}
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+      </WideContainer>
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
     </HomeLayout>
   );
 }

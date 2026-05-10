@@ -25,6 +25,8 @@ export type TMDBMediaResult = {
   original_release_date?: Date;
   object_type: TMDBContentTypes;
   seasons?: TMDBSeasonShort[];
+  overview?: string;
+  vote_average?: number;
 };
 
 export type TMDBSeasonMetaResult = {
@@ -380,4 +382,21 @@ export interface TMDBPersonImage {
 export interface TMDBPersonImages {
   id: number;
   profiles: TMDBPersonImage[];
+}
+
+export interface TMDBVideo {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  thumbnail?: string;
+}
+
+export interface TMDBVideosResponse {
+  id: number;
+  results: TMDBVideo[];
 }

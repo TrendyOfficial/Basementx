@@ -16,7 +16,14 @@ import forest from "./list/forest";
 import wolverine from "./list/wolverine";
 import popsicle from "./list/popsicle";
 import hulk from "./list/hulk";
+<<<<<<< HEAD
 import shadow from "./list/shadow";
+=======
+import autumn from "./list/autumn";
+import cobalt from "./list/cobalt";
+import frost from "./list/frost";
+import christmas from "./list/christmas";
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
 
 export const allThemes = [
   teal,
@@ -26,6 +33,8 @@ export const allThemes = [
   classic,
   green,
   forest,
+  autumn,
+  frost,
   mocha,
   pink,
   grape,
@@ -37,5 +46,11 @@ export const allThemes = [
   hulk,
   wolverine,
   popsicle,
+<<<<<<< HEAD
   shadow,
 ]
+=======
+  christmas,
+  cobalt,
+];
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e

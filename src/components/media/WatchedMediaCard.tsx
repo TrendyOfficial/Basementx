@@ -1,6 +1,8 @@
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
 
-import { useProgressStore } from "@/stores/progress";
+import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import {
   ShowProgressResult,
   shouldShowProgress,
@@ -24,6 +26,8 @@ export interface WatchedMediaCardProps {
   closable?: boolean;
   onClose?: () => void;
   onShowDetails?: (media: MediaItem) => void;
+  editable?: boolean;
+  onEdit?: (e?: React.MouseEvent) => void;
 }
 
 export function WatchedMediaCard(props: WatchedMediaCardProps) {
@@ -36,18 +40,48 @@ export function WatchedMediaCard(props: WatchedMediaCardProps) {
     [item],
   );
   const percentage = itemToDisplay?.show
-    ? (itemToDisplay.progress.watched / itemToDisplay.progress.duration) * 100
+    ? getProgressPercentage(
+        itemToDisplay.progress.watched,
+        itemToDisplay.progress.duration,
+      )
     : undefined;
 
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: props.media.id,
+      disabled: !props.editable,
+      data: {
+        media: props.media,
+      },
+    });
+
+  const style = {
+    // Only apply transform horizontally & vertically so it actually drags around
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 50 : "auto",
+    cursor: props.editable ? (isDragging ? "grabbing" : "grab") : "auto",
+  };
+
   return (
-    <MediaCard
-      media={props.media}
-      series={formatSeries(itemToDisplay)}
-      linkable
-      percentage={percentage}
-      onClose={props.onClose}
-      closable={props.closable}
-      onShowDetails={props.onShowDetails}
-    />
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={isDragging ? "pointer-events-none touch-none" : "touch-none"}
+    >
+      <MediaCard
+        media={props.media}
+        series={formatSeries(itemToDisplay)}
+        linkable
+        percentage={percentage}
+        onClose={props.onClose}
+        closable={props.closable}
+        onShowDetails={props.onShowDetails}
+        editable={props.editable}
+        onEdit={props.onEdit}
+      />
+    </div>
   );
 }

@@ -10,9 +10,14 @@ import { IconPatch } from "../buttons/IconPatch";
 interface MediaBookmarkProps {
   media: MediaItem;
   group?: string[];
+  tabIndex?: number;
 }
 
-export function MediaBookmarkButton({ media, group }: MediaBookmarkProps) {
+export function MediaBookmarkButton({
+  media,
+  group,
+  tabIndex,
+}: MediaBookmarkProps) {
   const addBookmark = useBookmarkStore((s) => s.addBookmark);
   const addBookmarkWithGroups = useBookmarkStore(
     (s) => s.addBookmarkWithGroups,
@@ -59,6 +64,7 @@ export function MediaBookmarkButton({ media, group }: MediaBookmarkProps) {
     >
       <IconPatch
         icon={isBookmarked ? Icons.BOOKMARK : Icons.BOOKMARK_OUTLINE}
+        tabIndex={tabIndex}
         className={`${buttonOpacityClass} p-2 opacity-75 transition-opacity duration-300 hover:scale-110 hover:cursor-pointer`}
       />
     </div>

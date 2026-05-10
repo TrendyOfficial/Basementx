@@ -3,17 +3,20 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { base64ToBuffer, decryptData } from "@/backend/accounts/crypto";
+import { base64ToBuffer } from "@/backend/accounts/crypto";
 import { getRoomStatuses } from "@/backend/player/status";
 import { UserAvatar } from "@/components/Avatar";
 import { Icon, Icons } from "@/components/Icon";
 import { Spinner } from "@/components/layout/Spinner";
+import { useModal } from "@/components/overlays/Modal";
 import { Transition } from "@/components/utils/Transition";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { usePreferencesStore } from "@/stores/preferences";
+import { useProfileStore } from "@/stores/profile";
 
 function Divider() {
   return <hr className="border-0 w-full h-px bg-dropdown-border" />;
@@ -206,8 +209,10 @@ function WatchPartyInputLink() {
 export function LinksDropdown(props: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const deviceName = useAuthStore((s) => s.account?.deviceName);
-  const seed = useAuthStore((s) => s.account?.seed);
+  const revivalModal = useModal("revival-announcement");
+  const account = useAuthStore((s) => s.account);
+  const { activeProfileId, setForceShowProfileSelector } = useProfileStore();
+  const seed = account?.seed;
   const bufferSeed = useMemo(
     () => (seed ? base64ToBuffer(seed) : null),
     [seed],
@@ -231,6 +236,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
   const enableLowPerformanceMode = usePreferencesStore(
     (s) => s.enableLowPerformanceMode,
   );
+  const isDesktopApp = useIsDesktopApp();
 
   return (
     <div className="relative is-dropdown">
@@ -253,12 +259,45 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
         />
       </div>
       <Transition animation="slide-down" show={open}>
-        <div className="rounded-lg absolute w-64 bg-dropdown-altBackground top-full mt-3 right-0">
-          {deviceName && bufferSeed ? (
-            <DropdownLink className="text-white" href="/settings">
-              <UserAvatar />
-              {decryptData(deviceName, bufferSeed)}
-            </DropdownLink>
+        <div className="rounded-xl absolute w-72 bg-dropdown-altBackground top-full mt-3 right-0 shadow-2xl border border-dropdown-border overflow-hidden">
+          {account && bufferSeed ? (
+            <div className="flex flex-col">
+              {/* Identity Header */}
+              <DropdownLink
+                className="relative !m-0 !p-4 self-stretch text-white hover:bg-white/5"
+                href="/settings"
+              >
+                <div className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                  PROFILE
+                </div>
+                <UserAvatar />
+                <span className="truncate font-bold text-[17px]">
+                  {account.nickname || "Main Account"}
+                </span>
+              </DropdownLink>
+
+              {/* Sub-profile Switcher */}
+              {activeProfileId && activeProfileId !== "main" && (
+                <div
+                  className="mx-3 mb-3 flex cursor-pointer items-center justify-center gap-4 rounded-2xl border border-white/5 bg-white/[0.03] p-3 transition-colors hover:bg-white/5 group"
+                  onClick={() => setForceShowProfileSelector(true)}
+                >
+                  <UserAvatar
+                    onlyMain
+                    sizeClass="w-[22px] h-[22px] rounded-md"
+                    iconClass="text-[8px]"
+                  />
+                  <Icon
+                    icon={Icons.SWITCH}
+                    className="text-[10px] text-white/20 transition-colors group-hover:text-white/40"
+                  />
+                  <UserAvatar
+                    sizeClass="w-[22px] h-[22px] rounded-md"
+                    iconClass="text-[8px]"
+                  />
+                </div>
+              )}
+            </div>
           ) : (
             <DropdownLink href="/login" icon={Icons.RISING_STAR} highlight>
               {t("navigation.menu.register")}
@@ -268,13 +307,41 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           <DropdownLink href="/settings" icon={Icons.SETTINGS}>
             {t("navigation.menu.settings")}
           </DropdownLink>
-          {process.env.NODE_ENV === "development" ? (
-            <DropdownLink href="/dev" icon={Icons.COMPRESS}>
-              {t("navigation.menu.development")}
-            </DropdownLink>
-          ) : null}
+          {isDesktopApp && (
+            <>
+              <DropdownLink
+                onClick={() =>
+                  window.dispatchEvent(
+                    new CustomEvent("pstream-desktop-settings"),
+                  )
+                }
+                icon={Icons.GEAR}
+              >
+                {t("navigation.menu.desktop")}
+              </DropdownLink>
+              <DropdownLink
+                onClick={() => window.desktopApi?.openOffline()}
+                icon={Icons.DOWNLOAD}
+              >
+                Offline Downloads
+              </DropdownLink>
+            </>
+          )}
+          <DropdownLink href="/watch-history" icon={Icons.CLOCK}>
+            {t("home.watchHistory.sectionTitle")}
+          </DropdownLink>
+
           <DropdownLink href="/about" icon={Icons.CIRCLE_QUESTION}>
             {t("navigation.menu.about")}
+          </DropdownLink>
+          <DropdownLink
+            onClick={() => {
+              revivalModal.show();
+              setOpen(false);
+            }}
+            icon={Icons.PSTREAM}
+          >
+            P-stream Revival
           </DropdownLink>
           {!enableLowPerformanceMode && (
             <DropdownLink href="/discover" icon={Icons.RISING_STAR}>
@@ -282,7 +349,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             </DropdownLink>
           )}
           <WatchPartyInputLink />
-          {deviceName ? (
+          {account ? (
             <DropdownLink
               className="!text-type-danger opacity-75 hover:opacity-100"
               icon={Icons.LOGOUT}
@@ -304,10 +371,6 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               icon={Icons.DISCORD}
             />
             <CircleDropdownLink href="/support" icon={Icons.SUPPORT} />
-            <CircleDropdownLink
-              href="https://rentry.co/h5mypdfs"
-              icon={Icons.TIP_JAR}
-            />
           </div>
         </div>
       </Transition>

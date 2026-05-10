@@ -1,20 +1,19 @@
 import classNames from "classnames";
 import { t } from "i18next";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/buttons/Button";
 import { WideContainer } from "@/components/layout/WideContainer";
-import { DetailsModal } from "@/components/overlays/detailsModal";
-import { useModal } from "@/components/overlays/Modal";
 import { useDiscoverStore } from "@/stores/discover";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { useProgressStore } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import { DiscoverNavigation } from "./components/DiscoverNavigation";
 import type { FeaturedMedia } from "./components/FeaturedCarousel";
-import { LazyTabContent } from "./components/LazyTabContent";
-import { MediaCarousel } from "./components/MediaCarousel";
+import { LazyMediaCarousel } from "./components/LazyMediaCarousel";
+import { PersonalRecommendationsCarousel } from "./components/PersonalRecommendationsCarousel";
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
 
 const STREAMING_PLATFORMS = [
@@ -30,9 +29,8 @@ const STREAMING_PLATFORMS = [
 
 export function DiscoverContent() {
   const { selectedCategory, setSelectedCategory } = useDiscoverStore();
-  const [detailsData, setDetailsData] = useState<any>();
   const navigate = useNavigate();
-  const detailsModal = useModal("discover-details");
+  const { showModal } = useOverlayStack();
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const [showPlatforms, setShowPlatforms] = useState(false);
   const progressItems = useProgressStore((state) => state.items);
@@ -47,11 +45,10 @@ export function DiscoverContent() {
   };
 
   const handleShowDetails = async (media: MediaItem | FeaturedMedia) => {
-    setDetailsData({
+    showModal("discover-details", {
       id: Number(media.id),
       type: media.type === "movie" ? "movie" : "show",
     });
-    detailsModal.show();
   };
 
   const movieProgressItems = Object.entries(progressItems || {}).filter(
@@ -62,6 +59,7 @@ export function DiscoverContent() {
   );
 
   const renderMoviesContent = () => {
+<<<<<<< HEAD
     if (activeProvider) {
       return (
         <>
@@ -147,10 +145,119 @@ export function DiscoverContent() {
           moreContent
         />
       </>
+=======
+    const carousels = [];
+
+    // For You - personal recommendations from watch history, progress, and bookmarks
+    carousels.push(
+      <PersonalRecommendationsCarousel
+        key="movie-for-you"
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+      />,
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
     );
+
+    // Movie Recommendations - only show if there are movie progress items
+    if (movieProgressItems.length > 0) {
+      carousels.push(
+        <LazyMediaCarousel
+          key="movie-recommendations"
+          content={{ type: "recommendations" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          showRecommendations
+          priority={carousels.length < 2} // First 2 carousels load immediately
+        />,
+      );
+    }
+
+    // Top 10 Movies
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-top10"
+        content={{ type: "top10", fallback: "popular" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
+      />,
+    );
+
+    // Latest Releases
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-latest"
+        content={{ type: "latest", fallback: "nowPlaying" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
+      />,
+    );
+
+    // 4K Releases
+    // carousels.push(
+    //   <LazyMediaCarousel
+    //     key="movie-4k"
+    //     content={{ type: "latest4k", fallback: "popular" }}
+    //     isTVShow={false}
+    //     carouselRefs={carouselRefs}
+    //     onShowDetails={handleShowDetails}
+    //     moreContent
+    //     priority={carousels.length < 2}
+    //   />,
+    // );
+
+    // Top Rated
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-top-rated"
+        content={{ type: "topRated" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
+      />,
+    );
+
+    // Provider Movies
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-providers"
+        content={{ type: "provider" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        showProviders
+        moreContent
+      />,
+    );
+
+    // Genre Movies
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-genres"
+        content={{ type: "genre" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        showGenres
+        moreContent
+      />,
+    );
+
+    return carousels;
   };
 
   const renderTVShowsContent = () => {
+<<<<<<< HEAD
     if (activeProvider) {
       return (
         <>
@@ -235,25 +342,122 @@ export function DiscoverContent() {
           moreContent
         />
       </>
+=======
+    const carousels = [];
+
+    // For You - personal recommendations from watch history, progress, and bookmarks
+    carousels.push(
+      <PersonalRecommendationsCarousel
+        key="tv-for-you"
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+      />,
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
     );
+
+    // TV Show Recommendations - only show if there are TV show progress items
+    if (tvProgressItems.length > 0) {
+      carousels.push(
+        <LazyMediaCarousel
+          key="tv-recommendations"
+          content={{ type: "recommendations" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          showRecommendations
+          priority={carousels.length < 2} // First 2 carousels load immediately
+        />,
+      );
+    }
+
+    // On Air
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-on-air"
+        content={{ type: "latesttv", fallback: "onTheAir" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
+      />,
+    );
+
+    // Top Rated
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-top-rated"
+        content={{ type: "topRated" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
+      />,
+    );
+
+    // Popular
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-popular"
+        content={{ type: "popular" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
+      />,
+    );
+
+    // Provider TV Shows
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-providers"
+        content={{ type: "provider" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        showProviders
+        moreContent
+      />,
+    );
+
+    // Genre TV Shows
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-genres"
+        content={{ type: "genre" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        showGenres
+        moreContent
+      />,
+    );
+
+    return carousels;
   };
 
   const renderEditorPicksContent = () => {
     return (
       <>
-        <MediaCarousel
+        <LazyMediaCarousel
           content={{ type: "editorPicks" }}
           isTVShow={false}
           carouselRefs={carouselRefs}
           onShowDetails={handleShowDetails}
           moreContent
+          priority // Editor picks load immediately since they're the main content
         />
-        <MediaCarousel
+        <LazyMediaCarousel
           content={{ type: "editorPicks" }}
           isTVShow
           carouselRefs={carouselRefs}
           onShowDetails={handleShowDetails}
           moreContent
+          priority // Editor picks load immediately since they're the main content
         />
       </>
     );
@@ -286,17 +490,32 @@ export function DiscoverContent() {
       </div>
 
       <WideContainer ultraWide classNames="!px-0">
+<<<<<<< HEAD
         <LazyTabContent isActive={isMoviesTab}>
+=======
+        {/* Movies Tab */}
+        <div style={{ display: isMoviesTab ? "block" : "none" }}>
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
           {renderMoviesContent()}
-        </LazyTabContent>
+        </div>
 
+<<<<<<< HEAD
         <LazyTabContent isActive={isTVShowsTab}>
+=======
+        {/* TV Shows Tab */}
+        <div style={{ display: isTVShowsTab ? "block" : "none" }}>
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
           {renderTVShowsContent()}
-        </LazyTabContent>
+        </div>
 
+<<<<<<< HEAD
         <LazyTabContent isActive={isEditorPicksTab}>
+=======
+        {/* Editor Picks Tab */}
+        <div style={{ display: isEditorPicksTab ? "block" : "none" }}>
+>>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
           {renderEditorPicksContent()}
-        </LazyTabContent>
+        </div>
       </WideContainer>
 
       <div
@@ -312,7 +531,7 @@ export function DiscoverContent() {
 
       <ScrollToTopButton />
 
-      {detailsData && <DetailsModal id="discover-details" data={detailsData} />}
+      {/* DetailsModal is now managed by overlayStack */}
     </div>
   );
 }
