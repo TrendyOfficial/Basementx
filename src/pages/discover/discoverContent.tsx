@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { t } from "i18next";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/buttons/Button";
@@ -40,6 +40,7 @@ export function DiscoverContent() {
   const isEditorPicksTab = selectedCategory === "editorpicks";
 
   const handleCategoryChange = (category: string) => {
+    setActiveProvider(null);
     setSelectedCategory(category as "movies" | "tvshows" | "editorpicks");
   };
 
@@ -58,6 +59,93 @@ export function DiscoverContent() {
   );
 
   const renderMoviesContent = () => {
+    //
+    if (activeProvider) {
+      return (
+        <>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <img
+                src={providerMap[activeProvider.key].img}
+                alt={providerMap[activeProvider.key].name}
+                className="h-8 rounded-md"
+              />
+              <h3 className="text-lg font-semibold">
+                {t("discover.providerResults", { provider: activeProvider.name })}
+              </h3>
+            </div>
+            <Button theme="plain" onClick={clearProviderFilter}>
+              {t("discover.clearFilter") || "Clear"}
+            </Button>
+          </div>
+          <MediaCarousel
+            content={{
+              type: "provider",
+              providerId: activeProvider.providerId,
+              providerKey: activeProvider.key,
+              providerName: activeProvider.name,
+            }}
+            isTVShow={false}
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            showProviders
+            moreContent
+          />
+        </>
+      );
+    }
+    // fallback: default content
+    return (
+      <>
+        {movieProgressItems.length > 0 && (
+          <MediaCarousel
+            content={{ type: "recommendations" }}
+            isTVShow={false}
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            moreContent
+            showRecommendations
+          />
+        )}
+        <MediaCarousel
+          content={{ type: "latest", fallback: "nowPlaying" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+        />
+        <MediaCarousel
+          content={{ type: "latest4k", fallback: "popular" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+        />
+        <MediaCarousel
+          content={{ type: "topRated" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+        />
+        <MediaCarousel
+          content={{ type: "provider" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showProviders
+          moreContent
+        />
+        <MediaCarousel
+          content={{ type: "genre" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showGenres
+          moreContent
+        />
+      </>
+=======
     const carousels = [];
 
     // For You - personal recommendations from watch history, progress, and bookmarks
@@ -67,7 +155,8 @@ export function DiscoverContent() {
         isTVShow={false}
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
-      />
+      />,
+//
     );
 
     // Movie Recommendations - only show if there are movie progress items
@@ -81,8 +170,8 @@ export function DiscoverContent() {
           onShowDetails={handleShowDetails}
           moreContent
           showRecommendations
-          priority={carousels.length < 2}
-        />
+          priority={carousels.length < 2} // First 2 carousels load immediately
+        />,
       );
     }
 
@@ -96,7 +185,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     // Latest Releases
@@ -109,8 +198,21 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
+
+    // 4K Releases
+    // carousels.push(
+    //   <LazyMediaCarousel
+    //     key="movie-4k"
+    //     content={{ type: "latest4k", fallback: "popular" }}
+    //     isTVShow={false}
+    //     carouselRefs={carouselRefs}
+    //     onShowDetails={handleShowDetails}
+    //     moreContent
+    //     priority={carousels.length < 2}
+    //   />,
+    // );
 
     // Top Rated
     carousels.push(
@@ -122,7 +224,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     // Provider Movies
@@ -135,7 +237,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
-      />
+      />,
     );
 
     // Genre Movies
@@ -148,13 +250,99 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showGenres
         moreContent
-      />
+      />,
     );
 
     return carousels;
   };
 
   const renderTVShowsContent = () => {
+    //
+    if (activeProvider) {
+      return (
+        <>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <img
+                src={providerMap[activeProvider.key].img}
+                alt={providerMap[activeProvider.key].name}
+                className="h-8 rounded-md"
+              />
+              <h3 className="text-lg font-semibold">
+                {t("discover.providerResults", { provider: activeProvider.name })}
+              </h3>
+            </div>
+            <Button theme="plain" onClick={clearProviderFilter}>
+              {t("discover.clearFilter") || "Clear"}
+            </Button>
+          </div>
+          <MediaCarousel
+            content={{
+              type: "provider",
+              providerId: activeProvider.providerId,
+              providerKey: activeProvider.key,
+              providerName: activeProvider.name,
+            }}
+            isTVShow
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            showProviders
+            moreContent
+          />
+        </>
+      );
+    }
+    return (
+      <>
+        {tvProgressItems.length > 0 && (
+          <MediaCarousel
+            content={{ type: "recommendations" }}
+            isTVShow
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            moreContent
+            showRecommendations
+          />
+        )}
+        <MediaCarousel
+          content={{ type: "latesttv", fallback: "onTheAir" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+        />
+        <MediaCarousel
+          content={{ type: "topRated" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+        />
+        <MediaCarousel
+          content={{ type: "popular" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+        />
+        <MediaCarousel
+          content={{ type: "provider" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showProviders
+          moreContent
+        />
+        <MediaCarousel
+          content={{ type: "genre" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showGenres
+          moreContent
+        />
+      </>
+=======
     const carousels = [];
 
     // For You - personal recommendations from watch history, progress, and bookmarks
@@ -164,7 +352,8 @@ export function DiscoverContent() {
         isTVShow
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
-      />
+      />,
+//
     );
 
     // TV Show Recommendations - only show if there are TV show progress items
@@ -178,8 +367,8 @@ export function DiscoverContent() {
           onShowDetails={handleShowDetails}
           moreContent
           showRecommendations
-          priority={carousels.length < 2}
-        />
+          priority={carousels.length < 2} // First 2 carousels load immediately
+        />,
       );
     }
 
@@ -193,7 +382,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     // Top Rated
@@ -206,7 +395,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     // Popular
@@ -219,7 +408,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
-      />
+      />,
     );
 
     // Provider TV Shows
@@ -232,7 +421,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
-      />
+      />,
     );
 
     // Genre TV Shows
@@ -245,7 +434,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showGenres
         moreContent
-      />
+      />,
     );
 
     return carousels;
@@ -260,7 +449,7 @@ export function DiscoverContent() {
           carouselRefs={carouselRefs}
           onShowDetails={handleShowDetails}
           moreContent
-          priority
+          priority // Editor picks load immediately since they're the main content
         />
         <LazyMediaCarousel
           content={{ type: "editorPicks" }}
@@ -268,7 +457,7 @@ export function DiscoverContent() {
           carouselRefs={carouselRefs}
           onShowDetails={handleShowDetails}
           moreContent
-          priority
+          priority // Editor picks load immediately since they're the main content
         />
       </>
     );
@@ -276,6 +465,7 @@ export function DiscoverContent() {
 
   return (
     <div className="relative min-h-screen">
+      {/* Navigation Tabs */}
       <DiscoverNavigation
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
@@ -283,6 +473,7 @@ export function DiscoverContent() {
         setShowPlatforms={setShowPlatforms}
       />
 
+      {/* Streaming Platforms Row (Expandable) */}
       <div className={`platform-filter-shell ${showPlatforms ? "open" : ""}`}>
         <div className="platform-filter-panel">
           {STREAMING_PLATFORMS.map((platform) => (
@@ -299,36 +490,50 @@ export function DiscoverContent() {
       </div>
 
       <WideContainer ultraWide classNames="!px-0">
+//
+        <LazyTabContent isActive={isMoviesTab}>
+=======
         {/* Movies Tab */}
-        <div style={{ display: isMoviesTab ? "block" : "none" }}>
-          {renderMoviesContent()}
-        </div>
+          <div style={{ display: isMoviesTab ? "block" : "none" }}>
+//
+            {renderMoviesContent()}
+          </div>
 
+//
+          <LazyTabContent isActive={isTVShowsTab}>
+=======
         {/* TV Shows Tab */}
-        <div style={{ display: isTVShowsTab ? "block" : "none" }}>
-          {renderTVShowsContent()}
-        </div>
+            <div style={{ display: isTVShowsTab ? "block" : "none" }}>
+//
+              {renderTVShowsContent()}
+            </div>
 
+//
+            <LazyTabContent isActive={isEditorPicksTab}>
+=======
         {/* Editor Picks Tab */}
-        <div style={{ display: isEditorPicksTab ? "block" : "none" }}>
-          {renderEditorPicksContent()}
-        </div>
-      </WideContainer>
+              <div style={{ display: isEditorPicksTab ? "block" : "none" }}>
+//
+                {renderEditorPicksContent()}
+              </div>
+            </WideContainer>
 
-      <div
-        className={classNames(
-          "flex justify-center mt-8 mb-12",
-          isMoviesTab ? "block" : "hidden"
-        )}
-      >
-        <Button theme="purple" onClick={() => navigate("/discover/all")}>
-          {t("discover.viewLists")}
-        </Button>
-      </div>
+            <div
+              className={classNames(
+                "flex justify-center mt-8 mb-12",
+                isMoviesTab ? "block" : "hidden"
+              )}
+            >
+              <Button theme="purple" onClick={() => navigate("/discover/all")}>
+                {t("discover.viewLists")}
+              </Button>
+            </div>
 
-      <ScrollToTopButton />
-    </div>
-  );
+            <ScrollToTopButton />
+
+            {/* DetailsModal is now managed by overlayStack */}
+          </div>
+          );
 }
 
-export default DiscoverContent;
+          export default DiscoverContent;
