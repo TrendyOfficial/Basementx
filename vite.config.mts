@@ -67,12 +67,7 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: "Basement",
           short_name: "Basement",
-<<<<<<< HEAD
           description: "Watch anything you want — totally free, no ads forever! (≧◡≦)",
-=======
-          description:
-            "Watch your favorite shows and movies for free with no ads ever! (っ'ヮ'c)",
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
           theme_color: "#000000",
           background_color: "#000000",
           display: "standalone",
