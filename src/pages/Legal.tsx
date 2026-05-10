@@ -131,13 +131,13 @@ export function LegalPage() {
                 information or identifying data.
                 <br />
                 <br />
-<<<<<<< HEAD
+//
                 Basement is entirely self-hostable, and can be run on any
                 server—even by yourself.
 =======
                 Basement is entirely self hostable, and can be run on any
                 server. Even by yourself.
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+//
               </Paragraph>
             }
           />

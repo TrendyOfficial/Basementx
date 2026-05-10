@@ -21,11 +21,11 @@
     "q5": {
       "section": "geral",
       "title": "Como posso saber mais?",
-<<<<<<< HEAD
+      //
       "body": "O Basement tem um servidor no Discord, que podes encontrar no topo desta página!"
 =======
       "body": "O Basement tem um servidor no Fluxer, que podes encontrar no topo desta página!"
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+      //
     },
     "q25": {
       "section": "linguagem",
@@ -38,11 +38,11 @@
       "section": "pesquisa"
     },
     "q6": {
-<<<<<<< HEAD
+      //
       "body": "Ainda não, mas podes instalá-lo como uma PWA (Progressive Web App). No iOS, usa o Safari → Partilhar → Adicionar ao Ecrã Principal. No Android, usa o Chrome → 3 pontos → Adicionar ao Ecrã Principal. Há um APK experimental disponível no nosso Discord, mas não é recomendado.",
 =======
       "body": "Ainda não, mas podes instalá-lo como uma PWA (Progressive Web App). No iOS, usa o Safari → Partilhar → Adicionar ao Ecrã Principal. No Android, usa o Chrome → 3 pontos → Adicionar ao Ecrã Principal. Há um APK experimental disponível no nosso Fluxer, mas não é recomendado.",
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+      //
       "title": "Existe alguma app do Basement?",
       "section": "geral"
     },
@@ -289,19 +289,27 @@
       },
       "morning": {
         "default": "O que gostaria de assistir esta manhã?",
-        "extra": ["Dizem que Antes do Amanhecer é bom"]
+        "extra": [
+          "Dizem que Antes do Amanhecer é bom"
+        ]
       },
       "night": {
         "default": "O que gostaria de assistir esta noite?",
-        "extra": ["Cansado? Dizem que O Exorcista é bom."]
+        "extra": [
+          "Cansado? Dizem que O Exorcista é bom."
+        ]
       },
       "420": {
         "default": "O que gostarias de ver neste 4/20?",
-        "extra": ["Feliz 4/20 🥳!"]
+        "extra": [
+          "Feliz 4/20 🥳!"
+        ]
       },
       "69": {
         "default": "Apetece-te algo picante?",
-        "extra": ["Feliz dia 69 😘!"]
+        "extra": [
+          "Feliz dia 69 😘!"
+        ]
       }
     },
     "mediaCard": {

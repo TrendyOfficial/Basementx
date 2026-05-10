@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+//
 # Contributing Guidelines for Basement
 
 - Vblaze
@@ -6,7 +6,7 @@
 
 =======
 # Contributing Guidelines for P-Stream
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+//
 
 Thank you for investing your time in contributing to our project! Your contribution will be reflected on all of the community hosted instances that are on the latest version.
 

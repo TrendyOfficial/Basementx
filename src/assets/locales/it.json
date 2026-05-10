@@ -161,22 +161,32 @@
     "titles": {
       "day": {
         "default": "Cosa vorresti guardare questo pomeriggio?",
-        "extra": ["Viva Basement!"]
+        "extra": [
+          "Viva Basement!"
+        ]
       },
       "morning": {
         "default": "Cosa vorresti guardare questa mattina?",
-        "extra": ["Viva Basement!"]
+        "extra": [
+          "Viva Basement!"
+        ]
       },
       "night": {
         "default": "Cosa vorresti guardare questa sera?",
-        "extra": ["Viva Basement!"]
+        "extra": [
+          "Viva Basement!"
+        ]
       },
       "420": {
         "default": "Cosa ti piacerebbe guardare questo 20/4?",
-        "extra": ["Buon 20/4 🥳!"]
+        "extra": [
+          "Buon 20/4 🥳!"
+        ]
       },
       "69": {
-        "extra": ["Buon 69 giorno😘!"],
+        "extra": [
+          "Buon 69 giorno😘!"
+        ],
         "default": "Pronto per qualcosa di piccante?"
       }
     },
@@ -624,11 +634,11 @@
     "title": "Supporto",
     "text": "Basement è progettato per essere il più intuitivo possibile. Tuttavia, le persone hanno ancora domande e problemi. Questa pagina è qui per aiutare a risolvere queste carenze",
     "q1": {
-<<<<<<< HEAD
+      //
       "body": "Be', puoi unirti al <0>Discord di Basement</0> ufficiale e porre domande lì oppure puoi inviare un'e-mail a quella fornita in fondo a questa pagina.",
 =======
       "body": "Be', puoi unirti al <0>Fluxer di Basement</0> ufficiale e porre domande lì oppure puoi inviare un'e-mail a quella fornita in fondo a questa pagina.",
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+      //
       "title": "Dove posso ottenere aiuto?"
     }
   },

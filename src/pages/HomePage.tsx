@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@/components/buttons/Button";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
@@ -166,37 +165,8 @@ export function HomePage() {
 
       {renderSearch()}
 
-<<<<<<< HEAD
-      {!search &&
-        (enableCarouselView ? (
-          <WideContainer ultraWide classNames="!px-3 md:!px-9">
-            <WatchingCarousel
-              carouselRefs={carouselRefs}
-              onShowDetails={handleShowDetails}
-            />
-            <BookmarksCarousel
-              carouselRefs={carouselRefs}
-              onShowDetails={handleShowDetails}
-            />
-          </WideContainer>
-        ) : (
-          <WideContainer>
-            <div className="flex flex-col gap-8">
-              <WatchingPart
-                onItemsChange={setShowWatching}
-                onShowDetails={handleShowDetails}
-              />
-              <BookmarksPart
-                onItemsChange={setShowBookmarks}
-                onShowDetails={handleShowDetails}
-              />
-            </div>
-          </WideContainer>
-        ))}
-=======
       {/* User Content */}
       {!search && renderHomeSections()}
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
 
       {!search && !(showBookmarks || showWatching) ? (
         <div className="flex flex-col translate-y-[-30px] items-center justify-center pt-20">
@@ -217,7 +187,6 @@ export function HomePage() {
           shorter
         />
 
-<<<<<<< HEAD
         <WideContainer ultraWide classNames="basement-discover-shell">
           {!enableLowPerformanceMode ? <DiscoverContent /> : null}
         </WideContainer>
@@ -244,28 +213,6 @@ export function HomePage() {
           ? renderDiscoverHome()
           : renderClassicHome()}
       </div>
-
-      {detailsData && <DetailsModal id="details" data={detailsData} />}
-=======
-        {/* Discover section or discover button */}
-        {enableDiscover && !search && !enableLowPerformanceMode ? (
-          <DiscoverContent />
-        ) : (
-          <div className="flex flex-col justify-center items-center h-40 space-y-4">
-            <div className="flex flex-col items-center justify-center">
-              {!search && !enableLowPerformanceMode && (
-                <Button
-                  className="px-py p-[0.35em] mt-3 rounded-xl text-type-dimmed box-content text-[18px] bg-largeCard-background justify-center items-center"
-                  onClick={() => handleClick("/discover")}
-                >
-                  {t("home.search.discover")}
-                </Button>
-              )}
-            </div>
-          </div>
-        )}
-      </WideContainer>
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
     </HomeLayout>
   );
 }

@@ -185,7 +185,7 @@ export function Navigation(props: NavigationProps) {
       </div>
 
       <div
-<<<<<<< HEAD
+        //
         className="top-content fixed pointer-events-none left-0 right-0 z-[60] top-0 min-h-[150px]"
         style={{ top: `${bannerHeight}px` }}
 =======
@@ -194,7 +194,7 @@ export function Navigation(props: NavigationProps) {
         style={{
           top: `${bannerHeight}px`,
         }}
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+//
       >
         <div className="fixed left-0 right-0 flex items-center">
           <div className="basement-topbar relative z-[60] flex flex-1 items-center justify-between">
@@ -343,7 +343,7 @@ export function Navigation(props: NavigationProps) {
                     </span>
                   ) : null;
                 })()}
-<<<<<<< HEAD
+//
               </button>
               <Link
                 to="/settings"
@@ -358,16 +358,16 @@ export function Navigation(props: NavigationProps) {
               </div>
 =======
               </a>
-            </div>
-            <div className="flex items-center space-x-3 pointer-events-auto">
-              <LinksDropdown>
-                {loggedIn ? <UserAvatar withName onlyMain /> : <NoUserAvatar />}
-              </LinksDropdown>
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
-            </div>
+          </div>
+          <div className="flex items-center space-x-3 pointer-events-auto">
+            <LinksDropdown>
+              {loggedIn ? <UserAvatar withName onlyMain /> : <NoUserAvatar />}
+            </LinksDropdown>
+//
           </div>
         </div>
       </div>
+    </div >
     </>
   );
 }

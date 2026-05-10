@@ -20,11 +20,11 @@
       "title": "Entä tietoni ja muut asiat?"
     },
     "q5": {
-<<<<<<< HEAD
+      //
       "body": "Basementilla on Discord-palvelin, jonka löydät tämän sivun yläosasta!",
 =======
       "body": "Basementilla on Fluxer-palvelin, jonka löydät tämän sivun yläosasta!",
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+      //
       "title": "Miten voin saada lisätietoa?"
     }
   },
@@ -178,15 +178,21 @@
       },
       "night": {
         "default": "Mitä haluaisit katsoa tänä iltana?",
-        "extra": ["Väsynyt? Kuulin, että Manaaja (The Exorcist) on hyvä!"]
+        "extra": [
+          "Väsynyt? Kuulin, että Manaaja (The Exorcist) on hyvä!"
+        ]
       },
       "420": {
         "default": "Mitä tekisi mieli katsoa tänä 4/20-päivänä?",
-        "extra": ["Hyvää 4/20-päivää 🥳!"]
+        "extra": [
+          "Hyvää 4/20-päivää 🥳!"
+        ]
       },
       "69": {
         "default": "Ootko valmis johonkin kuumaan?",
-        "extra": ["Hyvää 69-päivää 😘!"]
+        "extra": [
+          "Hyvää 69-päivää 😘!"
+        ]
       }
     },
     "mediaCard": {

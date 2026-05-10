@@ -20,11 +20,11 @@
       "title": "那我的数据呢？"
     },
     "q5": {
-<<<<<<< HEAD
+      //
       "body": "Basement 有一个 Discord 服务器，可在本页上方找到！",
 =======
       "body": "Basement 有一个 Fluxer 服务器，可在本页上方找到！",
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+      //
       "title": "如何了解更多信息？"
     }
   },
@@ -152,7 +152,12 @@
       "sectionTitle": "搜索结果",
       "empty": {
         "default": "欢迎，在这里找到你想看的！",
-        "extra": ["这里啥都没有", "空空如也…", "空空如也…", "Hi，新用户"]
+        "extra": [
+          "这里啥都没有",
+          "空空如也…",
+          "空空如也…",
+          "Hi，新用户"
+        ]
       },
       "discoverMore": "探索更多",
       "discover": "探索"
@@ -160,23 +165,33 @@
     "titles": {
       "day": {
         "default": "您今天下午想看什么？",
-        "extra": ["Basement 万岁！"]
+        "extra": [
+          "Basement 万岁！"
+        ]
       },
       "morning": {
         "default": "您今早想看什么？",
-        "extra": ["Basement 万岁！"]
+        "extra": [
+          "Basement 万岁！"
+        ]
       },
       "night": {
         "default": "您今晚想看什么？",
-        "extra": ["Basement 万岁！"]
+        "extra": [
+          "Basement 万岁！"
+        ]
       },
       "420": {
         "default": "这个 4/20 你想看什么？",
-        "extra": ["4/20 快乐 🥳！"]
+        "extra": [
+          "4/20 快乐 🥳！"
+        ]
       },
       "69": {
         "default": "想来点火热的吗？",
-        "extra": ["69 日快乐 😘！"]
+        "extra": [
+          "69 日快乐 😘！"
+        ]
       }
     }
   },
@@ -765,11 +780,11 @@
     "text": "Basement 的设计尽可能方便用户使用。但是人们仍然会有疑问和问题，本页将帮助解决这些问题",
     "q1": {
       "title": "我可以在哪获取帮助？",
-<<<<<<< HEAD
+      //
       "body": "您可以加入 <0>Basement 官方 Discord</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。"
 =======
       "body": "您可以加入 <0>Basement 官方 Fluxer</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。"
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+      //
     }
   },
   "jip": {
@@ -780,11 +795,11 @@
     "title": "Jip",
     "text": "Basement 并不是大风刮来的，它主要是由一个人（一个非常史诗般的人）创造的。",
     "q1": {
-<<<<<<< HEAD
+      //
       "body": "您可以加入 <0>Basement 官方 Discord</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。",
 =======
       "body": "您可以加入 <0>Basement 官方 Fluxer</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。",
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+      //
       "title": "我可以在哪获取帮助？"
     }
   },

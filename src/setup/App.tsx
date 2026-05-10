@@ -229,15 +229,12 @@ function App() {
           />
           <Route path="/browse/:query?" element={<HomePage />} />
           <Route path="/" element={<HomePage />} />
-<<<<<<< HEAD
           <Route
             path="/movies"
             element={<BrowseMediaPage mediaType="movie" />}
           />
           <Route path="/tvshows" element={<BrowseMediaPage mediaType="tv" />} />
-=======
           <Route path="/gamepad-setup" element={<GamepadSetupPage />} />
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/about" element={<AboutPage />} />

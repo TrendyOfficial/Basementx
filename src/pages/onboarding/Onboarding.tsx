@@ -36,7 +36,7 @@ import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProxyUrls } from "@/utils/proxyUrls";
 
-<<<<<<< HEAD
+//
 import {
   Status,
   testFebboxKey,
@@ -374,7 +374,7 @@ export function RealDebridSetup() {
 }
 =======
 import { DebridEdit, FebboxSetup } from "../parts/settings/ConnectionsPart";
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+//
 
 function Item(props: { title: string; children: React.ReactNode }) {
   return (

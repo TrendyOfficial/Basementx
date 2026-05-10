@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-<<<<<<< HEAD
+//
     <title>Basement Notifications</title>
     <link>https://v-basement.vercel.app</link>
     <description>Site updates and important notifications for Basement users</description>
@@ -442,7 +442,7 @@ Also, P-Stream now has a SimpleX community! Feel free to join if you want to sta
       <pubDate>Mon, 29 Sep 2025 18:00:00 MST</pubDate>
       <category>update</category>
     </item>
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+//
 
     <item>
       <guid>notification-041</guid>

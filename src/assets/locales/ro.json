@@ -20,11 +20,11 @@
       "title": "Ce se întâmplă cu datele mele?"
     },
     "q5": {
-<<<<<<< HEAD
+      //
       "body": "Basement are un server de Discord care poate fi găsit în antetul acestei pagini!",
 =======
       "body": "Basement are un server de Fluxer care poate fi găsit în antetul acestei pagini!",
->>>>>>> ec60421d5edcfc67ce2728e3d7524cbae8d34c4e
+      //
       "title": "Cum pot afla mai multe?"
     }
   },
@@ -171,14 +171,20 @@
       },
       "morning": {
         "default": "La ce dorești să te in uiți dimineață aceasta?",
-        "extra": ["Aud că Before Sunrise este bun"]
+        "extra": [
+          "Aud că Before Sunrise este bun"
+        ]
       },
       "night": {
         "default": "La ce dorești să te uiți în astă seară?",
-        "extra": ["Obosit? Aud că The Exorcist is good."]
+        "extra": [
+          "Obosit? Aud că The Exorcist is good."
+        ]
       },
       "420": {
-        "extra": ["Un 20/4 fericit 🥳!"],
+        "extra": [
+          "Un 20/4 fericit 🥳!"
+        ],
         "default": "Ce ai vrea să vizionezi pe data asta de 20/4?"
       },
       "69": {
