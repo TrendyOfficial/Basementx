@@ -50,7 +50,7 @@ import { SettingsCard } from "@/components/layout/SettingsCard";
 import {
   Status,
   testFebboxKey,
-  testRealDebridKey,
+  testdebridToken,
 } from "../parts/settings/SetupPart";
 
 async function getFebboxKeyStatus(febboxKey: string | null) {
@@ -260,7 +260,7 @@ export function FEDAPISetup() {
 
 async function getRealDebridKeyStatus(realDebridKey: string | null) {
   if (realDebridKey) {
-    const status: Status = await testRealDebridKey(realDebridKey);
+    const status: Status = await testdebridToken(realDebridKey);
     return status;
   }
   return "unset";
