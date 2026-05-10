@@ -190,34 +190,12 @@ function MediaCardContent({
   }
 
   return (
-    //
-    <Flare.Base
-      className={`artifact-card group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
-        } ${closable ? "jiggle" : ""}`}
-      tabIndex={canLink ? 0 : -1}
-      onKeyUp={(e) => e.key === "Enter" && e.currentTarget.click()}
-    >
-      <Flare.Light
-        flareSize={300}
-        cssColorVar="--colors-mediaCard-hoverAccent"
-        backgroundClass="bg-mediaCard-hoverBackground duration-100"
-        className={classNames({
-          "rounded-xl bg-background-main group-hover:opacity-100": canLink,
-        })}
-      />
-      <Flare.Child
-        className={`artifact-card-inner pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${canLink ? "group-hover:scale-95" : "opacity-60"
-          }`}
-=======
     <div ref={targetRef as React.RefObject<HTMLDivElement>}>
       <Flare.Base
-        className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 ${
-          canLink ? "hover:bg-mediaCard-hoverBackground" : ""
-        } ${closable ? "jiggle" : ""}`}
-        onKeyUp={(e) =>
-          e.key === "Enter" && (e.currentTarget as HTMLElement).click()
-        }
-//
+        className={`artifact-card group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
+          } ${closable ? "jiggle" : ""}`}
+        tabIndex={canLink ? 0 : -1}
+        onKeyUp={(e) => e.key === "Enter" && (e.currentTarget as HTMLElement).click()}
       >
         <Flare.Light
           flareSize={300}
@@ -228,7 +206,7 @@ function MediaCardContent({
           })}
         />
         <Flare.Child
-          className={`pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${canLink ? "group-hover:scale-95" : "opacity-60"
+          className={`artifact-card-inner pointer-events-auto relative mb-2 p-[0.4em] transition-transform duration-300 ${canLink ? "group-hover:scale-95" : "opacity-60"
             }`}
         >
           <div
@@ -369,8 +347,8 @@ function MediaCardContent({
             </>
           )}
         </Flare.Child>
-    </Flare.Base>
-    </div >
+      </Flare.Base>
+    </div>
   );
 }
 

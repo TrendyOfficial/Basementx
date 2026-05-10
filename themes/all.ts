@@ -16,14 +16,11 @@ import forest from "./list/forest";
 import wolverine from "./list/wolverine";
 import popsicle from "./list/popsicle";
 import hulk from "./list/hulk";
-//
 import shadow from "./list/shadow";
-=======
 import autumn from "./list/autumn";
 import cobalt from "./list/cobalt";
 import frost from "./list/frost";
 import christmas from "./list/christmas";
-//
 
 export const allThemes = [
   teal,
@@ -46,11 +43,7 @@ export const allThemes = [
   hulk,
   wolverine,
   popsicle,
-  //
   shadow,
-]
-=======
   christmas,
   cobalt,
 ];
-//

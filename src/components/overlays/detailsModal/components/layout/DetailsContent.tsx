@@ -244,11 +244,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
     if (/iPad|iPhone|iPod/i.test(navigator.userAgent) && navigator.share) {
       navigator
         .share({
-          //
-          title: "P-d",
-=======
           title: "Basement",
-//
           text: data.title,
           url: shareUrl,
         })

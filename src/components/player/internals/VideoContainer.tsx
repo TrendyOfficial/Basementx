@@ -100,12 +100,8 @@ function VideoElement() {
   if (shouldUseNativeTrack && trackObjectUrl && language) {
     subtitleTrack = (
       <track
-        //
-        label="P-Nas Captions"
-=======
         ref={trackEl}
         label="Basement Captions"
-//
         kind="subtitles"
         srcLang={language}
         src={trackObjectUrl}
