@@ -16,7 +16,7 @@ interface DropdownProps {
   options: Array<OptionItem>;
   direction?: "up" | "down";
   side?: "left" | "right";
-  customButton?: React.ReactNode;
+  customButton?: React.ReactNode | ((props: { open: boolean }) => React.ReactNode);
   customMenu?: React.ReactNode;
   className?: string;
   preventWrap?: boolean;

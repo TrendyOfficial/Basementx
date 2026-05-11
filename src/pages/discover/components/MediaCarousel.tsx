@@ -87,6 +87,7 @@ export function MediaCarousel({
   showProviders = false,
   showGenres = false,
   showRecommendations = false,
+  providerId: initialProviderId,
   providerKey: _initialProviderKey,
   providerName: initialProviderName,
   extraParams,
@@ -356,6 +357,15 @@ export function MediaCarousel({
                             name: recommendationSources[0]?.title || "",
                           }
                     }
+                    setSelectedItem={(item) => {
+                      const source = recommendationSources.find(
+                        (s) => s.id === item.id,
+                      );
+                      if (source) {
+                        setSelectedRecommendationId(item.id);
+                        setSelectedRecommendationTitle(source.title);
+                      }
+                    }}
                     onClear={() => {
                       setSelectedRecommendationId("");
                       setSelectedRecommendationTitle("");
@@ -364,10 +374,11 @@ export function MediaCarousel({
                       id: source.id,
                       name: source.title,
                     }))}
-                    customButton={
+                    customButton={({ open }) => (
                       <button
                         type="button"
-                        className="px-2 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                        className="discover-filter-button"
+                        title={t("discover.carousel.change")}
                       >
                         <span>{t("discover.carousel.change")}</span>
                         <Icon
@@ -375,7 +386,7 @@ export function MediaCarousel({
                           className={`text-xs text-dropdown-secondary transition-transform duration-300 ${open ? "rotate-180" : ""}`}
                         />
                       </button>
-                    }
+                    )}
                     side="right"
                     customMenu={
                       <Listbox.Options static className="py-1">
