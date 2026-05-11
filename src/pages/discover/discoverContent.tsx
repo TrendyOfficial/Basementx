@@ -42,14 +42,24 @@ const STREAMING_PLATFORMS = [
     providerId: "350",
     key: "apple",
   },
-  { name: "Hulu", src: "/platforms/hulu.png", providerId: "15", key: "hulu" },
+  {
+    name: "Hulu",
+    src: "/platforms/hulu.png",
+    providerId: "15",
+    key: "hulu"
+  },
   {
     name: "Crunchyroll",
     src: "/platforms/crunchyroll.png",
     providerId: "283",
     key: "crunchyroll",
   },
-  { name: "HBO Max", src: "/platforms/max.png", providerId: "384", key: "hbo" },
+  {
+    name: "HBO Max",
+    src: "/platforms/max.png",
+    providerId: "384",
+    key: "hbo"
+  },
   {
     name: "Paramount",
     src: "/platforms/paramount.png",
@@ -146,8 +156,6 @@ export function DiscoverContent() {
     }
 
     const carousels = [];
-
-    // Personal Recommendations (For You)
     carousels.push(
       <PersonalRecommendationsCarousel
         key="movie-for-you"
@@ -157,7 +165,6 @@ export function DiscoverContent() {
       />,
     );
 
-    // Continue Watching Recommendations
     if (movieProgressItems.length > 0) {
       carousels.push(
         <LazyMediaCarousel
@@ -173,67 +180,6 @@ export function DiscoverContent() {
       );
     }
 
-    // In Cinemas
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-in-cinemas"
-        content={{ type: "nowPlaying" }}
-        titleOverride={t("discover.carousel.title.inCinemas")}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-      />,
-    );
-
-    // What's Trending (Trending Movies)
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-trending"
-        content={{ type: "popular" }}
-        titleOverride="What's Trending"
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-      />,
-    );
-
-    // Cartoon (Animation Genre)
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-cartoon"
-        content={{ type: "genre" }}
-        titleOverride="Cartoon"
-        extraParams={{ with_genres: "16" }}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-      />,
-    );
-
-    // Comedy Movies (2016+)
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-comedy"
-        content={{ type: "genre" }}
-        titleOverride="Comedy Movies"
-        extraParams={{
-          with_genres: "35",
-          "primary_release_date.gte": "2016-01-01",
-          sort_by: "popularity.desc",
-        }}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-      />,
-    );
-
-    // Standard carousels
     carousels.push(
       <LazyMediaCarousel
         key="movie-top10"
@@ -242,6 +188,31 @@ export function DiscoverContent() {
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
         moreContent
+        priority={carousels.length < 2}
+      />,
+    );
+
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-latest"
+        content={{ type: "latest", fallback: "nowPlaying" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
+      />,
+    );
+
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-top-rated"
+        content={{ type: "topRated" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
       />,
     );
 
@@ -253,6 +224,18 @@ export function DiscoverContent() {
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
         showProviders
+        moreContent
+      />,
+    );
+
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-genres"
+        content={{ type: "genre" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        showGenres
         moreContent
       />,
     );
@@ -299,8 +282,6 @@ export function DiscoverContent() {
     }
 
     const carousels = [];
-
-    // Personal Recommendations (For You)
     carousels.push(
       <PersonalRecommendationsCarousel
         key="tv-for-you"
@@ -310,7 +291,6 @@ export function DiscoverContent() {
       />,
     );
 
-    // Continue Watching Recommendations
     if (tvProgressItems.length > 0) {
       carousels.push(
         <LazyMediaCarousel
@@ -326,12 +306,10 @@ export function DiscoverContent() {
       );
     }
 
-    // What's Trending (Trending TV)
     carousels.push(
       <LazyMediaCarousel
-        key="tv-trending"
-        content={{ type: "popular" }}
-        titleOverride="What's Trending"
+        key="tv-on-air"
+        content={{ type: "latesttv", fallback: "onTheAir" }}
         isTVShow
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
@@ -340,35 +318,6 @@ export function DiscoverContent() {
       />,
     );
 
-    // Popular TV Shows
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-popular-shows"
-        content={{ type: "popular" }}
-        titleOverride="Popular TV Shows"
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-      />,
-    );
-
-    // Cartoon (Animation Genre)
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-cartoon"
-        content={{ type: "genre" }}
-        titleOverride="Cartoon"
-        extraParams={{ with_genres: "16" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-      />,
-    );
-
-    // Standard carousels
     carousels.push(
       <LazyMediaCarousel
         key="tv-top-rated"
@@ -377,6 +326,19 @@ export function DiscoverContent() {
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
         moreContent
+        priority={carousels.length < 2}
+      />,
+    );
+
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-popular"
+        content={{ type: "popular" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
       />,
     );
 
@@ -388,6 +350,18 @@ export function DiscoverContent() {
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
         showProviders
+        moreContent
+      />,
+    );
+
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-genres"
+        content={{ type: "genre" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        showGenres
         moreContent
       />,
     );
