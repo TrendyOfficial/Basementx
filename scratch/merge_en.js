@@ -1,4 +1,8 @@
-{
+const fs = require('fs');
+
+const currentEn = JSON.parse(fs.readFileSync('d:/Basement Project/Basement/src/assets/locales/en.json', 'utf8'));
+
+const providedEn = {
   "actions": {
     "copied": "Copied",
     "copy": "Copy",
@@ -94,7 +98,7 @@
     }
   },
   "errors": {
-    "badge": "It broke 💀",
+    "badge": "Badge",
     "details": "Error details",
     "adBlocker": "This is likely caused by your adblocker — we don't have any ads, so it's safe to whitelist us!",
     "adBlockerLink": "How to whitelist a site",
@@ -303,33 +307,23 @@
     "titles": {
       "day": {
         "default": "What would you like to watch this afternoon?",
-        "extra": [
-          "Viva la P-Stream!"
-        ]
+        "extra": ["Viva la P-Stream!"]
       },
       "morning": {
         "default": "What would you like to watch this morning?",
-        "extra": [
-          "Viva la P-Stream!"
-        ]
+        "extra": ["Viva la P-Stream!"]
       },
       "night": {
         "default": "What would you like to watch tonight?",
-        "extra": [
-          "Viva la P-Stream!"
-        ]
+        "extra": ["Viva la P-Stream!"]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": [
-          "Happy 4/20 🥳!"
-        ]
+        "extra": ["Happy 4/20 🥳!"]
       },
       "69": {
         "default": "Up for something spicy?",
-        "extra": [
-          "Happy 69 day 😘!"
-        ]
+        "extra": ["Happy 69 day 😘!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -724,7 +718,7 @@
           "title": "No embeds found"
         },
         "noStream": {
-          "text": "This source has no streams for this movie or show. /ᐠ - \u1d55 -\u30de \u2e4a",
+          "text": "This source has no streams for this movie or show. /ᐠ - ˕ -マ Ⳋ",
           "title": "No stream :("
         },
         "title": "Sources",
@@ -980,12 +974,6 @@
           }
         }
       }
-    },
-    "turnstile": {
-      "description": "Please prove your humanity by completing the quick challenge, this is to keep Basement safe.",
-      "error": "Failed to verify your humanity - stream failed to load. Clear your cache and try again, or switch to a different source.",
-      "title": "Are You a Robot 🤖?",
-      "verifyingHumanity": "Verifying your humanity... (^▽^)👍"
     }
   },
   "support": {
@@ -998,145 +986,6 @@
     "q2": {
       "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
       "title": "How can I report a bug or issue?"
-    }
-  },
-  "about": {
-    "description": "P-Stream is a web application that scours the internet for streams. The team aims for a minimalistic approach to consuming content.",
-    "faqTitle": "Common questions",
-    "q1": {
-      "body": "P-Stream doesn't host any content. When you click on something to watch, the internet is searched for the selected media (on the loading screen and in the 'video sources' tab you can see what source you're using). Media is never uploaded by P-Stream, everything is through this searching mechanism.",
-      "title": "Where does the content come from?",
-      "section": "general"
-    },
-    "q2": {
-      "body": "It's not possible to request a show or movie, P-Stream doesn't manage any content. All content is viewed from sources on the internet.",
-      "title": "Where can I request a show or movie?",
-      "section": "searching"
-    },
-    "q3": {
-      "body": "Our search results are powered by The Movie Database (TMDB) and will show regardless of whether our sources actually have the content.",
-      "title": "Search results show the show or movie, why can't I play it?",
-      "section": "searching"
-    },
-    "title": "About P-Stream (^▽^)",
-    "q4": {
-      "body": "All data is synced to the community backend. Anyone is free to use this as well.",
-      "title": "What about my data and stuff?",
-      "section": "general"
-    },
-    "q5": {
-      "body": "P-Stream has a Fluxer server which can be found at the top of this page!",
-      "title": "How can I find out more?",
-      "section": "general"
-    },
-    "searchPlaceholder": "Search for questions...",
-    "sections": {
-      "general": "General",
-      "search": "Searching & content availability",
-      "playback": "Playback issues",
-      "connections": "Connections",
-      "language": "Language & subtitle settings"
-    },
-    "help": "Can't find an answer? <0>Contact our support here.</0>",
-    "q14": {
-      "title": "4K is not available.",
-      "body": "If 4K isn't showing, it's likely not available from that source.",
-      "section": "playback"
-    },
-    "q6": {
-      "section": "general",
-      "title": "Is there a P-Stream app?",
-      "body": "Not yet, but you can install it as a PWA (Progressive Web App). On iOS, use Safari \u2192 Share \u2192 Add to Home Screen. On Android, use Chrome \u2192 3 dots \u2192 Add to Home Screen. An experimental APK is available on our Fluxer, but it's not recommended."
-    },
-    "q7": {
-      "title": "How do I create an account?",
-      "body": "Tap \"Sync to the Cloud\" on the menu dropdown or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "Missing media / Can I request media?",
-      "section": "searching",
-      "body": "No \u2014 since we don't host content, we cannot add or change what is available. The content list is based on what is publicly accessible through the search mechanism."
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm looking for!",
-      "body": "Our searches are powered by TMDB. Try tapping the \ud83d\udd0e icon for advanced search options if the results aren't accurate.",
-      "section": "searching"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a broken or corrupt video file. Try switching to a different source.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "section": "playback",
-      "body": "Switch to a different source. We don't control the content or the accuracy of the episodes."
-    },
-    "q13": {
-      "title": "The video quality is not what I expected.",
-      "body": "Try switching to a different source. Quality varies by provider; the FED API often offers more options.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "section": "playback",
-      "body": "Make sure your device audio is not muted and try switching sources. Audio issues can be caused by certain sources."
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "This can be caused by a bad file or HDR video. Ensure your device supports HDR, or switch to a different source.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm seeing visual bugs.",
-      "body": "Visual bugs often come from low-quality files. Try switching to a different source.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "section": "playback",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance."
-    },
-    "q19": {
-      "title": "How do I change sources?",
-      "body": "While playing, tap the \u2699\ufe0f icon, then choose another source from 'video sources'.",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is the FED API?",
-      "body": "The FED API is our scraper tool that fetches streams directly from Febbox. Each free Febbox account includes 100GB/month of unlimited bandwidth, and we use your interface token to fetch content as if you were watching it yourself. Desktop setup is easiest, but mobile instructions are on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once configured, your token works across all connected devices.",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need an extension or custom proxy?",
-      "section": "connections",
-      "body": "Some sources block scrapers. This extension acts as a local proxy and bypasses such blocking using your IP, headers, and cookies."
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "section": "connections",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mirrors your browsing session. It's also fully open source and available on our GitHub."
-    },
-    "q24": {
-      "section": "connections",
-      "title": "My Febbox token fails during setup. What do I do?",
-      "body": "Your ISP might be blocking the FED API. Set a custom DNS like 1.1.1.1 or NextDNS. You can also change your region in the admin panel."
-    },
-    "q25": {
-      "title": "How do I change language?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources. For FED API, only Safari supports audio switching via MP4 files.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles are out of sync.",
-      "section": "language",
-      "body": "Use the 'Customize' option in subtitle settings or press [ and ] on your keyboard to adjust. You can also import your own subtitle file."
     }
   },
   "jip": {
@@ -1194,7 +1043,7 @@
         "delete": {
           "button": "Delete account",
           "confirmButton": "Delete account",
-          "confirmDescription": "Are you sure you want to delete your account? All your data will be lost! \u0295\u0e34\u02f6\u00d3\ufe4f\u00d2 \ufe4f\u0294",
+          "confirmDescription": "Are you sure you want to delete your account? All your data will be lost! ૮₍˶Ó﹏Ò ⑅₎ა",
           "confirmTitle": "Are you sure?",
           "text": "This action is irreversible. All data will be deleted and nothing can be recovered.",
           "title": "Delete account"
@@ -1227,7 +1076,7 @@
       },
       "register": {
         "cta": "Get started",
-        "text": "Share your watch progress between devices and keep them synced. ( \u0327\u2e1f\u2e1f\u23a2\u2e1f\u2e1f)\u30d5",
+        "text": "Share your watch progress between devices and keep them synced. ( ̧⸝⸝⍢⸝⸝)ෆ",
         "title": "Sync to the Cloud"
       },
       "title": "Account"
@@ -1342,9 +1191,9 @@
         "doSetup": "Do setup",
         "errorStatus": {
           "description": "It seems that one or more items in this setup need your attention.",
-          "title": "Something needs your attention \ud83d\ude31"
+          "title": "Something needs your attention 😱"
         },
-        "itemError": "There is something wrong with this setting. Go through setup again to fix it. (\u1d17_ \u1d17\u3002)",
+        "itemError": "There is something wrong with this setting. Go through setup again to fix it. (ᴗ_ ᴗ。)",
         "items": {
           "default": "Default setup",
           "extension": "Extension",
@@ -1353,7 +1202,7 @@
         },
         "redoSetup": "Redo setup",
         "successStatus": {
-          "description": "All things are in place for you to start watching your favorite media. (\u0e2d>\u25e1<\u0e2d)",
+          "description": "All things are in place for you to start watching your favorite media. (๑>◡<๑)",
           "title": "Everything is set up!"
         },
         "unsetStatus": {
@@ -1366,7 +1215,7 @@
         "addButton": "Add new worker",
         "description": "To make the application function, all traffic is routed through proxies. Enable this if you want to bring your own workers. <0>Instructions.</0>",
         "documentation": "Proxy documentation",
-        "emptyState": "No workers yet (\uff61\u2022\u0301\ufe31\u2022\u0300\uff61), add one below",
+        "emptyState": "No workers yet (｡•́︿•̀｡), add one below",
         "label": "Use custom proxy workers",
         "urlLabel": "Worker URLs",
         "urlPlaceholder": "https://",
@@ -1391,7 +1240,7 @@
     "preferences": {
       "title": "Preferences",
       "language": "Application language",
-      "languageDescription": "Language applied to the entire application, only English has silly stuff \ud83d\ude41.",
+      "languageDescription": "Language applied to the entire application, only English has silly stuff 🙁.",
       "thumbnail": "Generate thumbnails",
       "thumbnailDescription": "Most of the time, videos don't have thumbnails. You can enable this setting to generate them on the fly but they can make your video slower.",
       "thumbnailLabel": "Generate thumbnails",
@@ -1474,7 +1323,7 @@
       },
       "BorderThicknessLabel": "Border Thickness"
     },
-    "unsaved": "You have unsaved changes... \u0e0e^\u2022\ufecc\u2022^\u0e0e"
+    "unsaved": "You have unsaved changes... ฅ^•ﻌ•^ฅ"
   },
   "discover": {
     "tabs": {
@@ -1531,9 +1380,7 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top",
-    "providerResults": "{{provider}} Results",
-    "clearFilter": "Clear"
+    "scrollToTop": "Back to top"
   },
   "fedapi": {
     "onboarding": {
@@ -1620,4 +1467,44 @@
     "backendRequirement": "All users must use the same backend server",
     "activeBackend": "Active Backend: {{backend}}"
   }
+};
+
+function deepMerge(target, source) {
+  for (const key in source) {
+    if (source[key] instanceof Object && key in target) {
+      Object.assign(source[key], deepMerge(target[key], source[key]));
+    }
+  }
+  Object.assign(target || {}, source);
+  return target;
 }
+
+// Deep merge current into provided, but prioritize current for "new things"
+// Actually, the user wants the provided one to be the base and "add new things into it"
+// "New things" are keys present in currentEn but not in providedEn.
+
+function mergeNewThings(base, current) {
+  const result = { ...base };
+  for (const key in current) {
+    if (!(key in base)) {
+      // Key is completely new
+      result[key] = current[key];
+    } else if (typeof current[key] === 'object' && current[key] !== null && !Array.isArray(current[key])) {
+      // Key is an object, recurse
+      result[key] = mergeNewThings(base[key], current[key]);
+    }
+    // If it's a string or array and already in base, we keep the base version (P-Stream rebranding)
+  }
+  return result;
+}
+
+const merged = mergeNewThings(providedEn, currentEn);
+
+// Add missing specific keys I know about
+if (merged.discover) {
+  if (!merged.discover.providerResults) merged.discover.providerResults = currentEn.discover.providerResults || "{{provider}} Results";
+  if (!merged.discover.clearFilter) merged.discover.clearFilter = currentEn.discover.clearFilter || "Clear";
+}
+
+fs.writeFileSync('d:/Basement Project/Basement/src/assets/locales/en.json', JSON.stringify(merged, null, 2) + '\n');
+console.log('Merged successfully');
