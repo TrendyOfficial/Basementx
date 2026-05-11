@@ -374,6 +374,7 @@ export function MediaCarousel({
                       id: source.id,
                       name: source.title,
                     }))}
+                    /* eslint-disable-next-line react/no-unstable-nested-components */
                     customButton={({ open }) => (
                       <button
                         type="button"

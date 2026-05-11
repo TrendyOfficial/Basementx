@@ -16,7 +16,9 @@ interface DropdownProps {
   options: Array<OptionItem>;
   direction?: "up" | "down";
   side?: "left" | "right";
-  customButton?: React.ReactNode | ((props: { open: boolean }) => React.ReactNode);
+  customButton?:
+    | React.ReactNode
+    | ((props: { open: boolean }) => React.ReactElement);
   customMenu?: React.ReactNode;
   className?: string;
   preventWrap?: boolean;
@@ -33,7 +35,11 @@ export function Dropdown(props: DropdownProps) {
           <>
             <div className="flex items-center gap-2">
               {customButton ? (
-                <Listbox.Button as={Fragment}>{customButton}</Listbox.Button>
+                <Listbox.Button as={Fragment}>
+                  {typeof customButton === "function"
+                    ? (customButton as any)({ open })
+                    : customButton}
+                </Listbox.Button>
               ) : (
                 <Listbox.Button className="relative z-[30] w-full rounded-xl bg-dropdown-background hover:bg-dropdown-hoverBackground py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none tabbable cursor-pointer">
                   <span className="flex gap-4 items-center truncate">

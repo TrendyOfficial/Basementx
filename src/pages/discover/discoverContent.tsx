@@ -46,7 +46,7 @@ const STREAMING_PLATFORMS = [
     name: "Hulu",
     src: "/platforms/hulu.png",
     providerId: "15",
-    key: "hulu"
+    key: "hulu",
   },
   {
     name: "Crunchyroll",
@@ -58,7 +58,7 @@ const STREAMING_PLATFORMS = [
     name: "HBO Max",
     src: "/platforms/max.png",
     providerId: "384",
-    key: "hbo"
+    key: "hbo",
   },
   {
     name: "Paramount",
