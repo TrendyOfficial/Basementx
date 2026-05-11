@@ -123,6 +123,7 @@ export function useDiscoverMedia({
   mediaTitle,
   isCarouselView = false,
   enabled = true,
+  extraParams,
 }: UseDiscoverMediaProps): UseDiscoverMediaReturn {
   const [media, setMedia] = useState<DiscoverMedia[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -469,7 +470,7 @@ export function useDiscoverMedia({
             data = await fetchTMDBMedia("/tv/on_the_air");
             setSectionTitle(t("discover.carousel.title.onTheAir"));
           } else {
-            throw new Error("onTheAir is only available for TV shows");
+            throw new Error("on The Air is only available for TV shows");
           }
           break;
 
@@ -478,7 +479,7 @@ export function useDiscoverMedia({
             data = await fetchTMDBMedia("/movie/now_playing");
             setSectionTitle(t("discover.carousel.title.inCinemas"));
           } else {
-            throw new Error("nowPlaying is only available for movies");
+            throw new Error("Now Playing is only available for movies");
           }
           break;
 
@@ -508,6 +509,7 @@ export function useDiscoverMedia({
           // Use TMDB for genres (Trakt genre endpoints removed)
           data = await fetchTMDBMedia(`/discover/${mediaType}`, {
             with_genres: id,
+            ...extraParams,
           });
           setSectionTitle(
             mediaType === "movie"
@@ -527,11 +529,11 @@ export function useDiscoverMedia({
               setSectionTitle(
                 mediaType === "movie"
                   ? t("discover.carousel.title.moviesOn", {
-                      provider: providerName,
-                    })
+                    provider: providerName,
+                  })
                   : t("discover.carousel.title.tvshowsOn", {
-                      provider: providerName,
-                    }),
+                    provider: providerName,
+                  }),
               );
             } catch (traktErr) {
               console.error(
@@ -546,11 +548,11 @@ export function useDiscoverMedia({
               setSectionTitle(
                 mediaType === "movie"
                   ? t("discover.carousel.title.moviesOn", {
-                      provider: providerName,
-                    })
+                    provider: providerName,
+                  })
                   : t("discover.carousel.title.tvshowsOn", {
-                      provider: providerName,
-                    }),
+                    provider: providerName,
+                  }),
               );
             }
           } else {
@@ -562,11 +564,11 @@ export function useDiscoverMedia({
             setSectionTitle(
               mediaType === "movie"
                 ? t("discover.carousel.title.moviesOn", {
-                    provider: providerName,
-                  })
+                  provider: providerName,
+                })
                 : t("discover.carousel.title.tvshowsOn", {
-                    provider: providerName,
-                  }),
+                  provider: providerName,
+                }),
             );
           }
           break;
@@ -643,6 +645,7 @@ export function useDiscoverMedia({
     t,
     page,
     getTraktProviderFunction,
+    extraParams,
   ]);
 
   useEffect(() => {

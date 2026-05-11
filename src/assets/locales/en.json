@@ -755,5 +755,66 @@
       "body": "Well, you can join the official <0>Basement Fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
       "title": "Where can I get help?"
     }
+  },
+  "discover": {
+    "tabs": {
+      "movies": "Movies",
+      "tvshows": "TV Shows",
+      "editorpicks": "Editor Picks"
+    },
+    "carousel": {
+      "more": "More",
+      "change": "Change",
+      "title": {
+        "personalRecommendationsMovies": "For You",
+        "personalRecommendationsTVShows": "For You",
+        "recommendationsMovies": "Because you watched",
+        "recommendationsTVShows": "Because you watched",
+        "top10Movies": "Top 10 Movies",
+        "top10TVShows": "Top 10 TV Shows",
+        "latestMovies": "Latest Movies",
+        "latestTVShows": "Latest TV Shows",
+        "topRatedMovies": "Top Rated Movies",
+        "topRatedTVShows": "Top Rated TV Shows",
+        "providerMovies": "Movies on {{provider}}",
+        "providerTVShows": "TV Shows on {{provider}}",
+        "genreMovies": "{{category}} Movies",
+        "genreTVShows": "{{category}} TV Shows",
+        "editorPicksMovies": "Editor Picks: Movies",
+        "editorPicksTVShows": "Editor Picks: TV Shows",
+        "latestReleases": "Latest Releases",
+        "latestTVReleases": "Latest TV Releases",
+        "inCinemas": "In Cinemas",
+        "popular": "Trending",
+        "topRated": "Top Rated",
+        "onTheAir": "On The Air",
+        "top10": "Top 10",
+        "4kReleases": "4K Releases",
+        "movies": "{{category}} Movies",
+        "tvshows": "{{category}} TV Shows",
+        "moviesOn": "Movies on {{provider}}",
+        "tvshowsOn": "TV Shows on {{provider}}",
+        "recommended": "Recommended for {{title}}",
+        "editorPicksShows": "Editor Picks: TV Shows",
+        "forYou": "For You"
+      }
+    },
+    "featured": {
+      "playNow": "Play Now",
+      "moreInfo": "More Info"
+    },
+    "providerResults": "{{provider}} Results",
+    "clearFilter": "Clear",
+    "viewLists": "View Lists",
+    "allLists": "All Lists",
+    "scrollToTop": "Scroll to Top",
+    "page": {
+      "back": "Back",
+      "loading": "Loading...",
+      "loadMore": "Load More"
+    }
+  },
+  "details": {
+    "seasons": "Seasons"
   }
 }

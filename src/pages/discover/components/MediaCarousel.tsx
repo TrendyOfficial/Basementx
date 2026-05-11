@@ -41,6 +41,8 @@ interface MediaCarouselProps {
   providerId?: string;
   providerKey?: string;
   providerName?: string;
+  extraParams?: Record<string, any>;
+  titleOverride?: string;
 }
 
 function MoreCard({ link }: { link: string }) {
@@ -85,9 +87,10 @@ export function MediaCarousel({
   showProviders = false,
   showGenres = false,
   showRecommendations = false,
-  providerId: initialProviderId,
   providerKey: _initialProviderKey,
   providerName: initialProviderName,
+  extraParams,
+  titleOverride,
 }: MediaCarouselProps) {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowSize();
@@ -212,6 +215,7 @@ export function MediaCarousel({
       providerName: selectedProviderName,
       mediaTitle: selectedRecommendationTitle,
       isCarouselView: true,
+      extraParams,
     });
 
   // Hide section if there's an error or no content (after loading is complete)
@@ -329,7 +333,7 @@ export function MediaCarousel({
         <div className="flex flex-col pl-2 lg:pl-[68px]">
           <div className="flex items-center gap-4">
             <h2 className="text-2xl cursor-default font-bold text-white md:text-2xl pl-0 text-balance">
-              {sectionTitle}
+              {titleOverride || sectionTitle}
             </h2>
             {showRecommendations &&
               recommendationSources &&
@@ -352,14 +356,9 @@ export function MediaCarousel({
                             name: recommendationSources[0]?.title || "",
                           }
                     }
-                    setSelectedItem={(item) => {
-                      const source = recommendationSources.find(
-                        (s) => s.id === item.id,
-                      );
-                      if (source) {
-                        setSelectedRecommendationId(item.id);
-                        setSelectedRecommendationTitle(source.title);
-                      }
+                    onClear={() => {
+                      setSelectedRecommendationId("");
+                      setSelectedRecommendationTitle("");
                     }}
                     options={recommendationSources.map((source) => ({
                       id: source.id,
@@ -372,8 +371,8 @@ export function MediaCarousel({
                       >
                         <span>{t("discover.carousel.change")}</span>
                         <Icon
-                          icon={Icons.UP_DOWN_ARROW}
-                          className="text-xs text-dropdown-secondary"
+                          icon={Icons.CHEVRON_DOWN}
+                          className={`text-xs text-dropdown-secondary transition-transform duration-300 ${open ? "rotate-180" : ""}`}
                         />
                       </button>
                     }
@@ -460,6 +459,13 @@ export function MediaCarousel({
                   setSelectedItem={(item) => {
                     setSelectedGenre(item);
                     onButtonClick?.(item.id, item.name);
+                  }}
+                  onClear={() => {
+                    setSelectedGenre(null);
+                    setSelectedGenreId("");
+                    setSelectedGenreName("");
+                    setSelectedProviderId("");
+                    setSelectedProviderName("");
                   }}
                   options={dropdownOptions}
                   customButton={

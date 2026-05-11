@@ -255,15 +255,15 @@ export function Navigation(props: NavigationProps) {
                   {showInlineSearch ? (
                     <div
                       className={classNames(
-                        "nav-search-container flex items-center gap-2 rounded-full backdrop-blur-lg border transition-all duration-400 ease-in-out overflow-hidden",
+                        "nav-search-container backdrop-blur-lg transition-all duration-400 ease-in-out",
                         searchExpanded
-                          ? "nav-search-expanded border-white/20 bg-black/30 px-3"
-                          : "nav-search-collapsed border-transparent bg-transparent px-0",
+                          ? "nav-search-expanded"
+                          : "nav-search-collapsed",
                       )}
                     >
                       <button
                         type="button"
-                        className="text-xl text-white tabbable rounded-full flex-shrink-0 py-1"
+                        className="flex-shrink-0 flex items-center justify-center"
                         onClick={handleSearchButtonClick}
                         title="Search"
                       >
@@ -272,6 +272,7 @@ export function Navigation(props: NavigationProps) {
                           clickable
                           downsized
                           navigation
+                          active={searchExpanded}
                         />
                       </button>
                       <input
@@ -282,17 +283,17 @@ export function Navigation(props: NavigationProps) {
                         onKeyDown={handleSearchKeyDown}
                         placeholder="Search..."
                         className={classNames(
-                          "bg-transparent text-white placeholder-white/40 outline-none text-sm",
+                          "bg-transparent text-white placeholder-white/40 outline-none text-sm ml-2 flex-1",
                           "transition-all duration-400 ease-in-out",
                           searchExpanded
-                            ? "nav-search-input-expanded opacity-100"
-                            : "nav-search-input-collapsed opacity-0 pointer-events-none",
+                            ? "opacity-100"
+                            : "opacity-0 pointer-events-none w-0",
                         )}
                       />
                       {searchExpanded ? (
                         <button
                           type="button"
-                          className="nav-search-close"
+                          className="nav-search-close ml-1"
                           onClick={closeSearch}
                           title="Close search"
                         >

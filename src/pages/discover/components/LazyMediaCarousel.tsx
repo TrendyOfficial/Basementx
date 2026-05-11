@@ -24,6 +24,8 @@ interface LazyMediaCarouselProps {
   showGenres?: boolean;
   showRecommendations?: boolean;
   priority?: boolean; // For carousels that should load immediately (e.g., first few)
+  extraParams?: Record<string, any>;
+  titleOverride?: string;
 }
 
 export function LazyMediaCarousel({
@@ -37,6 +39,8 @@ export function LazyMediaCarousel({
   showGenres = false,
   showRecommendations = false,
   priority = false,
+  extraParams,
+  titleOverride,
 }: LazyMediaCarouselProps) {
   const { ref, hasIntersected } = useIntersectionObserver<HTMLDivElement>({
     threshold: 0.1,
@@ -60,6 +64,8 @@ export function LazyMediaCarousel({
           showProviders={showProviders}
           showGenres={showGenres}
           showRecommendations={showRecommendations}
+          extraParams={extraParams}
+          titleOverride={titleOverride}
         />
       ) : (
         // Placeholder with similar height to prevent layout shift

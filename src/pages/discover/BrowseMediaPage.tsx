@@ -56,8 +56,8 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
   const [selectedGenre, setSelectedGenre] = useState<OptionItem | null>(null);
   const [fromYear, setFromYear] = useState("");
   const [toYear, setToYear] = useState("");
-  const [minRating, setMinRating] = useState<OptionItem | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [ratingValue, setRatingValue] = useState(0);
   const [detailsData, setDetailsData] = useState<any>();
   const detailsModal = useModal("browse-details");
   const { providers, genres } = useDiscoverOptions(mediaType);
@@ -76,6 +76,7 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
     page: currentPage,
     providerName: selectedProvider?.name,
     genreName: selectedGenre?.name,
+    fallbackType: isTVShow ? "onTheAir" : "nowPlaying",
     isCarouselView: false,
   });
 
@@ -86,7 +87,7 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
   const filteredMedia = useMemo(() => {
     const minYear = fromYear ? Number(fromYear) : undefined;
     const maxYear = toYear ? Number(toYear) : undefined;
-    const rating = minRating?.id ? Number(minRating.id) : undefined;
+    const rating = ratingValue > 0 ? ratingValue : undefined;
 
     return media.filter((item) => {
       const date = isTVShow ? item.first_air_date : item.release_date;
@@ -98,11 +99,15 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
       if (rating && itemRating < rating) return false;
       return true;
     });
-  }, [fromYear, isTVShow, media, minRating?.id, toYear]);
+  }, [fromYear, isTVShow, media, ratingValue, toYear]);
 
-  const clearCollections = () => {
+  const clearAllFilters = () => {
     setSelectedProvider(null);
     setSelectedGenre(null);
+    setFromYear("");
+    setToYear("");
+    setRatingValue(0);
+    setSortMode("popular");
   };
 
   const handleShowDetails = async (item: MediaItem) => {
@@ -123,12 +128,7 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
         </div>
 
         <div className="basement-filter-rack">
-          <Dropdown
-            selectedItem={selectedProvider || { id: "", name: "Services" }}
-            setSelectedItem={(item) => {
-              setSelectedProvider(item);
-              setSelectedGenre(null);
-            }}
+            onClear={() => setSelectedProvider(null)}
             options={providers.map((provider) => ({
               id: provider.id,
               name: provider.name,
@@ -136,7 +136,10 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
             customButton={
               <button type="button" className="basement-filter-control">
                 <span>{selectedProvider?.name || "Services"}</span>
-                <Icon icon={Icons.CHEVRON_DOWN} />
+                <Icon
+                  icon={Icons.CHEVRON_DOWN}
+                  className="text-xs text-dropdown-secondary"
+                />
               </button>
             }
           />
@@ -147,6 +150,7 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
               setSelectedGenre(item);
               setSelectedProvider(null);
             }}
+            onClear={() => setSelectedGenre(null)}
             options={genres.map((genre) => ({
               id: genre.id.toString(),
               name: genre.name,
@@ -154,7 +158,10 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
             customButton={
               <button type="button" className="basement-filter-control">
                 <span>{selectedGenre?.name || "Genres"}</span>
-                <Icon icon={Icons.CHEVRON_DOWN} />
+                <Icon
+                  icon={Icons.CHEVRON_DOWN}
+                  className="text-xs text-dropdown-secondary"
+                />
               </button>
             }
           />
@@ -167,7 +174,8 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
                 className={sortMode === option.id ? "active" : ""}
                 onClick={() => {
                   setSortMode(option.id);
-                  clearCollections();
+                  setSelectedProvider(null);
+                  setSelectedGenre(null);
                 }}
               >
                 {option.label}
@@ -175,20 +183,23 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
             ))}
           </div>
 
-          <Dropdown
-            selectedItem={minRating || { id: "", name: "Rating" }}
-            setSelectedItem={setMinRating}
-            options={[6, 7, 8, 9].map((rating) => ({
-              id: rating.toString(),
-              name: `${rating}+`,
-            }))}
-            customButton={
-              <button type="button" className="basement-filter-control">
-                <span>{minRating?.name || "Rating"}</span>
-                <Icon icon={Icons.CHEVRON_DOWN} />
-              </button>
-            }
-          />
+          <div className="flex flex-col gap-1 px-4 min-w-[120px]">
+            <div className="flex justify-between items-center text-[10px] font-bold text-type-secondary uppercase tracking-widest">
+              <span>Rating</span>
+              <span className="text-type-link">
+                {ratingValue === 0 ? "Any" : `${ratingValue}+`}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="9.5"
+              step="0.5"
+              value={ratingValue}
+              onChange={(e) => setRatingValue(parseFloat(e.target.value))}
+              className="basement-rating-slider"
+            />
+          </div>
 
           <input
             value={fromYear}
@@ -204,6 +215,14 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
             placeholder="To"
             type="number"
           />
+
+          <Button
+            theme="secondary"
+            className="!h-[46px] !rounded-0.7rem !px-4"
+            onClick={clearAllFilters}
+          >
+            Clear All
+          </Button>
         </div>
 
         <div className="basement-browse-grid">

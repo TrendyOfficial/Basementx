@@ -20,34 +20,50 @@ interface DropdownProps {
   customMenu?: React.ReactNode;
   className?: string;
   preventWrap?: boolean;
+  onClear?: () => void;
 }
 
 export function Dropdown(props: DropdownProps) {
-  const { direction = "down", customButton, customMenu } = props;
+  const { direction = "down", customButton, customMenu, onClear } = props;
 
   return (
     <div className={`relative my-4 w-fit max-w-[25rem] ${props.className}`}>
       <Listbox value={props.selectedItem} onChange={props.setSelectedItem}>
         {({ open }) => (
           <>
-            {customButton ? (
-              <Listbox.Button as={Fragment}>{customButton}</Listbox.Button>
-            ) : (
-              <Listbox.Button className="relative z-[30] w-full rounded-xl bg-dropdown-background hover:bg-dropdown-hoverBackground py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none tabbable cursor-pointer">
-                <span className="flex gap-4 items-center truncate">
-                  {props.selectedItem.leftIcon
-                    ? props.selectedItem.leftIcon
-                    : null}
-                  {props.selectedItem.name}
-                </span>
-                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                  <Icon
-                    icon={Icons.UP_DOWN_ARROW}
-                    className={`transform transition-transform text-xl text-dropdown-secondary ${direction === "up" ? "rotate-180" : ""}`}
-                  />
-                </span>
-              </Listbox.Button>
-            )}
+            <div className="flex items-center gap-2">
+              {customButton ? (
+                <Listbox.Button as={Fragment}>{customButton}</Listbox.Button>
+              ) : (
+                <Listbox.Button className="relative z-[30] w-full rounded-xl bg-dropdown-background hover:bg-dropdown-hoverBackground py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none tabbable cursor-pointer">
+                  <span className="flex gap-4 items-center truncate">
+                    {props.selectedItem.leftIcon
+                      ? props.selectedItem.leftIcon
+                      : null}
+                    {props.selectedItem.name}
+                  </span>
+                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                    <Icon
+                      icon={Icons.CHEVRON_DOWN}
+                      className={`transform transition-transform text-xl text-dropdown-secondary ${open ? "rotate-180" : ""}`}
+                    />
+                  </span>
+                </Listbox.Button>
+              )}
+              {onClear && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClear();
+                  }}
+                  className="p-2 rounded-full bg-dropdown-background hover:bg-dropdown-hoverBackground text-dropdown-secondary transition-colors"
+                  aria-label="Clear selection"
+                >
+                  <Icon icon={Icons.X} className="text-sm" />
+                </button>
+              )}
+            </div>
             <Transition
               animation="slide-down"
               show={open}
