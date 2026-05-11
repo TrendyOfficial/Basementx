@@ -529,11 +529,11 @@ export function useDiscoverMedia({
               setSectionTitle(
                 mediaType === "movie"
                   ? t("discover.carousel.title.moviesOn", {
-                    provider: providerName,
-                  })
+                      provider: providerName,
+                    })
                   : t("discover.carousel.title.tvshowsOn", {
-                    provider: providerName,
-                  }),
+                      provider: providerName,
+                    }),
               );
             } catch (traktErr) {
               console.error(
@@ -548,11 +548,11 @@ export function useDiscoverMedia({
               setSectionTitle(
                 mediaType === "movie"
                   ? t("discover.carousel.title.moviesOn", {
-                    provider: providerName,
-                  })
+                      provider: providerName,
+                    })
                   : t("discover.carousel.title.tvshowsOn", {
-                    provider: providerName,
-                  }),
+                      provider: providerName,
+                    }),
               );
             }
           } else {
