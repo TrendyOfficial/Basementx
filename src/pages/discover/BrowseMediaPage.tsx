@@ -128,6 +128,12 @@ export function BrowseMediaPage({ mediaType }: { mediaType: MediaType }) {
         </div>
 
         <div className="basement-filter-rack">
+          <Dropdown
+            selectedItem={selectedProvider || { id: "", name: "Services" }}
+            setSelectedItem={(item) => {
+              setSelectedProvider(item);
+              setSelectedGenre(null);
+            }}
             onClear={() => setSelectedProvider(null)}
             options={providers.map((provider) => ({
               id: provider.id,
