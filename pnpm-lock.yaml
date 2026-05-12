@@ -46,8 +46,8 @@ importers:
         specifier: ^1.8.0
         version: 1.8.0
       '@p-stream/providers':
-        specifier: file:vendor/p-stream-providers-3.2.0.tgz
-        version: file:vendor/p-stream-providers-3.2.0.tgz
+        specifier: github:TrendyOfficial/providers#production
+        version: git+https://github.com/TrendyOfficial/providers.git#667940f2ba3595fe096e2101e24ed318d827dd80
       '@plasmohq/messaging':
         specifier: ^0.6.2
         version: 0.6.2(react@18.3.1)
@@ -1341,8 +1341,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@p-stream/providers@file:vendor/p-stream-providers-3.2.0.tgz':
-    resolution: {integrity: sha512-7u7mrBg567MSAKdb6lmTu171/rMnUevNzz4Lw+CddWkjXVarRhH1ibkkQvpzFrYVn2lLrKgbXPCciHRfhn+dNQ==, tarball: file:vendor/p-stream-providers-3.2.0.tgz}
+  '@p-stream/providers@git+https://github.com/TrendyOfficial/providers.git#667940f2ba3595fe096e2101e24ed318d827dd80':
+    resolution: {commit: 667940f2ba3595fe096e2101e24ed318d827dd80, repo: https://github.com/TrendyOfficial/providers.git, type: git}
     version: 3.2.0
 
   '@pkgjs/parseargs@0.11.0':
@@ -6163,7 +6163,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@p-stream/providers@file:vendor/p-stream-providers-3.2.0.tgz':
+  '@p-stream/providers@git+https://github.com/TrendyOfficial/providers.git#667940f2ba3595fe096e2101e24ed318d827dd80':
     dependencies:
       abort-controller: 3.0.0
       cheerio: 1.0.0-rc.12
