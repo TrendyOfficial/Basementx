@@ -1342,7 +1342,7 @@ packages:
     engines: {node: '>=12.4.0'}
 
   '@p-stream/providers@file:vendor/p-stream-providers-3.2.0.tgz':
-    resolution: {integrity: sha512-NvEpb96VtfilYr6g08wNcQ/Hc76l/tF6okIF+umTWBCmBnbItDyD7JgteHqMZPY8JjX0DoqJucePOfr8lorYhA==, tarball: file:vendor/p-stream-providers-3.2.0.tgz}
+    resolution: {integrity: sha512-7u7mrBg567MSAKdb6lmTu171/rMnUevNzz4Lw+CddWkjXVarRhH1ibkkQvpzFrYVn2lLrKgbXPCciHRfhn+dNQ==, tarball: file:vendor/p-stream-providers-3.2.0.tgz}
     version: 3.2.0
 
   '@pkgjs/parseargs@0.11.0':
