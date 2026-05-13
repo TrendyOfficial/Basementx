@@ -24,11 +24,6 @@ export interface ScrapingSegment {
   percentage: number;
 }
 
-function prioritizeVortex(sourceIds: string[]): string[] {
-  if (!sourceIds.includes("vortex-api")) return sourceIds;
-  return ["vortex-api", ...sourceIds.filter((id) => id !== "vortex-api")];
-}
-
 type ScraperEvent<Event extends keyof FullScraperEvents> = Parameters<
   NonNullable<FullScraperEvents[Event]>
 >[0];
@@ -212,10 +207,7 @@ export function useScrape() {
         }
 
         // Add remaining sources
-        baseSourceOrder = prioritizeVortex([
-          ...orderedSources,
-          ...remainingSources,
-        ]);
+        baseSourceOrder = [...orderedSources, ...remainingSources];
       }
 
       // If we have a last successful source and the feature is enabled, prioritize it
@@ -233,8 +225,6 @@ export function useScrape() {
           ];
         }
       }
-
-      baseSourceOrder = prioritizeVortex(baseSourceOrder);
 
       // If starting from a specific source ID, filter the order to start AFTER that source
       // This preserves the custom order while starting from the next source

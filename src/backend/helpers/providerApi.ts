@@ -1,6 +1,8 @@
 import { MetaOutput } from "@p-stream/providers";
 import { jwtDecode } from "jwt-decode";
 
+import { getProviders } from "@/backend/providers/providers";
+
 let metaDataCache: MetaOutput[] | null = null;
 let token: null | string = null;
 
@@ -10,6 +12,19 @@ export function setCachedMetadata(data: MetaOutput[]) {
 
 export function getCachedMetadata(): MetaOutput[] {
   return metaDataCache ?? [];
+}
+
+export function getFreshProviderMetadata(): MetaOutput[] {
+  const live = [
+    ...getProviders().listSources(),
+    ...getProviders().listEmbeds(),
+  ];
+  const cached = getCachedMetadata();
+
+  return [...live, ...cached].filter(
+    (item, index, items) =>
+      items.findIndex((candidate) => candidate.id === item.id) === index,
+  );
 }
 
 export function setApiToken(newToken: string) {

@@ -1,7 +1,10 @@
 import { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getCachedMetadata } from "@/backend/helpers/providerApi";
+import {
+  getCachedMetadata,
+  getFreshProviderMetadata,
+} from "@/backend/helpers/providerApi";
 import { Loading } from "@/components/layout/Loading";
 import {
   useEmbedScraping,
@@ -173,7 +176,7 @@ export function SourceSelectionView({
 
   const sources = useMemo(() => {
     if (!metaType) return [];
-    const allSources = getCachedMetadata()
+    const allSources = getFreshProviderMetadata()
       .filter((v) => v.type === "source")
       .filter((v) => v.mediaTypes?.includes(metaType));
 

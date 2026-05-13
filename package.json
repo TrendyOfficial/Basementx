@@ -13,6 +13,7 @@
     "build:pwa": "cross-env VITE_PWA_ENABLED=true vite build",
     "update-and-build": "pnpm run update-providers && pnpm run build",
     "update-providers": "pnpm add @p-stream/providers@file:vendor/p-stream-providers-3.2.0.tgz --force",
+    "refresh-providers": "cd ../providers/providers-production && pnpm pack --pack-destination ../../Basement/vendor && cd ../../Basement && pnpm install --force",
     "test": "vitest run",
     "preview": "vite preview",
     "lint": "eslint --ext .tsx,.ts src",

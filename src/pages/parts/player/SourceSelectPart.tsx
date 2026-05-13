@@ -2,8 +2,10 @@ import { ScrapeMedia } from "@p-stream/providers";
 import React, { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getCachedMetadata } from "@/backend/helpers/providerApi";
-import { getProviders } from "@/backend/providers/providers";
+import {
+  getCachedMetadata,
+  getFreshProviderMetadata,
+} from "@/backend/helpers/providerApi";
 import { Loading } from "@/components/layout/Loading";
 import {
   useEmbedScraping,
@@ -12,14 +14,6 @@ import {
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { usePreferencesStore } from "@/stores/preferences";
-
-function prioritizeVortex<T extends { id: string }>(sources: T[]): T[] {
-  const index = sources.findIndex((source) => source.id === "vortex-api");
-  if (index <= 0) return sources;
-  const next = sources.slice();
-  const [vortex] = next.splice(index, 1);
-  return [vortex, ...next];
-}
 
 // Embed option component
 function EmbedOption(props: {
@@ -166,15 +160,8 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
   const sources = useMemo(() => {
     const metaType = props.media.type;
     if (!metaType) return [];
-    const cachedSources = getCachedMetadata().filter(
-      (v) => v.type === "source",
-    );
-    const liveSources = getProviders().listSources();
-    const allSources = [...liveSources, ...cachedSources]
-      .filter(
-        (source, index, arr) =>
-          arr.findIndex((item) => item.id === source.id) === index,
-      )
+    const allSources = getFreshProviderMetadata()
+      .filter((v) => v.type === "source")
       .filter((v) => v.mediaTypes?.includes(metaType));
 
     if (!enableSourceOrder || preferredSourceOrder.length === 0) {
@@ -188,7 +175,7 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
           return [lastSource, ...allSources];
         }
       }
-      return prioritizeVortex(allSources);
+      return allSources;
     }
 
     // Sort sources according to preferred order, but prioritize last successful source
@@ -218,7 +205,7 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
     // Add remaining sources that weren't in the preferred order
     orderedSources.push(...remainingSources);
 
-    return prioritizeVortex(orderedSources);
+    return orderedSources;
   }, [
     props.media.type,
     preferredSourceOrder,
