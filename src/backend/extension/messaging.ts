@@ -38,7 +38,6 @@ async function sendMessage<MessageKey extends keyof MessagesMetadata>(
       body: payload,
     })
       .then((res) => {
-        activeExtension = true;
         resolve(res);
       })
       .catch(() => {
@@ -51,7 +50,9 @@ async function sendMessage<MessageKey extends keyof MessagesMetadata>(
 export async function sendExtensionRequest<T>(
   ops: MessagesMetadata["makeRequest"]["req"],
 ): Promise<ExtensionMakeRequestResponse<T> | null> {
-  return sendMessage("makeRequest", ops);
+  const response = await sendMessage("makeRequest", ops);
+  activeExtension = !!response?.success;
+  return response;
 }
 
 export async function setDomainRule(
@@ -70,6 +71,12 @@ export async function extensionInfo(): Promise<
   MessagesMetadata["hello"]["res"] | null
 > {
   const message = await sendMessage("hello", undefined, 500);
+  activeExtension = !!(
+    message?.success &&
+    isAllowedExtensionVersion(message.version) &&
+    message.allowed &&
+    message.hasPermission
+  );
   return message;
 }
 

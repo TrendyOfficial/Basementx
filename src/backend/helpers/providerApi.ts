@@ -20,16 +20,7 @@ export function getCachedMetadata(): MetaOutput[] {
 }
 
 export function getFreshProviderMetadata(): MetaOutput[] {
-  const live = [
-    ...getProviders().listSources(),
-    ...getProviders().listEmbeds(),
-  ];
-  const cached = getCachedMetadata();
-
-  return [...live, ...cached].filter(
-    (item, index, items) =>
-      items.findIndex((candidate) => candidate.id === item.id) === index,
-  );
+  return [...getProviders().listSources(), ...getProviders().listEmbeds()];
 }
 
 export function setApiToken(newToken: string) {
