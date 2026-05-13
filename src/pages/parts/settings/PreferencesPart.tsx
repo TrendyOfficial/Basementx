@@ -85,7 +85,14 @@ export function PreferencesPart(props: {
 
   const sourceItems = useMemo(() => {
     const currentDeviceSources = getProviders().listSources();
-    return props.sourceOrder.map((id) => ({
+    const orderedSourceIds = [
+      ...props.sourceOrder.filter((id) => allSources.some((s) => s.id === id)),
+      ...allSources
+        .filter((source) => !props.sourceOrder.includes(source.id))
+        .map((source) => source.id),
+    ];
+
+    return orderedSourceIds.map((id) => ({
       id,
       name: allSources.find((s) => s.id === id)?.name || id,
       disabled: !currentDeviceSources.find((s) => s.id === id),

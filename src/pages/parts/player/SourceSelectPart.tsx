@@ -2,10 +2,7 @@ import { ScrapeMedia } from "@p-stream/providers";
 import React, { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import {
-  getCachedMetadata,
-  getFreshProviderMetadata,
-} from "@/backend/helpers/providerApi";
+import { getFreshProviderMetadata } from "@/backend/helpers/providerApi";
 import { Loading } from "@/components/layout/Loading";
 import {
   useEmbedScraping,
@@ -27,7 +24,9 @@ function EmbedOption(props: {
 
   const embedName = useMemo(() => {
     if (!props.embedId) return unknownEmbedName;
-    const sourceMeta = getCachedMetadata().find((s) => s.id === props.embedId);
+    const sourceMeta = getFreshProviderMetadata().find(
+      (s) => s.id === props.embedId,
+    );
     return sourceMeta?.name ?? unknownEmbedName;
   }, [props.embedId, unknownEmbedName]);
 
@@ -79,7 +78,9 @@ function EmbedSelectionView(props: {
 
   const sourceName = useMemo(() => {
     if (!props.sourceId) return "...";
-    const sourceMeta = getCachedMetadata().find((s) => s.id === props.sourceId);
+    const sourceMeta = getFreshProviderMetadata().find(
+      (s) => s.id === props.sourceId,
+    );
     return sourceMeta?.name ?? "...";
   }, [props.sourceId]);
 

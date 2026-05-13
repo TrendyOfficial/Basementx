@@ -3,7 +3,7 @@ import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { prepareStream } from "@/backend/extension/streams";
-import { getCachedMetadata } from "@/backend/helpers/providerApi";
+import { getFreshProviderMetadata } from "@/backend/helpers/providerApi";
 import { getProviders } from "@/backend/providers/providers";
 import { getMediaKey } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -38,7 +38,7 @@ function useBaseScrape() {
     setSources(
       evt.sourceIds
         .map((v) => {
-          const source = getCachedMetadata().find((s) => s.id === v);
+          const source = getFreshProviderMetadata().find((s) => s.id === v);
           if (!source) throw new Error("invalid source id");
           const out: ScrapingSegment = {
             name: source.name,
@@ -84,7 +84,7 @@ function useBaseScrape() {
     (evt: ScraperEvent<"discoverEmbeds">) => {
       setSources((s) => {
         evt.embeds.forEach((v) => {
-          const source = getCachedMetadata().find(
+          const source = getFreshProviderMetadata().find(
             (src) => src.id === v.embedScraperId,
           );
           if (!source) throw new Error("invalid source id");

@@ -11,7 +11,12 @@ export function setCachedMetadata(data: MetaOutput[]) {
 }
 
 export function getCachedMetadata(): MetaOutput[] {
-  return metaDataCache ?? [];
+  return (
+    metaDataCache ?? [
+      ...getProviders().listSources(),
+      ...getProviders().listEmbeds(),
+    ]
+  );
 }
 
 export function getFreshProviderMetadata(): MetaOutput[] {
