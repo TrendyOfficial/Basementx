@@ -32,7 +32,7 @@ export function PauseOverlay() {
   );
   const { isSeeking } = usePlayerStore((s: any) => s.interface);
   const playbackRate = usePlayerStore((s: any) => s.mediaPlaying.playbackRate);
-  const play = usePlayerStore((s: any) => s.play);
+  const display = usePlayerStore((s: any) => s.display);
   const enablePauseOverlay = usePreferencesStore(
     (s: any) => s.enablePauseOverlay,
   );
@@ -267,7 +267,7 @@ export function PauseOverlay() {
           : "opacity-0 pointer-events-none"
       }`}
       onClick={() => {
-        play();
+        display?.play();
         setOverlayVisible(false);
       }}
     >

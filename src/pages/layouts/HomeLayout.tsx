@@ -31,7 +31,7 @@ export function HomeLayout(props: {
       <Navigation
         bg={enableFeatured ? true : props.showBg}
         clearBackground={clearBackground}
-        noLightbar={enableFeatured}
+        noLightbar={enableFeatured || props.discoverEnabled}
         discoverEnabled={props.discoverEnabled}
         onDiscoverToggle={props.onDiscoverToggle}
       />

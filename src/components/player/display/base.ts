@@ -98,6 +98,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let lastValidTime = 0; // Store the last valid time to prevent reset during source switches
   let shouldAutoplayAfterLoad = false; // Flag to track if we should autoplay after loading completes
   let qualityChangeTimeout: NodeJS.Timeout | null = null; // Timeout for debouncing rapid quality changes
+  let sourceEventsController: AbortController | null = null;
 
   const languagePromises = new Map<
     string,
@@ -176,6 +177,9 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   }
 
   function setupSource(vid: HTMLVideoElement, src: LoadableSource) {
+    if (hls) {
+      hls.destroy();
+    }
     hls = null;
     if (src.type === "hls") {
       if (canPlayHlsNatively(vid)) {
@@ -365,121 +369,54 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
 
   function setSource() {
     if (!videoElement || !source) return;
+    if (sourceEventsController) {
+      sourceEventsController.abort();
+    }
+    sourceEventsController = new AbortController();
+    const listenerOptions = { signal: sourceEventsController.signal };
     setupSource(videoElement, source);
 
-    videoElement.addEventListener("play", () => {
-      emit("play", undefined);
-      emit("loading", false);
-    });
-    videoElement.addEventListener("error", () => {
-      const err = videoElement?.error ?? null;
-      const errorDetails = getMediaErrorDetails(err);
-      emit("error", {
-        errorName: errorDetails.name,
-        key: errorDetails.key,
-        type: "htmlvideo",
-      });
-    });
-    videoElement.addEventListener("playing", () => emit("play", undefined));
-    videoElement.addEventListener("pause", () => emit("pause", undefined));
-    videoElement.addEventListener("canplay", () => {
-      // Check if video has enough buffered data to play smoothly (at least 5 seconds ahead)
-      const hasEnoughBuffer = (() => {
-        if (!videoElement) return false;
-        const currentTime = videoElement.currentTime ?? 0;
-        const buffered = videoElement.buffered;
-        if (buffered.length === 0) return false;
-
-        // Find the buffered range that contains current time
-        for (let i = 0; i < buffered.length; i += 1) {
-          if (
-            currentTime >= buffered.start(i) &&
-            currentTime <= buffered.end(i)
-          ) {
-            const bufferedAhead = buffered.end(i) - currentTime;
-            return bufferedAhead >= 5; // At least 5 seconds buffered ahead
-          }
-        }
-        return false;
-      })();
-
-      // Only set loading to false if we have enough buffer or if we're not at the start
-      if (hasEnoughBuffer || (videoElement?.currentTime ?? 0) > 0) {
+    videoElement.addEventListener(
+      "play",
+      () => {
+        emit("play", undefined);
         emit("loading", false);
-      }
-
-      // Attempt autoplay if this was an autoplay transition (startAt = 0)
-      if (shouldAutoplayAfterLoad && startAt === 0 && videoElement) {
-        shouldAutoplayAfterLoad = false; // Reset the flag
-        // Try to play - this will work on most platforms, but iOS may block it
-        const playPromise = videoElement.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              // Autoplay succeeded
-            })
-            .catch((_error) => {
-              // Play was blocked (likely iOS), emit that we're not playing
-              // The AutoPlayStart component will show a play button
-              emit("pause", undefined);
-            });
-        }
-      }
-    });
-    videoElement.addEventListener("waiting", () => emit("loading", true));
-    videoElement.addEventListener("volumechange", () =>
-      emit(
-        "volumechange",
-        videoElement?.muted ? 0 : (videoElement?.volume ?? 0),
-      ),
+      },
+      listenerOptions,
     );
-    videoElement.addEventListener("timeupdate", () => {
-      const currentTime = videoElement?.currentTime ?? 0;
-      // Always emit time updates when seeking to prevent subtitle freezing
-      // Also emit when progressing forward or when time changes significantly
-      // This prevents time from resetting to 0 during source switches
-      if (
-        currentTime >= lastValidTime ||
-        isSeeking ||
-        Math.abs(currentTime - lastValidTime) > 0.1
-      ) {
-        lastValidTime = currentTime;
-        emit("time", currentTime);
-      }
-    });
-    videoElement.addEventListener("loadedmetadata", () => {
-      if (
-        source?.type === "hls" &&
-        videoElement &&
-        canPlayHlsNatively(videoElement)
-      ) {
-        emit("qualities", ["unknown"]);
-        emit("changedquality", "unknown");
-      }
-      // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
-      const duration = videoElement?.duration ?? 0;
-      if (duration > 0) {
-        lastValidDuration = duration;
-        emit("duration", duration);
-      } else if (lastValidDuration > 0) {
-        // Keep the last valid duration if the new one is invalid
-        emit("duration", lastValidDuration);
-      }
-    });
-    videoElement.addEventListener("progress", () => {
-      if (videoElement) {
-        const bufferedTime = handleBuffered(
-          videoElement.currentTime,
-          videoElement.buffered,
-        );
-        emit("buffered", bufferedTime);
-
-        // Check if we now have enough buffer to stop loading
+    videoElement.addEventListener(
+      "error",
+      () => {
+        const err = videoElement?.error ?? null;
+        const errorDetails = getMediaErrorDetails(err);
+        emit("error", {
+          errorName: errorDetails.name,
+          key: errorDetails.key,
+          type: "htmlvideo",
+        });
+      },
+      listenerOptions,
+    );
+    videoElement.addEventListener(
+      "playing",
+      () => emit("play", undefined),
+      listenerOptions,
+    );
+    videoElement.addEventListener(
+      "pause",
+      () => emit("pause", undefined),
+      listenerOptions,
+    );
+    videoElement.addEventListener(
+      "canplay",
+      () => {
+        // Check if video has enough buffered data to play smoothly (at least 5 seconds ahead)
         const hasEnoughBuffer = (() => {
+          if (!videoElement) return false;
+          const currentTime = videoElement.currentTime ?? 0;
           const buffered = videoElement.buffered;
           if (buffered.length === 0) return false;
 
-          const currentTime = videoElement.currentTime ?? 0;
           // Find the buffered range that contains current time
           for (let i = 0; i < buffered.length; i += 1) {
             if (
@@ -493,18 +430,133 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           return false;
         })();
 
-        // If we're still loading but now have enough buffer, stop loading
-        // This handles cases where canplay fired with insufficient buffer
-        if (hasEnoughBuffer && videoElement.readyState >= 3) {
+        // Only set loading to false if we have enough buffer or if we're not at the start
+        if (hasEnoughBuffer || (videoElement?.currentTime ?? 0) > 0) {
           emit("loading", false);
         }
-      }
-    });
-    videoElement.addEventListener("webkitendfullscreen", () => {
-      isFullscreen = false;
-      emit("fullscreen", isFullscreen);
-      if (!isFullscreen) emit("needstrack", false);
-    });
+
+        // Attempt autoplay if this was an autoplay transition (startAt = 0)
+        if (shouldAutoplayAfterLoad && startAt === 0 && videoElement) {
+          shouldAutoplayAfterLoad = false; // Reset the flag
+          // Try to play - this will work on most platforms, but iOS may block it
+          const playPromise = videoElement.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                // Autoplay succeeded
+              })
+              .catch((_error) => {
+                // Play was blocked (likely iOS), emit that we're not playing
+                // The AutoPlayStart component will show a play button
+                emit("pause", undefined);
+              });
+          }
+        }
+      },
+      listenerOptions,
+    );
+    videoElement.addEventListener(
+      "waiting",
+      () => emit("loading", true),
+      listenerOptions,
+    );
+    videoElement.addEventListener(
+      "volumechange",
+      () =>
+        emit(
+          "volumechange",
+          videoElement?.muted ? 0 : (videoElement?.volume ?? 0),
+        ),
+      listenerOptions,
+    );
+    videoElement.addEventListener(
+      "timeupdate",
+      () => {
+        const currentTime = videoElement?.currentTime ?? 0;
+        // Always emit time updates when seeking to prevent subtitle freezing
+        // Also emit when progressing forward or when time changes significantly
+        // This prevents time from resetting to 0 during source switches
+        if (
+          currentTime >= lastValidTime ||
+          isSeeking ||
+          Math.abs(currentTime - lastValidTime) > 0.1
+        ) {
+          lastValidTime = currentTime;
+          emit("time", currentTime);
+        }
+      },
+      listenerOptions,
+    );
+    videoElement.addEventListener(
+      "loadedmetadata",
+      () => {
+        if (
+          source?.type === "hls" &&
+          videoElement &&
+          canPlayHlsNatively(videoElement)
+        ) {
+          emit("qualities", ["unknown"]);
+          emit("changedquality", "unknown");
+        }
+        // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
+        const duration = videoElement?.duration ?? 0;
+        if (duration > 0) {
+          lastValidDuration = duration;
+          emit("duration", duration);
+        } else if (lastValidDuration > 0) {
+          // Keep the last valid duration if the new one is invalid
+          emit("duration", lastValidDuration);
+        }
+      },
+      listenerOptions,
+    );
+    videoElement.addEventListener(
+      "progress",
+      () => {
+        if (videoElement) {
+          const bufferedTime = handleBuffered(
+            videoElement.currentTime,
+            videoElement.buffered,
+          );
+          emit("buffered", bufferedTime);
+
+          // Check if we now have enough buffer to stop loading
+          const hasEnoughBuffer = (() => {
+            const buffered = videoElement.buffered;
+            if (buffered.length === 0) return false;
+
+            const currentTime = videoElement.currentTime ?? 0;
+            // Find the buffered range that contains current time
+            for (let i = 0; i < buffered.length; i += 1) {
+              if (
+                currentTime >= buffered.start(i) &&
+                currentTime <= buffered.end(i)
+              ) {
+                const bufferedAhead = buffered.end(i) - currentTime;
+                return bufferedAhead >= 5; // At least 5 seconds buffered ahead
+              }
+            }
+            return false;
+          })();
+
+          // If we're still loading but now have enough buffer, stop loading
+          // This handles cases where canplay fired with insufficient buffer
+          if (hasEnoughBuffer && videoElement.readyState >= 3) {
+            emit("loading", false);
+          }
+        }
+      },
+      listenerOptions,
+    );
+    videoElement.addEventListener(
+      "webkitendfullscreen",
+      () => {
+        isFullscreen = false;
+        emit("fullscreen", isFullscreen);
+        if (!isFullscreen) emit("needstrack", false);
+      },
+      listenerOptions,
+    );
     videoElement.addEventListener(
       "webkitplaybacktargetavailabilitychanged",
       (e: any) => {
@@ -512,29 +564,44 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           emit("canairplay", true);
         }
       },
+      listenerOptions,
     );
     videoElement.addEventListener(
       "webkitpresentationmodechanged",
       webkitPresentationModeChange,
+      listenerOptions,
     );
-    videoElement.addEventListener("ratechange", () => {
-      if (videoElement) emit("playbackrate", videoElement.playbackRate);
-    });
+    videoElement.addEventListener(
+      "ratechange",
+      () => {
+        if (videoElement) emit("playbackrate", videoElement.playbackRate);
+      },
+      listenerOptions,
+    );
 
-    videoElement.addEventListener("durationchange", () => {
-      // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
-      const duration = videoElement?.duration ?? 0;
-      if (duration > 0) {
-        lastValidDuration = duration;
-        emit("duration", duration);
-      } else if (lastValidDuration > 0) {
-        // Keep the last valid duration if the new one is invalid
-        emit("duration", lastValidDuration);
-      }
-    });
+    videoElement.addEventListener(
+      "durationchange",
+      () => {
+        // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
+        const duration = videoElement?.duration ?? 0;
+        if (duration > 0) {
+          lastValidDuration = duration;
+          emit("duration", duration);
+        } else if (lastValidDuration > 0) {
+          // Keep the last valid duration if the new one is invalid
+          emit("duration", lastValidDuration);
+        }
+      },
+      listenerOptions,
+    );
   }
 
   function unloadSource() {
+    if (sourceEventsController) {
+      sourceEventsController.abort();
+      sourceEventsController = null;
+    }
+
     // Clear any pending quality change timeout
     if (qualityChangeTimeout) {
       clearTimeout(qualityChangeTimeout);
@@ -631,11 +698,11 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       );
     },
     load(ops) {
-      if (!ops.source) unloadSource();
+      unloadSource();
       automaticQuality = ops.automaticQuality;
       preferenceQuality = ops.preferredQuality;
       source = ops.source;
-      emit("loading", true);
+      if (source) emit("loading", true);
       startAt = ops.startAt;
       // Set autoplay flag if starting from beginning (indicates autoplay transition)
       shouldAutoplayAfterLoad = ops.startAt === 0;

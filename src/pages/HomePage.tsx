@@ -165,34 +165,6 @@ export function HomePage() {
 
       {renderSearch()}
 
-      {!search &&
-        (enableCarouselView ? (
-          <WideContainer ultraWide classNames="!px-3 md:!px-9">
-            <WatchingCarousel
-              carouselRefs={carouselRefs}
-              onShowDetails={handleShowDetails}
-            />
-            <BookmarksCarousel
-              carouselRefs={carouselRefs}
-              onShowDetails={handleShowDetails}
-            />
-          </WideContainer>
-        ) : (
-          <WideContainer>
-            <div className="flex flex-col gap-8">
-              <WatchingPart
-                onItemsChange={setShowWatching}
-                onShowDetails={handleShowDetails}
-              />
-              <BookmarksPart
-                onItemsChange={setShowBookmarks}
-                onShowDetails={handleShowDetails}
-              />
-            </div>
-          </WideContainer>
-        ))}
-
-      {/* User Content */}
       {!search && renderHomeSections()}
 
       {!search && !(showBookmarks || showWatching) ? (

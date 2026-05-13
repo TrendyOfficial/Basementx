@@ -46,8 +46,8 @@ importers:
         specifier: ^1.8.0
         version: 1.8.0
       '@p-stream/providers':
-        specifier: file:vendor/p-stream-providers-3.2.3.tgz
-        version: file:vendor/p-stream-providers-3.2.3.tgz
+        specifier: file:vendor/p-stream-providers-3.2.4.tgz
+        version: file:vendor/p-stream-providers-3.2.4.tgz
       '@plasmohq/messaging':
         specifier: ^0.6.2
         version: 0.6.2(react@18.3.1)
@@ -1250,9 +1250,9 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@p-stream/providers@file:vendor/p-stream-providers-3.2.3.tgz':
-    resolution: {integrity: sha512-frDEHD8PcjESVfBIcNb44+iEMhctGmsLNVBMvbX3y3p58+h858MMQCC7HOa82ArSY/u0inUe9NH3po4Ex8e3Ww==, tarball: file:vendor/p-stream-providers-3.2.3.tgz}
-    version: 3.2.3
+  '@p-stream/providers@file:vendor/p-stream-providers-3.2.4.tgz':
+    resolution: {integrity: sha512-xKL/8ilGKj6g9xFRuAJEX9Ja8IabKjpwMmgJ3wg+1/ZWK2JVIS2VT/mqah/rqjB0PKDTt+//In9HPHBDAVcVUQ==, tarball: file:vendor/p-stream-providers-3.2.4.tgz}
+    version: 3.2.4
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -5860,7 +5860,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@p-stream/providers@file:vendor/p-stream-providers-3.2.3.tgz':
+  '@p-stream/providers@file:vendor/p-stream-providers-3.2.4.tgz':
     dependencies:
       abort-controller: 3.0.0
       cheerio: 1.0.0-rc.12
