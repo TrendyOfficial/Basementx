@@ -131,7 +131,7 @@ const DEFAULT_PREFERENCES = {
   homeSectionOrder: ["watching", "bookmarks"],
   manualSourceSelection: false,
   enableDoubleClickToSeek: false,
-  enableAutoResumeOnPlaybackError: true,
+  enableAutoResumeOnPlaybackError: false,
   enableNumberKeySeeking: true,
   enableAutoSkipSegmentsAtStart: false,
   enablePauseOverlay: false,

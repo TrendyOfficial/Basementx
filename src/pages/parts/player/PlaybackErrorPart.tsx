@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
+import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { Button } from "@/components/buttons/Button";
 import { Icons } from "@/components/Icon";
 import { IconPill } from "@/components/layout/IconPill";
@@ -39,6 +40,8 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
   const enableAutoResumeOnPlaybackError = usePreferencesStore(
     (s) => s.enableAutoResumeOnPlaybackError,
   );
+  const canAutoResumeOnPlaybackError =
+    enableAutoResumeOnPlaybackError && isExtensionActiveCached();
 
   // Mark the failed source/embed and handle UI when a playback error occurs
   useEffect(() => {
@@ -73,7 +76,7 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
         }
       }
 
-      if (!hasOpenedSettings.current && !enableAutoResumeOnPlaybackError) {
+      if (!hasOpenedSettings.current && !canAutoResumeOnPlaybackError) {
         hasOpenedSettings.current = true;
         // Reset the last successful source when a playback error occurs
         setLastSuccessfulSource(null);
@@ -91,7 +94,7 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
     addFailedEmbed,
     settingsRouter,
     setLastSuccessfulSource,
-    enableAutoResumeOnPlaybackError,
+    canAutoResumeOnPlaybackError,
   ]);
 
   // Automatically resume scraping from the next source if enabled
@@ -99,7 +102,7 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
     if (
       playbackError &&
       !hasAutoResumed.current &&
-      enableAutoResumeOnPlaybackError &&
+      canAutoResumeOnPlaybackError &&
       props.currentSourceId &&
       props.onResume
     ) {
@@ -109,7 +112,7 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
     }
   }, [
     playbackError,
-    enableAutoResumeOnPlaybackError,
+    canAutoResumeOnPlaybackError,
     props.currentSourceId,
     props.onResume,
   ]);
@@ -125,14 +128,14 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
         <IconPill icon={Icons.WAND}>{t("player.playbackError.badge")}</IconPill>
         <Title>{t("player.playbackError.title")}</Title>
         <Paragraph>
-          {enableAutoResumeOnPlaybackError
+          {canAutoResumeOnPlaybackError
             ? t("player.playbackError.autoResumeText")
             : t("player.playbackError.text")}
         </Paragraph>
         <div className="flex gap-3">
           {props.currentSourceId &&
             props.onResume &&
-            !enableAutoResumeOnPlaybackError && (
+            !canAutoResumeOnPlaybackError && (
               <Button
                 onClick={() => props.onResume!(props.currentSourceId!)}
                 theme="purple"
