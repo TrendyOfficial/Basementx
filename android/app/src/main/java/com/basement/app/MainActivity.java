@@ -1,4 +1,4 @@
-package com.basement.tv;
+package com.basement.app;
 
 import com.getcapacitor.BridgeActivity;
 

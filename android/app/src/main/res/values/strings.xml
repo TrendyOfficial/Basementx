@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Basement IPTV</string>
-    <string name="title_activity_main">Basement IPTV</string>
-    <string name="package_name">com.basement.tv</string>
-    <string name="custom_url_scheme">com.basement.tv</string>
+    <string name="app_name">Basement</string>
+    <string name="title_activity_main">Basement</string>
+    <string name="package_name">com.basement.app</string>
+    <string name="custom_url_scheme">com.basement.app</string>
 </resources>

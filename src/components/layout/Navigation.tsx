@@ -148,18 +148,18 @@ export function Navigation(props: NavigationProps) {
       onClick: () => handleNavClick("/movies", "movies"),
     },
     {
-      id: "home",
-      label: "Home",
-      icon: Icons.LOGO,
-      active: isActivePath("/"),
-      onClick: () => handleNavClick("/"),
-    },
-    {
       id: "series",
       label: "Series",
       icon: Icons.TV,
       active: isActivePath("/tvshows"),
       onClick: () => handleNavClick("/tvshows", "tvshows"),
+    },
+    {
+      id: "home",
+      label: "Home",
+      icon: Icons.LOGO,
+      active: isActivePath("/"),
+      onClick: () => handleNavClick("/"),
     },
   ];
 
