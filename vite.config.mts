@@ -67,7 +67,8 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: "Basement",
           short_name: "Basement",
-          description: "Watch anything you want — totally free, no ads forever! (≧◡≦)",
+          description:
+            "Watch anything you want — totally free, no ads forever! (≧◡≦)",
           theme_color: "#000000",
           background_color: "#000000",
           display: "standalone",
@@ -138,8 +139,12 @@ export default defineConfig(({ mode }) => {
             if (id.includes("locales") && !id.includes("en.json")) {
               return "locales";
             }
-            if (id.includes("react-dom")) {
-              return "react-dom";
+            if (
+              id.includes("node_modules/react/") ||
+              id.includes("node_modules/react-dom/") ||
+              id.includes("node_modules/scheduler/")
+            ) {
+              return "react-vendor";
             }
             if (id.includes("Icon.tsx")) {
               return "Icons";
