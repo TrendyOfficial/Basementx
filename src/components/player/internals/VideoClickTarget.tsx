@@ -55,10 +55,6 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
 
   const handleDoubleClick = useCallback(
     (e: PointerEvent<HTMLDivElement>) => {
-      if (!enableDoubleClickToSeek) {
-        toggleFullscreen();
-        return;
-      }
       const rect = e.currentTarget.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const oneThird = rect.width / 3;
@@ -73,6 +69,8 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
         setSeekDirection("forward");
         setSeekId((s) => s + 1);
         setIsSeeking(true);
+      } else if (!enableDoubleClickToSeek) {
+        toggleFullscreen();
       } else {
         toggleFullscreen();
       }

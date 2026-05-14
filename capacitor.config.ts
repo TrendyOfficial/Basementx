@@ -1,9 +1,9 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'com.basement.tv',
-  appName: 'Basement IPTV',
-  webDir: 'dist'
+  appId: "com.basement.tv",
+  appName: "Basement",
+  webDir: "dist",
 };
 
 export default config;

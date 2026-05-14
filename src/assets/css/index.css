@@ -1457,6 +1457,173 @@ body::before {
 }
 
 @media (max-width: 720px) {
+  .top-content {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  #mw-header {
+    display: none;
+  }
+
+  .basement-mobile-top-actions {
+    display: block;
+    padding-top: calc(env(safe-area-inset-top) + 0.45rem);
+  }
+
+  .basement-mobile-top-actions > div {
+    width: calc(100vw - 1rem);
+  }
+
+  .basement-mobile-action,
+  .basement-mobile-brand,
+  .basement-mobile-search,
+  .basement-mobile-bottom-nav {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.13),
+        rgba(255, 255, 255, 0.045)
+      ),
+      rgba(7, 7, 11, 0.62);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 18px 44px rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(24px) saturate(170%);
+    -webkit-backdrop-filter: blur(24px) saturate(170%);
+  }
+
+  .basement-mobile-action {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .basement-mobile-action > div > div {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .basement-mobile-brand {
+    min-width: 0;
+    flex: 1;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 900;
+  }
+
+  .basement-mobile-brand span {
+    max-width: 8.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .basement-mobile-search {
+    min-width: 0;
+    flex: 1;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0 0.3rem 0 1rem;
+    border-radius: 999px;
+  }
+
+  .basement-mobile-search input {
+    min-width: 0;
+    flex: 1;
+    background: transparent;
+    color: #fff;
+    outline: none;
+    font-weight: 700;
+  }
+
+  .basement-mobile-search input::placeholder {
+    color: rgba(255, 255, 255, 0.42);
+  }
+
+  .basement-mobile-search button {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+  }
+
+  .basement-mobile-bottom-nav {
+    position: fixed;
+    left: max(0.75rem, env(safe-area-inset-left));
+    right: max(0.75rem, env(safe-area-inset-right));
+    bottom: calc(env(safe-area-inset-bottom) + 0.65rem);
+    z-index: 520;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.25rem;
+    padding: 0.38rem;
+    border-radius: 1.45rem;
+  }
+
+  .basement-mobile-bottom-item {
+    height: 54px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.18rem;
+    border-radius: 1.1rem;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 0.72rem;
+    font-weight: 900;
+    transition:
+      color 180ms ease,
+      background-color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .basement-mobile-bottom-item > div > div {
+    width: 1.2rem;
+    height: 1.2rem;
+    min-width: 1.2rem;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .basement-mobile-bottom-item.active {
+    color: #fff;
+    background: color-mix(
+      in srgb,
+      theme("colors.type.link") 34%,
+      rgba(255, 255, 255, 0.08)
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 28px color-mix(in srgb, theme("colors.type.link") 24%, transparent);
+  }
+
+  .basement-mobile-bottom-item:active {
+    transform: scale(0.96);
+  }
+
+  .basement-app-surface,
+  .basement-browse-page,
+  .basement-discover-shell {
+    padding-bottom: calc(6.4rem + env(safe-area-inset-bottom));
+  }
+
   .basement-topbar {
     width: calc(100vw - 0.75rem);
     padding: 0.3rem;
@@ -1491,5 +1658,12 @@ body::before {
     width: 38px;
     height: 38px;
     min-width: 38px;
+  }
+}
+
+@media (min-width: 721px) {
+  .basement-mobile-top-actions,
+  .basement-mobile-bottom-nav {
+    display: none;
   }
 }

@@ -20,9 +20,10 @@
     "lint:fix": "eslint --fix --ext .tsx,.ts src",
     "lint:report": "eslint --ext .tsx,.ts --output-file eslint_report.json --format json src",
     "preinstall": "npx -y only-allow pnpm",
-    "android:sync": "vite build && npx cap sync",
+    "android:sync": "vite build && npx cap sync android",
     "android:open": "npx cap open android",
-    "android:build": "pnpm run android:sync && pnpm run android:open"
+    "android:build": "pnpm run android:sync && cd android && .\\gradlew.bat assembleDebug",
+    "android:apk": "pnpm run android:build"
   },
   "browserslist": {
     "production": [
