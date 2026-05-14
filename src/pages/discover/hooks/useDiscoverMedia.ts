@@ -522,7 +522,9 @@ export function useDiscoverMedia({
           if (!id) throw new Error("Provider ID is required");
 
           // Try to use Trakt provider endpoint if available
-          traktProviderFunction = getTraktProviderFunction(id);
+          traktProviderFunction = extraParams?.forceTmdbProvider
+            ? null
+            : getTraktProviderFunction(id);
           if (traktProviderFunction) {
             try {
               data = await fetchTraktMedia(traktProviderFunction);

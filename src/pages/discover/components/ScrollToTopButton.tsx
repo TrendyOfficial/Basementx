@@ -27,7 +27,11 @@ export function ScrollToTopButton() {
   };
 
   return (
-    <div className="fixed bottom-9 md:bottom-4 transform -translate-x-1/2 z-50 left-12 md:left-1/2">
+    <div
+      className={`fixed bottom-9 right-5 z-30 md:bottom-6 md:right-8 ${
+        isVisible ? "pointer-events-auto" : "pointer-events-none"
+      }`}
+    >
       <div
         className={`absolute inset-0 mx-auto h-[50px] w-[200px] rounded-full blur-[50px] opacity-50 pointer-events-none z-0 ${
           isVisible ? "opacity-100 visible" : "opacity-0 invisible"
@@ -40,7 +44,7 @@ export function ScrollToTopButton() {
       <button
         type="button"
         onClick={scrollToTop}
-        className={`relative backdrop-blur-sm flex items-center justify-center space-x-2 rounded-full px-3 py-3 md:py-2 text-lg font-semibold text-white bg-pill-background bg-opacity-80 hover:bg-pill-backgroundHover transition-opacity hover:scale-105 duration-500 ease-in-out ${
+        className={`relative backdrop-blur-sm flex items-center justify-center space-x-2 rounded-full px-3 py-3 md:py-2 text-lg font-semibold text-white bg-pill-background bg-opacity-80 hover:bg-pill-backgroundHover transition-opacity hover:scale-105 duration-500 ease-in-out shadow-lg shadow-black/20 ${
           isVisible ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         style={{

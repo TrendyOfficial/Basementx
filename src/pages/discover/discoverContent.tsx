@@ -57,7 +57,7 @@ const STREAMING_PLATFORMS = [
   {
     name: "HBO Max",
     src: "/platforms/hbomax.png",
-    providerId: "384",
+    providerId: "1899",
     key: "hbo",
   },
   {
@@ -151,6 +151,7 @@ export function DiscoverContent() {
             onShowDetails={handleShowDetails}
             showProviders
             moreContent
+            extraParams={{ forceTmdbProvider: true }}
           />
         </>
       );
@@ -278,6 +279,7 @@ export function DiscoverContent() {
             onShowDetails={handleShowDetails}
             showProviders
             moreContent
+            extraParams={{ forceTmdbProvider: true }}
           />
         </>
       );

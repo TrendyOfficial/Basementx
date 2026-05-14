@@ -84,6 +84,16 @@ export function Navigation(props: NavigationProps) {
   };
 
   const handleSearchButtonClick = () => {
+    if (searchExpanded && !props.discoverEnabled && inputValue.trim() === "") {
+      props.onDiscoverToggle?.(true);
+      setSearchExpanded(false);
+      setSearch("");
+      onUnFocus("");
+      if (location.pathname !== "/" && location.pathname !== "/browse")
+        navigate("/");
+      return;
+    }
+
     if (searchExpanded && props.discoverEnabled && inputValue.trim() === "") {
       props.onDiscoverToggle?.(false);
       setSearchExpanded(false);
