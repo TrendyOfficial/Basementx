@@ -501,7 +501,7 @@ export function OnboardingPage() {
         <div>
           <Trans i18nKey="onboarding.start.moreInfo.explainer.outro">
             <a
-              href="https://discord.gg/wmbWfk4SGy"
+              href="https://discord.gg/bWYUqEg7Xq"
               target="_blank"
               rel="noopener noreferrer"
               className="text-type-link"
