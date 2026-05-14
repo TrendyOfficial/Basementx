@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { WideContainer } from "@/components/layout/WideContainer";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
 import { FeaturedCarousel } from "@/pages/discover/components/FeaturedCarousel";
@@ -22,6 +23,7 @@ import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePreferencesStore } from "@/stores/preferences";
 import { MediaItem } from "@/utils/mediaTypes";
 
+import { MobileHomePage } from "./mobile/MobileHomePage";
 import { AdsPart } from "./parts/home/AdsPart";
 import { RevivalAnnouncementModal } from "./parts/home/RevivalAnnouncementModal";
 import { SupportBar } from "./parts/home/SupportBar";
@@ -71,6 +73,7 @@ export function HomePage() {
   const homeSectionOrder = usePreferencesStore(
     (state) => state.homeSectionOrder,
   );
+  const { isMobile } = useIsMobile();
 
   const handleShowDetails = async (media: MediaItem | FeaturedMedia) => {
     showModal("details", {
@@ -208,9 +211,13 @@ export function HomePage() {
 
       <div className="basement-app-surface">
         <RevivalAnnouncementModal />
-        {discoverMode && !enableLowPerformanceMode
-          ? renderDiscoverHome()
-          : renderClassicHome()}
+        {isMobile ? (
+          <MobileHomePage />
+        ) : discoverMode && !enableLowPerformanceMode ? (
+          renderDiscoverHome()
+        ) : (
+          renderClassicHome()
+        )}
       </div>
     </HomeLayout>
   );

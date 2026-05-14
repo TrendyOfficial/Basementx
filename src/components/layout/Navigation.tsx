@@ -405,69 +405,66 @@ export function Navigation(props: NavigationProps) {
         </div>
       </div>
 
-      <div
-        className="basement-mobile-top-actions top-content fixed left-0 right-0 z-[520] pointer-events-none"
-        style={{ top: `${bannerHeight}px` }}
-      >
-        <div className="pointer-events-auto mx-auto flex w-full max-w-[28rem] items-center justify-between gap-2 px-2">
-          <button
-            type="button"
-            className={actionButtonClass}
-            onClick={handleSearchButtonClick}
-            onDoubleClick={handleSearchButtonDoubleClick}
-            title="Search"
-          >
-            <IconPatch icon={Icons.SEARCH} clickable downsized navigation />
-          </button>
-
-          {searchExpanded ? (
-            <div className="basement-mobile-search">
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={handleSearchKeyDown}
-                placeholder="Search..."
-              />
-              <button type="button" onClick={closeSearch} title="Close search">
-                <IconPatch icon={Icons.X} clickable downsized navigation />
-              </button>
-            </div>
-          ) : (
+      {!isOnHomepage ? (
+        <div
+          className="basement-mobile-top-actions top-content fixed left-0 right-0 z-[520] pointer-events-none"
+          style={{ top: `${bannerHeight}px` }}
+        >
+          <div className="pointer-events-auto mx-auto flex w-full max-w-[28rem] items-center justify-end gap-2 px-2">
             <button
               type="button"
-              className="basement-mobile-brand"
-              onClick={() => handleNavClick("/")}
+              className={actionButtonClass}
+              onClick={handleSearchButtonClick}
+              onDoubleClick={handleSearchButtonDoubleClick}
+              title="Search"
             >
-              <IconPatch icon={Icons.LOGO} clickable downsized navigation />
-              <span>Basement</span>
+              <IconPatch icon={Icons.SEARCH} clickable downsized navigation />
             </button>
-          )}
 
-          <button
-            type="button"
-            onClick={() => openNotifications()}
-            className={actionButtonClass}
-            title="Notifications"
-          >
-            <IconPatch icon={Icons.BELL} clickable downsized navigation />
-            {(() => {
-              const count = getUnreadCount();
-              const shouldShow =
-                typeof count === "number" ? count > 0 : count === "99+";
-              return shouldShow ? (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
-                  {count}
-                </span>
-              ) : null;
-            })()}
-          </button>
-          <Link to="/settings" className={actionButtonClass} title="Settings">
-            <IconPatch icon={Icons.GEAR} clickable downsized navigation />
-          </Link>
+            {searchExpanded ? (
+              <div className="basement-mobile-search">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                  placeholder="Search..."
+                />
+                <button
+                  type="button"
+                  onClick={closeSearch}
+                  title="Close search"
+                >
+                  <IconPatch icon={Icons.X} clickable downsized navigation />
+                </button>
+              </div>
+            ) : null}
+
+            <button
+              type="button"
+              onClick={() => openNotifications()}
+              className={actionButtonClass}
+              title="Notifications"
+            >
+              <IconPatch icon={Icons.BELL} clickable downsized navigation />
+              {(() => {
+                const count = getUnreadCount();
+                const shouldShow =
+                  typeof count === "number" ? count > 0 : count === "99+";
+                return shouldShow ? (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
+                    {count}
+                  </span>
+                ) : null;
+              })()}
+            </button>
+            <Link to="/settings" className={actionButtonClass} title="Settings">
+              <IconPatch icon={Icons.GEAR} clickable downsized navigation />
+            </Link>
+          </div>
         </div>
-      </div>
+      ) : null}
 
       <nav className="basement-mobile-bottom-nav">
         {mobileNavItems.map((item) => (
