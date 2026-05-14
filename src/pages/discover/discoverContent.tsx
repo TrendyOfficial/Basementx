@@ -26,13 +26,13 @@ const STREAMING_PLATFORMS = [
   },
   {
     name: "Disney+",
-    src: "/platforms/disney.png",
+    src: "/platforms/disneyplus.png",
     providerId: "337",
     key: "disney",
   },
   {
     name: "Prime Video",
-    src: "/platforms/prime.png",
+    src: "/platforms/primevideo.png",
     providerId: "9",
     key: "amazon",
   },
@@ -56,7 +56,7 @@ const STREAMING_PLATFORMS = [
   },
   {
     name: "HBO Max",
-    src: "/platforms/max.png",
+    src: "/platforms/hbomax.png",
     providerId: "384",
     key: "hbo",
   },
@@ -70,12 +70,12 @@ const STREAMING_PLATFORMS = [
 
 const providerMap: { [key: string]: { name: string; img: string } } = {
   netflix: { name: "Netflix", img: "/platforms/netflix.png" },
-  disney: { name: "Disney+", img: "/platforms/disney.png" },
-  amazon: { name: "Prime Video", img: "/platforms/prime.png" },
+  disney: { name: "Disney+", img: "/platforms/disneyplus.png" },
+  amazon: { name: "Prime Video", img: "/platforms/primevideo.png" },
   apple: { name: "Apple TV", img: "/platforms/appletv.png" },
   hulu: { name: "Hulu", img: "/platforms/hulu.png" },
   crunchyroll: { name: "Crunchyroll", img: "/platforms/crunchyroll.png" },
-  hbo: { name: "HBO Max", img: "/platforms/max.png" },
+  hbo: { name: "HBO Max", img: "/platforms/hbomax.png" },
   paramount: { name: "Paramount+", img: "/platforms/paramount.png" },
 };
 
@@ -139,6 +139,7 @@ export function DiscoverContent() {
             </Button>
           </div>
           <MediaCarousel
+            key={`movie-provider-${activeProvider.key}`}
             content={{
               type: "provider",
             }}
@@ -265,6 +266,7 @@ export function DiscoverContent() {
             </Button>
           </div>
           <MediaCarousel
+            key={`tv-provider-${activeProvider.key}`}
             content={{
               type: "provider",
             }}
@@ -418,17 +420,9 @@ export function DiscoverContent() {
       </div>
 
       <WideContainer ultraWide classNames="!px-0">
-        <div style={{ display: isMoviesTab ? "block" : "none" }}>
-          {renderMoviesContent()}
-        </div>
-
-        <div style={{ display: isTVShowsTab ? "block" : "none" }}>
-          {renderTVShowsContent()}
-        </div>
-
-        <div style={{ display: isEditorPicksTab ? "block" : "none" }}>
-          {renderEditorPicksContent()}
-        </div>
+        {isMoviesTab ? <div>{renderMoviesContent()}</div> : null}
+        {isTVShowsTab ? <div>{renderTVShowsContent()}</div> : null}
+        {isEditorPicksTab ? <div>{renderEditorPicksContent()}</div> : null}
       </WideContainer>
 
       <div

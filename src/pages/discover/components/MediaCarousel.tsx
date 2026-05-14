@@ -45,6 +45,8 @@ interface MediaCarouselProps {
   titleOverride?: string;
 }
 
+const SKELETON_KEYS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+
 function MoreCard({ link }: { link: string }) {
   const { t } = useTranslation();
 
@@ -115,6 +117,11 @@ export function MediaCarousel({
   const [selectedGenre, setSelectedGenre] = React.useState<OptionItem | null>(
     null,
   );
+
+  useEffect(() => {
+    setSelectedProviderId(initialProviderId || "");
+    setSelectedProviderName(initialProviderName || "");
+  }, [initialProviderId, initialProviderName]);
 
   // Get available providers and genres
   const mediaType: MediaType = isTVShow ? "tv" : "movie";
@@ -549,24 +556,22 @@ export function MediaCarousel({
                   />
                 </div>
               ))
-            : Array(10)
-                .fill(null)
-                .map((_, index) => (
-                  <div
-                    key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(2)}`}
-                    className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
-                  >
-                    <MediaCard
-                      media={{
-                        id: `skeleton-${index}`,
-                        title: "",
-                        poster: "",
-                        type: isTVShow ? "show" : "movie",
-                      }}
-                      forceSkeleton
-                    />
-                  </div>
-                ))}
+            : SKELETON_KEYS.map((skeletonKey) => (
+                <div
+                  key={`skeleton-${categorySlug}-${skeletonKey}`}
+                  className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                >
+                  <MediaCard
+                    media={{
+                      id: `skeleton-${skeletonKey}`,
+                      title: "",
+                      poster: "",
+                      type: isTVShow ? "show" : "movie",
+                    }}
+                    forceSkeleton
+                  />
+                </div>
+              ))}
 
           {moreContent && generatedMoreLink && (
             <MoreCard link={generatedMoreLink} />

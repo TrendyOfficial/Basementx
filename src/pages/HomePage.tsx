@@ -157,7 +157,6 @@ export function HomePage() {
           showTitle
         />
 
-        <RevivalAnnouncementModal />
         {conf().SHOW_SUPPORT_BAR ? <SupportBar /> : null}
 
         {conf().SHOW_AD ? <AdsPart /> : null}
@@ -208,6 +207,7 @@ export function HomePage() {
       </Helmet>
 
       <div className="basement-app-surface">
+        <RevivalAnnouncementModal />
         {discoverMode && !enableLowPerformanceMode
           ? renderDiscoverHome()
           : renderClassicHome()}

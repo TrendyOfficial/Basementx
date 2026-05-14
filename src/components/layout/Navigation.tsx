@@ -94,6 +94,17 @@ export function Navigation(props: NavigationProps) {
     setSearchExpanded(true);
   };
 
+  const handleSearchButtonDoubleClick = () => {
+    const nextDiscoverMode = !props.discoverEnabled;
+    props.onDiscoverToggle?.(nextDiscoverMode);
+    setSearchExpanded(false);
+    setInputValue("");
+    setSearch("");
+    onUnFocus("");
+    if (location.pathname !== "/" && location.pathname !== "/browse")
+      navigate("/");
+  };
+
   const closeSearch = () => {
     setSearchExpanded(false);
     setInputValue("");
@@ -263,8 +274,9 @@ export function Navigation(props: NavigationProps) {
                     >
                       <button
                         type="button"
-                        className="flex-shrink-0 flex items-center justify-center"
+                        className="nav-search-action"
                         onClick={handleSearchButtonClick}
+                        onDoubleClick={handleSearchButtonDoubleClick}
                         title="Search"
                       >
                         <IconPatch
@@ -293,7 +305,7 @@ export function Navigation(props: NavigationProps) {
                       {searchExpanded ? (
                         <button
                           type="button"
-                          className="nav-search-close ml-1"
+                          className="nav-search-action"
                           onClick={closeSearch}
                           title="Close search"
                         >

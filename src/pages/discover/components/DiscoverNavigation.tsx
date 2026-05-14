@@ -17,16 +17,16 @@ export function DiscoverNavigation({
 }: DiscoverNavigationProps) {
   const { t } = useTranslation();
   const tabButtonClass = (category: string) =>
-    `text-xl md:text-2xl font-bold p-2 bg-transparent text-center rounded-full cursor-pointer flex items-center transition-[color,transform] duration-200 ${
+    `text-xl md:text-2xl font-bold p-2 bg-transparent text-center rounded-full cursor-pointer flex items-center justify-center transition-colors duration-200 ${
       selectedCategory === category
-        ? "transform scale-105 text-type-link"
+        ? "text-type-link"
         : "text-type-secondary hover:text-type-text"
     }`;
 
   return (
     <div className="w-full max-w-screen-xl mx-auto pt-24 pb-4">
       <div className="flex flex-col items-center gap-3">
-        <div className="flex items-center justify-center gap-4 md:gap-8">
+        <div className="grid w-full max-w-[34rem] grid-cols-3 items-center gap-2 md:gap-5">
           <button
             type="button"
             className={tabButtonClass("movies")}
