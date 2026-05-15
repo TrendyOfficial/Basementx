@@ -80,6 +80,40 @@ html[data-no-scroll] body {
   overflow: hidden;
 }
 
+.cast-button-container {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.cast-button-container > div {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cast-button-container google-cast-launcher {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+  display: block;
+}
+
+.google-cast-button.hidden {
+  display: none;
+}
+
 .google-cast-button:not(.casting) google-cast-launcher {
   @apply brightness-[500];
 }
@@ -1411,32 +1445,6 @@ body::before {
 
   .basement-topbar .nav-search-expanded {
     width: min(280px, calc(100vw - 14rem));
-  }
-
-  .cast-button-container {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .cast-button-container google-cast-launcher {
-    width: 24px !important;
-    height: 24px !important;
-    min-width: 24px !important;
-    min-height: 24px !important;
-    display: block;
-  }
-
-  .google-cast-button.hidden {
-    display: none;
-  }
-
-  .google-cast-button:not(.casting) google-cast-launcher {
-    @apply brightness-[500];
   }
 
   /* Image fade-in on load */
