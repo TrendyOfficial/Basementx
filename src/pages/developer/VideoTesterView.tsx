@@ -28,13 +28,11 @@ const testMeta: PlayerMeta = {
 const testStreams: Record<StreamType, string> = {
   hls: "https://alpha-charlott.github.io/video-openh264/Sintel_master.m3u8",
   mp4: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-  iframe: "https://vidfast.pro/movie/786892",
 };
 
 const streamTypes: Record<StreamType, string> = {
   hls: "HLS",
   mp4: "MP4",
-  iframe: "Iframe",
 };
 
 export default function VideoTesterView() {
@@ -111,19 +109,10 @@ export default function VideoTesterView() {
           },
           ...(Object.keys(headersObj).length > 0 && { headers: headersObj }),
         };
-      } else if (type === "iframe") {
-        source = {
-          type: "iframe",
-          url,
-        };
       } else throw new Error("Invalid type");
 
       // Prepare stream headers if extension is active and headers are present
-      if (
-        type !== "iframe" &&
-        extensionState === "success" &&
-        Object.keys(headersObj).length > 0
-      ) {
+      if (extensionState === "success" && Object.keys(headersObj).length > 0) {
         // Create a mock Stream object for prepareStream
         const mockStream: any = {
           type: type === "hls" ? "hls" : "file",
@@ -202,11 +191,6 @@ export default function VideoTesterView() {
           type: "file",
           qualities,
           ...(streamData.headers && { headers: streamData.headers }),
-        };
-      } else if (streamData.type === "iframe") {
-        source = {
-          type: "iframe",
-          url: streamData.url,
         };
       } else {
         throw new Error(`Unsupported stream type: ${streamData.type}`);
@@ -367,9 +351,6 @@ export default function VideoTesterView() {
                   </Button>
                   <Button onClick={() => start(testStreams.mp4, "mp4")}>
                     MP4 test
-                  </Button>
-                  <Button onClick={() => start(testStreams.iframe, "iframe")}>
-                    Iframe test
                   </Button>
                 </div>
               </div>
