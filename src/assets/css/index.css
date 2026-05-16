@@ -92,7 +92,7 @@ html[data-no-scroll] body {
   overflow: hidden;
 }
 
-.cast-button-container > div {
+.cast-button-container>div {
   width: 24px;
   height: 24px;
   display: inline-flex;
@@ -180,11 +180,8 @@ input[type="range"].styled-slider::-webkit-slider-thumb:hover {
 
 input[type="range"].styled-slider.slider-progress::-webkit-slider-runnable-track {
   background:
-    linear-gradient(
-        var(--slider-progress-background),
-        var(--slider-progress-background)
-      )
-      0 / var(--sx) 100% no-repeat,
+    linear-gradient(var(--slider-progress-background),
+      var(--slider-progress-background)) 0 / var(--sx) 100% no-repeat,
     #1c161b;
 }
 
@@ -212,11 +209,8 @@ input[type="range"].styled-slider::-moz-range-thumb:hover {
 
 input[type="range"].styled-slider.slider-progress::-moz-range-track {
   background:
-    linear-gradient(
-        var(--slider-progress-background),
-        var(--slider-progress-background)
-      )
-      0 / var(--sx) 100% no-repeat,
+    linear-gradient(var(--slider-progress-background),
+      var(--slider-progress-background)) 0 / var(--sx) 100% no-repeat,
     #1c161b;
 }
 
@@ -335,19 +329,16 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 
 [dir="rtl"] .transform {
   /* Invert horizontal X offset on transform (Tailwind RTL plugin does the rest) */
-  transform: translate(calc(var(--tw-translate-x) * -1), var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
+  transform: translate(calc(var(--tw-translate-x) * -1), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
 [dir="ltr"] .transform {
   /* default - otherwise it overwrites*/
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
 @keyframes jiggle {
+
   0%,
   100% {
     transform: rotate(-1deg);
@@ -364,73 +355,69 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 
 .carousel-container {
   position: relative;
-  mask-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    /* Left edge */ rgba(0, 0, 0, 1) 80px,
-    /* visible after 80px */ rgba(0, 0, 0, 1) calc(100% - 80px),
-    /* invisible 80px from right */ rgba(0, 0, 0, 0) 100% /* Right edge */
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 1) 80px,
-    rgba(0, 0, 0, 1) calc(100% - 80px),
-    rgba(0, 0, 0, 0) 100%
-  );
+  mask-image: linear-gradient(to right,
+      rgba(0, 0, 0, 0),
+      /* Left edge */
+      rgba(0, 0, 0, 1) 80px,
+      /* visible after 80px */
+      rgba(0, 0, 0, 1) calc(100% - 80px),
+      /* invisible 80px from right */
+      rgba(0, 0, 0, 0) 100%
+      /* Right edge */
+    );
+  -webkit-mask-image: linear-gradient(to right,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 1) 80px,
+      rgba(0, 0, 0, 1) calc(100% - 80px),
+      rgba(0, 0, 0, 0) 100%);
   z-index: 1;
 }
 
 @media (max-width: 768px) {
   .carousel-container {
-    mask-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0),
-      /* Left edge */ rgba(0, 0, 0, 1) 20px,
-      /* visible after 80px */ rgba(0, 0, 0, 1) calc(100% - 20px),
-      /* invisible 80px from right */ rgba(0, 0, 0, 0) 100% /* Right edge */
-    );
-    -webkit-mask-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 1) 20px,
-      rgba(0, 0, 0, 1) calc(100% - 20px),
-      rgba(0, 0, 0, 0) 100%
-    );
+    mask-image: linear-gradient(to right,
+        rgba(0, 0, 0, 0),
+        /* Left edge */
+        rgba(0, 0, 0, 1) 20px,
+        /* visible after 80px */
+        rgba(0, 0, 0, 1) calc(100% - 20px),
+        /* invisible 80px from right */
+        rgba(0, 0, 0, 0) 100%
+        /* Right edge */
+      );
+    -webkit-mask-image: linear-gradient(to right,
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, 1) 20px,
+        rgba(0, 0, 0, 1) calc(100% - 20px),
+        rgba(0, 0, 0, 0) 100%);
   }
 }
 
 .vertical-carousel-container {
   --mask-fade-distance: 80px;
   position: relative;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black var(--mask-fade-distance),
-    black calc(100% - var(--mask-fade-distance)),
-    transparent
-  );
+  -webkit-mask-image: linear-gradient(to bottom,
+      transparent,
+      black var(--mask-fade-distance),
+      black calc(100% - var(--mask-fade-distance)),
+      transparent);
   mask-image: var(-webkit-mask-image);
   z-index: 1;
 }
 
 .vertical-carousel-container.hide-top-gradient {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black,
-    black calc(100% - var(--mask-fade-distance)),
-    transparent
-  );
+  -webkit-mask-image: linear-gradient(to bottom,
+      black,
+      black calc(100% - var(--mask-fade-distance)),
+      transparent);
   mask-image: var(-webkit-mask-image);
 }
 
 .vertical-carousel-container.hide-bottom-gradient {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black var(--mask-fade-distance),
-    black
-  );
+  -webkit-mask-image: linear-gradient(to bottom,
+      transparent,
+      black var(--mask-fade-distance),
+      black);
   mask-image: var(-webkit-mask-image);
 }
 
@@ -491,11 +478,9 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
   border-radius: 999px;
   color: theme("colors.type.secondary");
   background:
-    linear-gradient(
-      180deg,
+    linear-gradient(180deg,
       rgba(255, 255, 255, 0.09),
-      rgba(255, 255, 255, 0.035)
-    ),
+      rgba(255, 255, 255, 0.035)),
     rgba(0, 0, 0, 0.28);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -515,11 +500,9 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
   color: theme("colors.type.link");
   border-color: rgba(255, 255, 255, 0.26);
   background:
-    linear-gradient(
-      180deg,
+    linear-gradient(180deg,
       rgba(255, 255, 255, 0.13),
-      rgba(255, 255, 255, 0.055)
-    ),
+      rgba(255, 255, 255, 0.055)),
     rgba(0, 0, 0, 0.36);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
@@ -562,11 +545,9 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 999px;
   background:
-    linear-gradient(
-      180deg,
+    linear-gradient(180deg,
       rgba(255, 255, 255, 0.075),
-      rgba(255, 255, 255, 0.025)
-    ),
+      rgba(255, 255, 255, 0.025)),
     rgba(0, 0, 0, 0.3);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.07),
@@ -973,20 +954,20 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 .nav-search-collapsed {
   width: 42px;
   background: transparent;
+  justify-content: center;
+  gap: 0;
 }
 
 .nav-search-expanded {
   width: 320px;
   background:
-    linear-gradient(
-      180deg,
+    linear-gradient(180deg,
       rgba(255, 255, 255, 0.09),
-      rgba(255, 255, 255, 0.035)
-    ),
+      rgba(255, 255, 255, 0.035)),
     rgba(255, 255, 255, 0.045);
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-  padding: 0 0.25rem;
+  padding: 0 1px;
 }
 
 .nav-search-action {
@@ -997,7 +978,39 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
+  color: white;
 }
+
+.nav-search-action>div,
+.nav-search-action>div>div {
+  width: 100%;
+  height: 100%;
+}
+
+.nav-search-action svg {
+  display: block;
+  margin: auto;
+}
+
+.nav-search-icon-patch,
+.nav-search-icon-patch>div,
+.nav-search-icon-patch span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-search-icon-patch span {
+  width: 100%;
+  height: 100%;
+  line-height: 0;
+}
+
+.nav-search-icon-patch svg {
+  width: 1.05em;
+  height: 1.05em;
+}
+
 
 .nav-search-input-collapsed {
   width: 0;
@@ -1036,7 +1049,7 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
   contain: layout paint;
 }
 
-.basement-discover-shell > * {
+.basement-discover-shell>* {
   content-visibility: auto;
   contain-intrinsic-size: 900px;
 }
@@ -1066,22 +1079,16 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
    ===================================================== */
 body {
   background:
-    radial-gradient(
-      circle at 15% 10%,
+    radial-gradient(circle at 15% 10%,
       color-mix(in srgb, theme("colors.background.accentA") 22%, transparent),
-      transparent 34rem
-    ),
-    radial-gradient(
-      circle at 82% 12%,
+      transparent 34rem),
+    radial-gradient(circle at 82% 12%,
       color-mix(in srgb, theme("colors.background.accentB") 22%, transparent),
-      transparent 32rem
-    ),
-    linear-gradient(
-      180deg,
+      transparent 32rem),
+    linear-gradient(180deg,
       theme("colors.background.main") 0%,
       #050507 62%,
-      theme("colors.background.main") 100%
-    );
+      theme("colors.background.main") 100%);
 }
 
 body::before {
@@ -1109,11 +1116,9 @@ body::before {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   background:
-    linear-gradient(
-      180deg,
+    linear-gradient(180deg,
       rgba(255, 255, 255, 0.075),
-      rgba(255, 255, 255, 0.025)
-    ),
+      rgba(255, 255, 255, 0.025)),
     rgba(8, 8, 12, 0.58);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -1122,7 +1127,7 @@ body::before {
   -webkit-backdrop-filter: blur(24px) saturate(160%);
 }
 
-.basement-topbar > div {
+.basement-topbar>div {
   min-width: 0;
 }
 
@@ -1165,23 +1170,20 @@ body::before {
   transform: translateY(-1px);
 }
 
-.basement-nav-icon > div > div,
+.basement-nav-icon>div>div,
 .basement-topbar .bg-pill-background {
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   background:
-    linear-gradient(
-      180deg,
+    linear-gradient(180deg,
       rgba(255, 255, 255, 0.09),
-      rgba(255, 255, 255, 0.035)
-    ),
+      rgba(255, 255, 255, 0.035)),
     rgba(255, 255, 255, 0.045) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .basement-topbar .nav-search-container:focus-within {
   border-color: color-mix(in srgb, theme("colors.type.link") 60%, transparent);
-  box-shadow: 0 0 22px
-    color-mix(in srgb, theme("colors.type.link") 20%, transparent);
+  box-shadow: 0 0 22px color-mix(in srgb, theme("colors.type.link") 20%, transparent);
 }
 
 .basement-search-results {
@@ -1200,7 +1202,7 @@ body::before {
   padding-bottom: 4rem;
 }
 
-.basement-discover-shell > .relative {
+.basement-discover-shell>.relative {
   min-height: auto;
 }
 
@@ -1227,11 +1229,9 @@ body::before {
 .group .artifact-card {
   border: 1px solid rgba(255, 255, 255, 0.07);
   background:
-    linear-gradient(
-      180deg,
+    linear-gradient(180deg,
       rgba(255, 255, 255, 0.06),
-      rgba(255, 255, 255, 0.018)
-    ),
+      rgba(255, 255, 255, 0.018)),
     rgba(0, 0, 0, 0.28) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.07),
@@ -1245,7 +1245,8 @@ body::before {
 }
 
 .carousel-container {
-  padding-top: 0.25rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .basement-browse-page {
@@ -1292,11 +1293,9 @@ body::before {
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 1.4rem;
   background:
-    linear-gradient(
-      180deg,
+    linear-gradient(180deg,
       rgba(255, 255, 255, 0.08),
-      rgba(255, 255, 255, 0.025)
-    ),
+      rgba(255, 255, 255, 0.025)),
     rgba(10, 8, 14, 0.62);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -1391,13 +1390,10 @@ body::before {
 
 .basement-segmented-control button.active {
   color: #fff;
-  background: color-mix(
-    in srgb,
-    theme("colors.type.link") 32%,
-    rgba(255, 255, 255, 0.08)
-  );
-  box-shadow: 0 0 24px
-    color-mix(in srgb, theme("colors.type.link") 22%, transparent);
+  background: color-mix(in srgb,
+      theme("colors.type.link") 32%,
+      rgba(255, 255, 255, 0.08));
+  box-shadow: 0 0 24px color-mix(in srgb, theme("colors.type.link") 22%, transparent);
 }
 
 .basement-browse-grid {
@@ -1408,12 +1404,10 @@ body::before {
   aspect-ratio: 2 / 3;
   border-radius: 0.9rem;
   background:
-    linear-gradient(
-      90deg,
+    linear-gradient(90deg,
       rgba(255, 255, 255, 0.035),
       rgba(255, 255, 255, 0.075),
-      rgba(255, 255, 255, 0.035)
-    ),
+      rgba(255, 255, 255, 0.035)),
     rgba(255, 255, 255, 0.045);
   background-size: 220% 100%;
   animation: shimmerMove 1.8s linear infinite;
@@ -1478,7 +1472,7 @@ body::before {
     padding-top: calc(env(safe-area-inset-top) + 0.7rem);
   }
 
-  .basement-mobile-top-actions > div {
+  .basement-mobile-top-actions>div {
     width: calc(100vw - 1.15rem);
   }
 
@@ -1488,11 +1482,9 @@ body::before {
   .basement-mobile-bottom-nav {
     border: 1px solid rgba(255, 255, 255, 0.16);
     background:
-      linear-gradient(
-        180deg,
+      linear-gradient(180deg,
         rgba(255, 255, 255, 0.2),
-        rgba(255, 255, 255, 0.07)
-      ),
+        rgba(255, 255, 255, 0.07)),
       rgba(13, 13, 17, 0.62);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.22),
@@ -1512,7 +1504,7 @@ body::before {
     border-radius: 999px;
   }
 
-  .basement-mobile-action > div > div {
+  .basement-mobile-action>div>div {
     border: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -1608,7 +1600,7 @@ body::before {
       box-shadow 180ms ease;
   }
 
-  .basement-mobile-bottom-item > div > div {
+  .basement-mobile-bottom-item>div>div {
     width: 1.55rem;
     height: 1.55rem;
     min-width: 1.55rem;
@@ -1620,11 +1612,9 @@ body::before {
   .basement-mobile-bottom-item.active {
     color: #fff;
     background:
-      linear-gradient(
-        180deg,
+      linear-gradient(180deg,
         rgba(255, 255, 255, 0.3),
-        rgba(255, 255, 255, 0.12)
-      ),
+        rgba(255, 255, 255, 0.12)),
       rgba(255, 255, 255, 0.1);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.26),
@@ -1670,7 +1660,7 @@ body::before {
     text-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
   }
 
-  .mobile-home-header > div {
+  .mobile-home-header>div {
     display: flex;
     align-items: center;
     gap: 0.45rem;
@@ -1687,11 +1677,9 @@ body::before {
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.13);
     background:
-      linear-gradient(
-        180deg,
+      linear-gradient(180deg,
         rgba(255, 255, 255, 0.16),
-        rgba(255, 255, 255, 0.055)
-      ),
+        rgba(255, 255, 255, 0.055)),
       rgba(5, 5, 7, 0.56);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.16),
@@ -1719,11 +1707,9 @@ body::before {
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     background:
-      linear-gradient(
-        180deg,
+      linear-gradient(180deg,
         rgba(255, 255, 255, 0.2),
-        rgba(255, 255, 255, 0.075)
-      ),
+        rgba(255, 255, 255, 0.075)),
       rgba(7, 7, 9, 0.82);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.18),
@@ -1769,11 +1755,9 @@ body::before {
     inset: 0;
     z-index: -1;
     background:
-      radial-gradient(
-        circle at 50% 28%,
+      radial-gradient(circle at 50% 28%,
         transparent 0 34%,
-        rgba(0, 0, 0, 0.32) 64%
-      ),
+        rgba(0, 0, 0, 0.32) 64%),
       linear-gradient(to bottom, transparent 0 55%, #000 100%);
   }
 
@@ -2032,6 +2016,7 @@ body::before {
 }
 
 @media (min-width: 721px) {
+
   .basement-mobile-top-actions,
   .basement-mobile-bottom-nav {
     display: none;

@@ -3,6 +3,11 @@ import { useAuthStore } from "@/stores/auth";
 
 const originalUrls = conf().PROXY_URLS;
 const types = ["proxy"] as const;
+const fallbackProxyUrls = [
+  "https://castly.dmin138p.workers.dev",
+  "https://loopifed.netlify.app",
+];
+const brokenProxyHosts = new Set(["backend.pstream.net"]);
 
 type ParsedUrlType = (typeof types)[number];
 
@@ -65,9 +70,18 @@ export function getParsedUrls() {
 }
 
 export function getProxyUrls() {
-  return getParsedUrls()
+  const urls = getParsedUrls()
     .filter((v) => v.type === "proxy")
-    .map((v) => v.url);
+    .map((v) => v.url)
+    .filter((url) => {
+      try {
+        return !brokenProxyHosts.has(new URL(url).host);
+      } catch {
+        return false;
+      }
+    });
+
+  return Array.from(new Set([...urls, ...fallbackProxyUrls]));
 }
 
 export function getM3U8ProxyUrls(): string[] {

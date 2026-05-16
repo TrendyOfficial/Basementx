@@ -29,6 +29,7 @@ import {
   Status,
   fetchFebboxQuota,
   testFebboxKey,
+  testTIDBKey,
   testTorboxToken,
   testdebridToken,
 } from "@/pages/parts/settings/SetupPart";
@@ -732,6 +733,14 @@ export function TIDBEdit({ tidbKey, setTIDBKey }: TIDBKeyProps) {
   const { t } = useTranslation();
   const preferences = usePreferencesStore();
   const initializedRef = useRef(false);
+  const [status, setStatus] = useState<Status>("unset");
+  const statusMap: Record<Status, StatusCircleProps["type"]> = {
+    error: "error",
+    success: "success",
+    unset: "noresult",
+    api_down: "error",
+    invalid_token: "error",
+  };
 
   // Enable TIDB key when component loads
   useEffect(() => {
@@ -740,6 +749,20 @@ export function TIDBEdit({ tidbKey, setTIDBKey }: TIDBKeyProps) {
       setTIDBKey(preferences.tidbKey);
     }
   }, [tidbKey, preferences.tidbKey, setTIDBKey]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const checkTokenStatus = async () => {
+      const result = await testTIDBKey(tidbKey);
+      if (!cancelled) setStatus(result);
+    };
+
+    checkTokenStatus();
+    return () => {
+      cancelled = true;
+    };
+  }, [tidbKey]);
 
   return (
     <SettingsCard>
@@ -754,6 +777,7 @@ export function TIDBEdit({ tidbKey, setTIDBKey }: TIDBKeyProps) {
           {t("settings.connections.tidb.tokenLabel")}
         </p>
         <div className="flex items-center w-full">
+          <StatusCircle type={statusMap[status]} className="mx-2 mr-4" />
           <AuthInputBox
             onChange={(newToken) => {
               setTIDBKey(newToken);
@@ -764,6 +788,14 @@ export function TIDBEdit({ tidbKey, setTIDBKey }: TIDBKeyProps) {
             className="flex-grow"
           />
         </div>
+        {status === "invalid_token" && (
+          <p className="text-type-danger mt-4">
+            {t("fedapi.status.invalid_token")}
+          </p>
+        )}
+        {status === "api_down" && (
+          <p className="text-type-danger mt-4">{t("fedapi.status.api_down")}</p>
+        )}
       </div>
     </SettingsCard>
   );

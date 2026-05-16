@@ -264,7 +264,12 @@ export function Navigation(props: NavigationProps) {
               </Link>
             </div>
 
-            <nav className="basement-nav-center pointer-events-auto">
+            <nav
+              className={classNames(
+                "basement-nav-center pointer-events-auto",
+                searchExpanded && "max-[1400px]:hidden",
+              )}
+            >
               <button
                 type="button"
                 className={classNames(
@@ -322,6 +327,7 @@ export function Navigation(props: NavigationProps) {
                           downsized
                           navigation
                           active={searchExpanded}
+                          className="nav-search-icon-patch"
                         />
                       </button>
                       <input
@@ -332,11 +338,11 @@ export function Navigation(props: NavigationProps) {
                         onKeyDown={handleSearchKeyDown}
                         placeholder="Search..."
                         className={classNames(
-                          "bg-transparent text-white placeholder-white/40 outline-none text-sm ml-2 flex-1",
+                          "bg-transparent text-white placeholder-white/40 outline-none text-sm flex-1",
                           "transition-all duration-400 ease-in-out",
                           searchExpanded
-                            ? "opacity-100"
-                            : "opacity-0 pointer-events-none w-0",
+                            ? "opacity-100 ml-2"
+                            : "opacity-0 pointer-events-none w-0 ml-0 border-none p-0",
                         )}
                       />
                       {searchExpanded ? (
@@ -418,7 +424,13 @@ export function Navigation(props: NavigationProps) {
               onDoubleClick={handleSearchButtonDoubleClick}
               title="Search"
             >
-              <IconPatch icon={Icons.SEARCH} clickable downsized navigation />
+              <IconPatch
+                icon={Icons.SEARCH}
+                clickable
+                downsized
+                navigation
+                className="nav-search-icon-patch"
+              />
             </button>
 
             {searchExpanded ? (

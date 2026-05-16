@@ -612,6 +612,7 @@ export function AppearancePart(props: {
                     )}
                     max={60}
                     min={0}
+                    step={5}
                     onChange={(v) => {
                       // Adjust to nearest 5 second interval
                       const interval = Math.round(v / 5) * 5;

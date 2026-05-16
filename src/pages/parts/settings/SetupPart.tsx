@@ -110,6 +110,34 @@ export async function testFebboxKey(febboxKey: string | null): Promise<Status> {
   }
 }
 
+export async function testTIDBKey(tidbKey: string | null): Promise<Status> {
+  if (!tidbKey) {
+    return "unset";
+  }
+
+  try {
+    await proxiedFetch("https://api.theintrodb.org/v1/me", {
+      headers: {
+        Authorization: `Bearer ${tidbKey}`,
+      },
+    });
+
+    return "success";
+  } catch (error) {
+    if (error instanceof FetchError) {
+      if (error.statusCode === 401 || error.statusCode === 403) {
+        return "invalid_token";
+      }
+
+      if (error.statusCode && error.statusCode >= 500) {
+        return "api_down";
+      }
+    }
+
+    return "api_down";
+  }
+}
+
 export async function testdebridToken(
   debridToken: string | null,
 ): Promise<Status> {

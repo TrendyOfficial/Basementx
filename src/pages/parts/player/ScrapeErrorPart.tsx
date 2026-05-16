@@ -58,7 +58,9 @@ export function ScrapeErrorPart(props: ScrapeErrorPartProps) {
     });
   }, [t]);
 
-  if (extensionState === "disallowed") {
+  const showExtensionPermissionError = false;
+
+  if (showExtensionPermissionError && extensionState === "disallowed") {
     return (
       <ErrorLayout>
         <ErrorContainer>

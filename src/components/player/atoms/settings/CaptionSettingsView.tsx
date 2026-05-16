@@ -48,6 +48,7 @@ export function CaptionDelay(props: {
   label: string;
   min: number;
   decimalsAllowed?: number;
+  step?: number;
 }) {
   const { t } = useTranslation();
 
@@ -139,7 +140,8 @@ export function CaptionDelay(props: {
             type="button"
             onClick={() =>
               props.onChange?.(
-                props.value - 1 / 10 ** (props.decimalsAllowed ?? 0),
+                props.value -
+                  (props.step ?? 1 / 10 ** (props.decimalsAllowed ?? 0)),
               )
             }
             className="flex-1 flex-col tabbable py-2 h-12 hover:text-white transition-colors duration-100 flex justify-center items-center hover:bg-video-context-buttonOverInputHover rounded bg-video-context-inputBg"
@@ -195,7 +197,8 @@ export function CaptionDelay(props: {
             type="button"
             onClick={() =>
               props.onChange?.(
-                props.value + 1 / 10 ** (props.decimalsAllowed ?? 0),
+                props.value +
+                  (props.step ?? 1 / 10 ** (props.decimalsAllowed ?? 0)),
               )
             }
             className="flex-1 flex-col tabbable py-2 h-12 hover:text-white transition-colors duration-100 flex justify-center items-center hover:bg-video-context-buttonOverInputHover rounded bg-video-context-inputBg"
@@ -220,6 +223,7 @@ export function CaptionSetting(props: {
   min: number;
   decimalsAllowed?: number;
   controlButtons?: boolean;
+  step?: number;
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const ref = useRef<HTMLDivElement>(null);
@@ -357,7 +361,8 @@ export function CaptionSetting(props: {
                         () =>
                           props.onChange?.(
                             props.value -
-                              1 / 10 ** (props.decimalsAllowed ?? 0),
+                              (props.step ??
+                                1 / 10 ** (props.decimalsAllowed ?? 0)),
                           ) // Remove depending on the decimalsAllowed. If there's 1 decimal allowed, add 0.1. For 2, add 0.01, etc.
                       }
                       className={arrowButtonClasses}
@@ -372,7 +377,8 @@ export function CaptionSetting(props: {
                         () =>
                           props.onChange?.(
                             props.value +
-                              1 / 10 ** (props.decimalsAllowed ?? 0),
+                              (props.step ??
+                                1 / 10 ** (props.decimalsAllowed ?? 0)),
                           ) // Add depending on the decimalsAllowed. If there's 1 decimal allowed, add 0.1. For 2, add 0.01, etc.
                       }
                       className={arrowButtonClasses}
