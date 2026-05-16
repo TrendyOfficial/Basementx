@@ -125,11 +125,48 @@ function VideoElement() {
   );
 }
 
+function IframeElement() {
+  const source = usePlayerStore((s) => s.source);
+
+  useEffect(() => {
+    usePlayerStore.setState((s) => {
+      s.mediaPlaying.hasPlayedOnce = true;
+      s.mediaPlaying.isPaused = false;
+      s.mediaPlaying.isPlaying = true;
+      s.mediaPlaying.isLoading = true;
+      s.progress.time = 0;
+      s.progress.duration = 0;
+      s.progress.buffered = 0;
+    });
+  }, [source]);
+
+  if (!source || source.type !== "iframe") return null;
+
+  return (
+    <iframe
+      id="video-iframe"
+      title="Basement source player"
+      src={source.url}
+      className="absolute inset-0 h-screen w-full border-0 bg-black"
+      allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+      allowFullScreen
+      referrerPolicy="origin"
+      onLoad={() => {
+        usePlayerStore.setState((s) => {
+          s.mediaPlaying.isLoading = false;
+        });
+      }}
+    />
+  );
+}
+
 export function VideoContainer() {
   const show = useShouldShowVideoElement();
+  const source = usePlayerStore((s) => s.source);
   useDisplayInterface();
   useInitializeSource();
 
   if (!show) return null;
+  if (source?.type === "iframe") return <IframeElement />;
   return <VideoElement />;
 }

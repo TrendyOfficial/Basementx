@@ -181,6 +181,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       hls.destroy();
     }
     hls = null;
+    if (src.type === "iframe") return;
     if (src.type === "hls") {
       if (canPlayHlsNatively(vid)) {
         vid.src = processCdnLink(src.url);

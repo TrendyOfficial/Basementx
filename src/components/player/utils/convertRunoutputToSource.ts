@@ -32,6 +32,14 @@ export function convertRunoutputToSource(out: {
       preferredHeaders: out.stream.preferredHeaders,
     };
   }
+  if (out.stream.type === "iframe") {
+    return {
+      type: "iframe",
+      url: out.stream.url,
+      headers: out.stream.headers,
+      preferredHeaders: out.stream.preferredHeaders,
+    };
+  }
   if (out.stream.type === "file") {
     const qualities: Partial<Record<SourceQuality, SourceFileStream>> = {};
     Object.entries(out.stream.qualities).forEach((entry) => {
